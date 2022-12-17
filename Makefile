@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2022/12/17 23:36:16 by lmery            ###   ########.fr        #
+#    Updated: 2022/12/18 00:07:44 by lmery            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,29 +31,28 @@ _BLUE_LLD	=	\e[38:5:25m
 
 # Back colors
 _BBLUE		=	\e[48:5:25m
+_BRED		=	\e[48:5:202m
+_BLKB 		=	\e[48:5:0m
 
 
 
 #Files
 
-SRCS_DIR		= ./
+C_ROOT = main
 
-FILES = main.c \
+#   C_[NOM_DOSSIER] = [fichiers du dossier]
 
 
 				
 #----------------------Sources and objects-------------------
 
-SRCS = $(addprefix $(SRCS_DIR), $(FILES))
+SRCS = $(addsuffix .c, $(C_ROOT) $(addprefix [nom_dossier]/, $(C_[NOM_DOSSIER])) )
 
 OBJS	=	$(SRCS:.c=.o)
 
 LIBFT		=	./libft/libft.a
 LIBFT_DIR	=	./libft
-
-
 LIB			=	make -C libft
-
 
 #----------------------- Constant strings --------------------
 
@@ -69,17 +68,18 @@ NAME			=	minishell
 
 READY	=	echo "$(_BLUE_LLD)$(_BOLD)\nMinishe$(_ORANGE)LLD $(_WHITE)ready !\n $(_END)"
 
-CLEANED			=	echo "$(_BBLUE)$(_BOLD)$(_ORANGE)\nclean: All objects files removed$(_END)\n"
+CLEANED			=	echo "$(_BBLUE)$(_BOLD)\n clean: $(_ORANGE)All objects files removed$(_END)\n"
 
-FCLEANED		=	echo "$(_BBLUE)$(_BOLD)$(_ORANGE)\nfclean: Removed the executables and the objects files\n$(_END)"
+FCLEANED		=	echo "$(_BBLUE)$(_BOLD)\n fclean: $(_ORANGE)Removed the executables and the objects files$(_END)\n"
 
-NOBONUS			=	echo "$(GREY)\n Bonus haven't been processed\n$(_END)"
+NOBONUS			=	echo "$(_BRED)\n Bonus haven't been processed$(_END)\n"
 
 #----------------------------- Rules -------------------------
 
 all: $(NAME)
 
-bonus: $(NOBONUS)
+bonus: 
+	@$(NOBONUS)
 
 $(NAME): $(OBJS) 
 	@$(LIB)
@@ -91,7 +91,8 @@ clean:
 	@make fclean -C libft
 	@$(CLEANED)
 
-fclean: clean
+fclean: 
+	rm -rf $(OBJS)
 	rm -rf $(NAME)
 	@make fclean -C libft
 	@$(FCLEANED)
