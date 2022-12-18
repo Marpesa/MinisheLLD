@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2022/12/18 00:07:44 by lmery            ###   ########.fr        #
+#    Updated: 2022/12/18 00:35:24 by lmery            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -28,6 +28,7 @@ _HRED		=	\e[0;91m
 _ORANGE		=	\e[38:5:208m
 _ORANGE2	=	\e[38:5:202m
 _BLUE_LLD	=	\e[38:5:25m
+_GR			=	\e[38:5:29m
 
 # Back colors
 _BBLUE		=	\e[48:5:25m
@@ -52,7 +53,7 @@ OBJS	=	$(SRCS:.c=.o)
 
 LIBFT		=	./libft/libft.a
 LIBFT_DIR	=	./libft
-LIB			=	make -C libft
+LIB			=	make --silent -C libft 
 
 #----------------------- Constant strings --------------------
 
@@ -66,7 +67,11 @@ NAME			=	minishell
 
 #--------------------------- Messages ------------------------
 
-READY	=	echo "$(_BLUE_LLD)$(_BOLD)\nMinishe$(_ORANGE)LLD $(_WHITE)ready !\n $(_END)"
+READY			=	echo "$(_BLUE_LLD)$(_BOLD)\nMinishe$(_ORANGE)LLD $(_WHITE)ready !\n $(_END)"
+
+LIBREADY		=	echo "$(_GR)$(_BOLD)Libft ready to use$(_END)\n"
+
+LIBCOMP			=	echo "$(_GR)Compiling libft...$(_END)"
 
 CLEANED			=	echo "$(_BBLUE)$(_BOLD)\n clean: $(_ORANGE)All objects files removed$(_END)\n"
 
@@ -82,7 +87,9 @@ bonus:
 	@$(NOBONUS)
 
 $(NAME): $(OBJS) 
-	@$(LIB)
+	@$(LIBCOMP)
+	@$(LIB) 
+	@$(LIBREADY)
 		$(COMPILER) $(FLAGS) $(OBJS) -o $(NAME) $(LIBFT) -lreadline
 	@$(READY)
 
