@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lexer.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2022/12/18 04:12:43 by gle-mini          #+#    #+#             */
+/*   Updated: 2022/12/18 05:49:32 by lmery            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 //#include "minishell.h"
 #include <stdio.h>
 #include <ctype.h>
@@ -22,6 +34,14 @@ struct Token {
   char *text;
 };
 
+typedef struct s_lexer {
+    int token_count;
+	int	token_start;
+    bool in_quote;
+	bool in_word;
+	int i;
+	t_list lst_token;
+} t_lexer;
 
 static int is_special(char c)
 {
@@ -35,217 +55,105 @@ static int is_special(char c)
 		return(TOKEN_AND);
 	return (0);
 }
-/*
-int	lexer(char *input)
+
+static void super_token(char *input, int *i, t_lexer *data) 
 {
-	//t_list *tokens;
-	int i;
-	int token_count;
-
-	i = 0;
-	token_count = 0;
-	while (input[i] != '\0')
-	{
-		while (input[i] != '\0' && input[i] == ' ')
-			i++;
-		while (is_special(input[i]))
-		{
-			token_count++;
-			i++;
-		}
-		if (input[i] != '\0' && !is_special(input[i]) && input[i] != ' ')
-		{
-			while (input[i] != '\0' && !is_special(input[i]) && input[i] != ' ')
-			{
-				i++;
-			}
-			token_count++;
-		}
-	}
-	return (token_count);
-}
-*/
-
-
-int	lexer(char *input)
-{
-    int token_count;
-	int	token_start;
-    bool in_quote;
-	bool in_word;
-	int i;
-
-	i = 0;
-	token_count = 0;
-	token_start = 0;
-	in_quote = false;
-	in_word = false;
-    while (input[i] != '\0')
-	{ 
-	        // Check for whitespace
-        if (input[i] == ' ')
-		{
-            in_word = false; 
-      		i++;	
-        }
-		else if (input[i] != '\0' && input[i] != ' ' && !is_special(input[i]) && input[i] != '"' && input[i] != '\'' && in_quote == false)
-		{
-			if (in_word == false)
-			    token_count++;
-			in_word = true;
-            token_start = i;
-			i++;
-			
-		}
-		    
-        // Check for quotes
-        else if (input[i] == '"' || input[i] == '\'') {
-            // Toggle the quote flag
-            in_word = false; 
-			if (in_quote == false)
-			{
-                token_count++;
-            	token_start = i;
-			}
-            in_quote = !in_quote;
-			i++;
-        }
-        
-        // Check for redirections and pipes
-        else if ((input[i] == '<' || input[i] == '>' || input[i] == '|' || input[i] == '&') && in_quote == false)
-		{
-            in_word = false; 
+            data->in_word = false; 
             // Mark the end of the previous token
-            if (i > token_start || i == 0) {
-
-				printf("char3: %c\n", input[i]);
-                token_count++;
-            }
+            if (*i > data->token_start || *i == 0)
+                data->token_count++;
 			else {
             
 				// Create a new token for the special character
-				if (input[i] == '<') {
+				if (input[*i] == '<') {
 					//tokens[token_count].text = "<";
 					//tokens[token_count].type = TOKEN_REDIRECT_IN;
 				}
-				else if (input[i] == '>') {
+				else if (input[*i] == '>') {
 					//tokens[token_count].text = ">";
 					//tokens[token_count].type = TOKEN_REDIRECT_OUT;
 				}
-				else if (input[i] == '|') {
+				else if (input[*i] == '|') {
 					//tokens[token_count].text = "|";
 					//tokens[token_count].type = TOKEN_PIPE;
 				}
-				else if (input[i] == '&') {
+				else if (input[*i] == '&') {
 					//tokens[token_count].text = "&";
 					//tokens[token_count].type = TOKEN_BACKGROUND;
 				}
-				token_count++;
+				data->token_count++;
 			}
-            i++; 
+            *i += 1; 
             // Start the next token after the special character
-            token_start = i;
-        }   
-        // Otherwise, add the character to the current token
-        else {
-            i++;
-        }
-    }
-	return (token_count);
+            data->token_start = *i;
 }
 
-/*
-int lexer(char *input, struct Token *tokens) {
-    int token_count = 0;
-    char *token_start = input;
-    bool in_quote = false;
-    
-    while (*input != '\0') {
-        // Check for whitespace
-        if (*input == ' ' || *input == '\t' || *input == '\n') {
-            // If we're in a quoted string, add the whitespace to the token
-            if (in_quote) {
-                input++;
-                continue;
-            }
-            
-            // Otherwise, mark the end of the token and move on to the next one
-            if (input > token_start) {
-                tokens[token_count].text = token_start;
-                tokens[token_count].type = TOKEN_WORD;
-                token_count++;
-            }
-            token_start = input + 1;
-			input++;	
-			printf("input: %d\n", *input);
-			printf("input: %d\n", *(input + 1));
-        }
-        
-        // Check for quotes
-        else if (*input == '"' || *input == '\'') {
-            // Toggle the quote flag
-            in_quote = !in_quote;
-            
-            // If we're starting a quoted string, set the token start
-            if (in_quote) {
-                token_start = input + 1;
-                tokens[token_count].type = TOKEN_QUOTE;
-            }
-            // Otherwise, mark the end of the quoted string
-            else {
-                tokens[token_count].text = token_start;
-                token_count++;
-            }
-        }
-        
-        // Check for redirections and pipes
-        else if (*input == '<' || *input == '>' || *input == '|' || *input == '&')
-		{
-            // Mark the end of the previous token
-            if (input > token_start) {
-                tokens[token_count].text = token_start;
-                tokens[token_count].type = TOKEN_WORD;
-                token_count++;
-            }
-            
-            // Create a new token for the special character
-            if (*input == '<') {
-                tokens[token_count].text = "<";
-                tokens[token_count].type = TOKEN_REDIRECT_IN;
-            }
-            else if (*input == '>') {
-                tokens[token_count].text = ">";
-                tokens[token_count].type = TOKEN_REDIRECT_OUT;
-            }
-            else if (*input == '|') {
-                tokens[token_count].text = "|";
-                tokens[token_count].type = TOKEN_PIPE;
-            }
-            else if (*input == '&') {
-                tokens[token_count].text = "&";
-                tokens[token_count].type = TOKEN_BACKGROUND;
-            }
-            token_count++;
-            
-            // Start the next token after the special character
-            token_start = input + 1;
-        }
-        
-        // Otherwise, add the character to the current token
-        else {
-            input++;
-        }
-    }
-   
-	// Mark the end of the final token
-    if (input > token_start) {
-        tokens[token_count].text = token_start;
-        tokens[token_count].type = TOKEN_WORD;
-        token_count++;
-    }
-	return (token_count);
+void lexer_data_init(t_lexer *data)
+{
+	data->token_count = 0;
+	data->token_start = 0;
+	data->in_quote = false;
+	data->in_word = false;
+
 }
-*/
+
+static void	token_quotes(int *i, t_lexer *data)
+{
+    data->in_word = false; 
+	if (data->in_quote == false)
+	{
+            data->token_count++;
+          	data->token_start = *i;
+	}
+    data->in_quote = !data->in_quote;
+	*i += 1;
+}
+
+static void	token_word(char *input, int *i, t_lexer *data)
+{
+	int	word_len;
+	int	j;
+
+	word_len = 0;
+	if (data->in_word == false)
+	    data->token_count++;
+	data->in_word = true;
+    data->token_start = *i;
+	j = *i;
+	while (input[j] != '\0' && input[j] != ' ' && !is_special(input[j]) && input[j] != '"' && input[j] != '\'')
+		j++;
+	word_len = j - 1;
+	printf("len = %d\n", word_len); 
+	*i += 1;
+}
+
+int	lexer(char *input)
+{
+	t_lexer data;
+	int i;
+
+	i = 0;
+	lexer_data_init(&data);
+    while (input[i] != '\0')
+	{ 
+        if (input[i] == ' ')
+		{
+            data.in_word = false; 
+      		i++;	
+        }
+		else if (input[i] != '\0' && input[i] != ' ' && !is_special(input[i]) && input[i] != '"' && input[i] != '\'' && data.in_quote == false)
+			token_word(input, &i, &data);
+	    
+        else if (input[i] == '"' || input[i] == '\'') 
+			token_quotes(&i, &data);
+        
+        else if ((input[i] == '<' || input[i] == '>' || input[i] == '|' || input[i] == '&') && data.in_quote == false)
+			super_token(input, &i, &data);
+        else 
+            i++;
+    }
+	return (data.token_count);
+}
 
 int main(int argc, char **argv)
 {
