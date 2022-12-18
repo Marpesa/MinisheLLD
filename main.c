@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2022/12/17 23:44:25 by lmery            ###   ########.fr       */
+/*   Updated: 2022/12/18 06:38:13 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,6 +91,8 @@ int main()
 			printf(_ORANGE "GOODBYE !\n");
 			exit(1);
 		}
+		printf("nb tokens: %d\n", lexer(linebuffer));
+
 
 	}
 	// Why clear history ?

@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2022/12/18 00:35:24 by lmery            ###   ########.fr        #
+#    Updated: 2022/12/18 06:39:02 by lmery            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ _BLKB 		=	\e[48:5:0m
 
 #Files
 
-C_ROOT = main
+C_ROOT = main lexer
 
 #   C_[NOM_DOSSIER] = [fichiers du dossier]
 
