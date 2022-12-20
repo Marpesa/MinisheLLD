@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2022/12/18 06:40:31 by lmery            ###   ########.fr       */
+/*   Updated: 2022/12/19 22:07:08 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ enum TokenType {
   TOKEN_REDIRECT_IN,  // < redirection
   TOKEN_REDIRECT_OUT, // > redirection
   TOKEN_PIPE,         // | symbol
-  TOKEN_AND,   // & symbol
+  TOKEN_AND,		  // & symbol
   TOKEN_QUOTE		  // " symbol
 };
 
@@ -54,6 +54,7 @@ typedef struct s_token {
 } t_token;
 
 typedef struct s_lexer {
+	t_token *token;
     int token_count;
 	int	token_start;
     bool in_quote;
