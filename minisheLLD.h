@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2022/12/19 22:07:08 by gle-mini         ###   ########.fr       */
+/*   Updated: 2022/12/20 08:10:33 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,9 @@
 typedef enum {
 	false,
 	true
-} bool;
+} t_bool;
 
-enum TokenType {
+enum e_token_type {
   TOKEN_EOF,          // End of file
   TOKEN_WORD,         // A word
   TOKEN_REDIRECT_IN,  // < redirection
@@ -49,7 +49,7 @@ enum TokenType {
 };
 
 typedef struct s_token {
-  enum TokenType type;
+  enum e_token_type type;
   char *text;
 } t_token;
 
@@ -57,8 +57,8 @@ typedef struct s_lexer {
 	t_token *token;
     int token_count;
 	int	token_start;
-    bool in_quote;
-	bool in_word;
+    t_bool in_quote;
+	t_bool in_word;
 	int i;
 	t_list *lst_token;
 } t_lexer;

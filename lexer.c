@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 04:12:43 by gle-mini          #+#    #+#             */
-/*   Updated: 2022/12/20 07:42:34 by gle-mini         ###   ########.fr       */
+/*   Updated: 2022/12/20 08:12:34 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,17 +107,58 @@ void	lexer_data_init(t_lexer *data)
 	data->lst_token = NULL;
 }
 
-static void	token_quotes(int *i, t_lexer *data)
+static int	ft_open_quote(char *input, int *i, t_lexer *data)
 {
-    data->in_word = false; 
-	if (data->in_quote == false)
-	{
-            data->token_count++;
-          	data->token_start = *i;
-	}
-    data->in_quote = !data->in_quote;
+	(void)input;
+	(void)i;
+	(void)data;
+	return (0);
+}
 
-	*i += 1;
+static void	token_quotes(char *input, int *i, t_lexer *data)
+{
+    // data->in_word = false; 
+	// if (data->in_quote == false)
+	// {
+    //         data->token_count++;
+    //       	data->token_start = *i;
+	// }
+    // data->in_quote = !data->in_quote;
+
+	t_token *token;
+	int		j;
+	t_bool	closed;
+
+	closed = false;
+	token = NULL;
+	j = 0;
+	if (input[*i] == '"')
+	{
+		j = *i;
+		while (input[j] != '"' && input[j])
+		{
+			if (input[j] == '"')
+				closed = true;
+			j++;
+		}
+	}
+	if (input[*i] == '\'')
+	{
+		j = *i;
+		while (input[j] != '\'' && input[j])
+		{
+			if (input[j] == '\'')
+				closed = true;
+			j++;
+		}
+	}
+
+	if (input[j] == '\0' && closed == false)
+		ft_open_quote(input, i, data);
+	token = malloc(sizeof(t_token) * 1);
+	token->text = malloc(sizeof(char) * (j - *i));
+	ft_strlcpy(token->text, &input[*i], (j - *i));
+	token->type = TOKEN_QUOTE;
 }
 
 static void	token_word(char *input, int *i, t_lexer *data)
@@ -167,7 +208,7 @@ int	lexer(char *input)
 			token_word(input, &i, &data);
 	    
         else if (input[i] == '"' || input[i] == '\'')
-			token_quotes(&i, &data);
+			token_quotes(input, &i, &data);
         
         else if ((input[i] == '<' || input[i] == '>' || input[i] == '|' || input[i] == '&') && data.in_quote == false)
 			super_token(input, &i, &data);
