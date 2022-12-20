@@ -6,22 +6,41 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 04:12:43 by gle-mini          #+#    #+#             */
-/*   Updated: 2022/12/20 11:12:53 by lmery            ###   ########.fr       */
+/*   Updated: 2022/12/20 12:22:44 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
 
+static char *get_token_type(enum e_token_type type)
+{
+	if (type == TOKEN_EOF)
+		return ("TOKEN_EOF");
+	else if (type == TOKEN_WORD)
+		return ("TOKEN_WORD");
+	else if (type == TOKEN_REDIRECT_IN)
+		return ("TOKEN_REDIRECT_IN");
+	else if (type == TOKEN_REDIRECT_OUT)
+		return ("TOKEN_REDIRECT_OUT");
+	else if (type == TOKEN_PIPE)
+		return ("TOKEN_PIPE");
+	else if (type == TOKEN_AND)
+		return ("TOKEN_AND");
+	else if (type == TOKEN_QUOTE)
+		return ("TOKEN_QUOTE");
+	else if (type == TOKEN_IGNORE)
+		return ("TOKEN_IGNORE");
+	else if (type == TOKEN_ENV)
+		return ("TOKEN_ENV");
+	return (NULL);
+}
 
 void	lst_print_token(t_list *head)
 {
-	printf("TEST\n");
-	//if (head == NULL)
 	while (head)
 	{
-		//printf("TEST\n");
 		t_token *token = head->content;
-		printf("token type: %d\ntoken text: %s\n", token->type, token->text);
+		printf("token type: %s\ntoken text: %s\n", get_token_type(token->type), token->text);
 		head = head->next;
 	}
 }
@@ -144,18 +163,21 @@ static void	token_word(char *input, int *i, t_lexer *data)
 	word_len = j - *i;
 	
 	token = malloc(sizeof(t_token) * 1);
-	token->text = malloc(sizeof(char) * j + 1);
 	if (input[*i] == '$')
+	{
 		token->type = TOKEN_ENV;
+		*i += 1;
+	}
 	else
 		token->type = TOKEN_WORD;
+	token->text = malloc(sizeof(char) * (j - *i + 1));
 	ft_strlcpy(token->text, &input[*i], word_len + 1);
 	//printf("token = %s, len: %d, input: %c, i: %d\n", token->text, word_len, input[*i], *i);
 	data->lst_token = lst_add_token(data->lst_token, token);
 	*i += word_len;
 }
 
-int	lexer(char *input)
+t_list	*lexer(char *input)
 {
 	t_lexer data;
 	int i;
@@ -179,8 +201,6 @@ int	lexer(char *input)
         else if ((is_special(input[i])) && data.in_quote == false)
 			super_token(input, &i, &data);
     }
-	printf("final print\n");
-	lst_print_token(data.lst_token);
-	return (data.token_count);
+	return (data.lst_token);
 }
 

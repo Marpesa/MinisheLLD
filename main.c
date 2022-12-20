@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2022/12/20 11:13:37 by lmery            ###   ########.fr       */
+/*   Updated: 2022/12/20 12:21:49 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,9 @@ int main(int argc, char **argv, char **env)
 {
 	(void)argc;
 	(void)argv;
-	(void)env;
+	t_list *lst_token;
+
+	ft_get_env(env);
 	// ignore Ctrl-\ Ctrl-C Ctrl-Z signals
 	ignore_signal_for_shell();
 
@@ -96,7 +98,12 @@ int main(int argc, char **argv, char **env)
 			printf(_ORANGE "GOODBYE !\n");
 			exit(1);
 		}
-		printf("nb tokens: %d\n", lexer(linebuffer));
+		lst_token = lexer(linebuffer);
+		lst_print_token(lst_token);
+		ft_expand(lst_token, env);
+		printf("---------------------------------------------------------\n");
+		lst_print_token(lst_token);
+
 
 
 	}
