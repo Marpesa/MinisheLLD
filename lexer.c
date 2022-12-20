@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 04:12:43 by gle-mini          #+#    #+#             */
-/*   Updated: 2022/12/20 08:12:34 by lmery            ###   ########.fr       */
+/*   Updated: 2022/12/20 08:39:58 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,14 +117,6 @@ static int	ft_open_quote(char *input, int *i, t_lexer *data)
 
 static void	token_quotes(char *input, int *i, t_lexer *data)
 {
-    // data->in_word = false; 
-	// if (data->in_quote == false)
-	// {
-    //         data->token_count++;
-    //       	data->token_start = *i;
-	// }
-    // data->in_quote = !data->in_quote;
-
 	t_token *token;
 	int		j;
 	t_bool	closed;
@@ -132,9 +124,10 @@ static void	token_quotes(char *input, int *i, t_lexer *data)
 	closed = false;
 	token = NULL;
 	j = 0;
+
 	if (input[*i] == '"')
 	{
-		j = *i;
+		j = *i + 1;
 		while (input[j] != '"' && input[j])
 		{
 			if (input[j] == '"')
@@ -144,7 +137,7 @@ static void	token_quotes(char *input, int *i, t_lexer *data)
 	}
 	if (input[*i] == '\'')
 	{
-		j = *i;
+		j = *i + 1;
 		while (input[j] != '\'' && input[j])
 		{
 			if (input[j] == '\'')
@@ -152,13 +145,15 @@ static void	token_quotes(char *input, int *i, t_lexer *data)
 			j++;
 		}
 	}
-
 	if (input[j] == '\0' && closed == false)
 		ft_open_quote(input, i, data);
 	token = malloc(sizeof(t_token) * 1);
 	token->text = malloc(sizeof(char) * (j - *i));
-	ft_strlcpy(token->text, &input[*i], (j - *i));
+	ft_strlcpy(token->text, &input[*i + 1], (j - *i));
 	token->type = TOKEN_QUOTE;
+	data->token_count++;
+	data->lst_token = lst_add_token(data->lst_token, token);
+	*i = j + 1;
 }
 
 static void	token_word(char *input, int *i, t_lexer *data)
