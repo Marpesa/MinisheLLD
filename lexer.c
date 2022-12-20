@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 04:12:43 by gle-mini          #+#    #+#             */
-/*   Updated: 2022/12/20 08:39:58 by lmery            ###   ########.fr       */
+/*   Updated: 2022/12/20 11:12:53 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ t_list	*lst_add_token(t_list *lst_token, void *content)
 	return (lst_token);
 }
 
+
+
 static int	is_special(char c)
 {
 	if (c == '<')
@@ -62,39 +64,24 @@ static int	is_special(char c)
 		return(TOKEN_PIPE);
 	if (c == '&')
 		return(TOKEN_AND);
+	if (c == '\\' || c == ';' || c == '{' || c == '}')
+		return(TOKEN_IGNORE);
 	return (0);
 }
 
 static void	super_token(char *input, int *i, t_lexer *data) 
 {
-	data->in_word = false; 
-	// Mark the end of the previous token
-	if (*i > data->token_start || *i == 0)
-		data->token_count++;
-	else {
-	
-		// Create a new token for the special character
-		if (input[*i] == '<') {
-			//tokens[token_count].text = "<";
-			//tokens[token_count].type = TOKEN_REDIRECT_IN;
-		}
-		else if (input[*i] == '>') {
-			//tokens[token_count].text = ">";
-			//tokens[token_count].type = TOKEN_REDIRECT_OUT;
-		}
-		else if (input[*i] == '|') {
-			//tokens[token_count].text = "|";
-			//tokens[token_count].type = TOKEN_PIPE;
-		}
-		else if (input[*i] == '&') {
-			//tokens[token_count].text = "&";
-			//tokens[token_count].type = TOKEN_BACKGROUND;
-		}
-		data->token_count++;
-	}
-	*i += 1; 
-	// Start the next token after the special character
-	data->token_start = *i;
+	t_token *token;
+
+	data->in_word = false;
+	token = NULL;
+	token = malloc(sizeof(t_token) * 1);
+	token->text = malloc(sizeof(char) * 2);
+	ft_strlcpy(token->text, &input[*i], 2);
+	token->type = is_special(input[*i]);
+	data->token_count++;
+	data->lst_token = lst_add_token(data->lst_token, token);
+	*i += 1;
 }
 
 void	lexer_data_init(t_lexer *data)
@@ -107,14 +94,6 @@ void	lexer_data_init(t_lexer *data)
 	data->lst_token = NULL;
 }
 
-static int	ft_open_quote(char *input, int *i, t_lexer *data)
-{
-	(void)input;
-	(void)i;
-	(void)data;
-	return (0);
-}
-
 static void	token_quotes(char *input, int *i, t_lexer *data)
 {
 	t_token *token;
@@ -123,30 +102,20 @@ static void	token_quotes(char *input, int *i, t_lexer *data)
 
 	closed = false;
 	token = NULL;
-	j = 0;
-
-	if (input[*i] == '"')
+	j = *i + 1;
+	char quote;
+	quote = input[*i];
+	if (input[*i] == quote)
 	{
-		j = *i + 1;
-		while (input[j] != '"' && input[j])
+		while (input[j] != quote && input[j])
 		{
-			if (input[j] == '"')
-				closed = true;
-			j++;
-		}
-	}
-	if (input[*i] == '\'')
-	{
-		j = *i + 1;
-		while (input[j] != '\'' && input[j])
-		{
-			if (input[j] == '\'')
+			if (input[j] == quote)
 				closed = true;
 			j++;
 		}
 	}
 	if (input[j] == '\0' && closed == false)
-		ft_open_quote(input, i, data);
+		printf(_ORANGE2 _BOLD"Quote not terminated, learn how to type...\n" _END);
 	token = malloc(sizeof(t_token) * 1);
 	token->text = malloc(sizeof(char) * (j - *i));
 	ft_strlcpy(token->text, &input[*i + 1], (j - *i));
@@ -176,9 +145,11 @@ static void	token_word(char *input, int *i, t_lexer *data)
 	
 	token = malloc(sizeof(t_token) * 1);
 	token->text = malloc(sizeof(char) * j + 1);
-
+	if (input[*i] == '$')
+		token->type = TOKEN_ENV;
+	else
+		token->type = TOKEN_WORD;
 	ft_strlcpy(token->text, &input[*i], word_len + 1);
-	token->type = TOKEN_WORD;
 	//printf("token = %s, len: %d, input: %c, i: %d\n", token->text, word_len, input[*i], *i);
 	data->lst_token = lst_add_token(data->lst_token, token);
 	*i += word_len;
@@ -205,7 +176,7 @@ int	lexer(char *input)
         else if (input[i] == '"' || input[i] == '\'')
 			token_quotes(input, &i, &data);
         
-        else if ((input[i] == '<' || input[i] == '>' || input[i] == '|' || input[i] == '&') && data.in_quote == false)
+        else if ((is_special(input[i])) && data.in_quote == false)
 			super_token(input, &i, &data);
     }
 	printf("final print\n");

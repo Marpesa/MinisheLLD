@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2022/12/18 06:38:13 by lmery            ###   ########.fr       */
+/*   Updated: 2022/12/20 11:13:37 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,8 +71,13 @@ char	*rl_gets ()
 	return (line_read);
 }
 
-int main()
+
+
+int main(int argc, char **argv, char **env)
 {
+	(void)argc;
+	(void)argv;
+	(void)env;
 	// ignore Ctrl-\ Ctrl-C Ctrl-Z signals
 	ignore_signal_for_shell();
 
@@ -95,7 +100,6 @@ int main()
 
 
 	}
-	// Why clear history ?
 	rl_clear_history();
 	free(linebuffer);
 	return (0);

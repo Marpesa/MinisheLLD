@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2022/12/20 08:10:33 by lmery            ###   ########.fr       */
+/*   Updated: 2022/12/20 11:12:55 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,10 @@ enum e_token_type {
   TOKEN_REDIRECT_IN,  // < redirection
   TOKEN_REDIRECT_OUT, // > redirection
   TOKEN_PIPE,         // | symbol
-  TOKEN_AND,		  // & symbol
-  TOKEN_QUOTE		  // " symbol
+  TOKEN_AND,		      //  & symbol
+  TOKEN_QUOTE,	      // " symbol
+  TOKEN_IGNORE,       // Every special char to ingore (; \)
+  TOKEN_ENV           // $
 };
 
 typedef struct s_token {
