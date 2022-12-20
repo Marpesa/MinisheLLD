@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 04:12:43 by gle-mini          #+#    #+#             */
-/*   Updated: 2022/12/20 12:22:44 by lmery            ###   ########.fr       */
+/*   Updated: 2022/12/20 13:01:28 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,11 +166,12 @@ static void	token_word(char *input, int *i, t_lexer *data)
 	if (input[*i] == '$')
 	{
 		token->type = TOKEN_ENV;
+		word_len--;
 		*i += 1;
 	}
 	else
 		token->type = TOKEN_WORD;
-	token->text = malloc(sizeof(char) * (j - *i + 1));
+	token->text = malloc(sizeof(char) * (word_len));
 	ft_strlcpy(token->text, &input[*i], word_len + 1);
 	//printf("token = %s, len: %d, input: %c, i: %d\n", token->text, word_len, input[*i], *i);
 	data->lst_token = lst_add_token(data->lst_token, token);
