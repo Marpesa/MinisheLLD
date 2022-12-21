@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2022/12/20 12:20:40 by lmery            ###   ########.fr       */
+/*   Updated: 2022/12/21 01:17:54 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,3 +78,4 @@ t_list	*lexer(char *input);
 char  **ft_get_env(char **env);
 void	lst_print_token(t_list *head);
 void  ft_expand(t_list *lst_token, char **env);
+int		is_special(char c);

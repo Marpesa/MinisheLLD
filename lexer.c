@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 04:12:43 by gle-mini          #+#    #+#             */
-/*   Updated: 2022/12/20 13:01:28 by lmery            ###   ########.fr       */
+/*   Updated: 2022/12/21 01:17:34 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ t_list	*lst_add_token(t_list *lst_token, void *content)
 
 
 
-static int	is_special(char c)
+int	is_special(char c)
 {
 	if (c == '<')
 		return(TOKEN_REDIRECT_IN);
@@ -163,6 +163,7 @@ static void	token_word(char *input, int *i, t_lexer *data)
 	word_len = j - *i;
 	
 	token = malloc(sizeof(t_token) * 1);
+	/*
 	if (input[*i] == '$')
 	{
 		token->type = TOKEN_ENV;
@@ -170,6 +171,7 @@ static void	token_word(char *input, int *i, t_lexer *data)
 		*i += 1;
 	}
 	else
+	*/
 		token->type = TOKEN_WORD;
 	token->text = malloc(sizeof(char) * (word_len));
 	ft_strlcpy(token->text, &input[*i], word_len + 1);
@@ -195,10 +197,8 @@ t_list	*lexer(char *input)
         }
 		else if (input[i] != '\0' && input[i] != ' ' && !is_special(input[i]) && input[i] != '"' && input[i] != '\'' && data.in_quote == false)
 			token_word(input, &i, &data);
-	    
         else if (input[i] == '"' || input[i] == '\'')
 			token_quotes(input, &i, &data);
-        
         else if ((is_special(input[i])) && data.in_quote == false)
 			super_token(input, &i, &data);
     }
