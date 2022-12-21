@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 04:12:43 by gle-mini          #+#    #+#             */
-/*   Updated: 2022/12/21 01:17:34 by gle-mini         ###   ########.fr       */
+/*   Updated: 2022/12/21 19:42:05 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,15 @@ static char *get_token_type(enum e_token_type type)
 		return ("TOKEN_QUOTE");
 	else if (type == TOKEN_IGNORE)
 		return ("TOKEN_IGNORE");
-	else if (type == TOKEN_ENV)
-		return ("TOKEN_ENV");
+	else if (type == TOKEN_HEREDOC)
+		return ("TOKEN_HEREDOC");
+	else if (type == TOKEN_REDIRECT_APPEND)
+		return ("TOKEN_REDICRECT_APPEND");
+//	else if (type == TOKEN_ENV)
+//		return ("TOKEN_ENV");
 	return (NULL);
 }
+
 
 void	lst_print_token(t_list *head)
 {
@@ -71,8 +76,6 @@ t_list	*lst_add_token(t_list *lst_token, void *content)
 	return (lst_token);
 }
 
-
-
 int	is_special(char c)
 {
 	if (c == '<')
@@ -101,6 +104,19 @@ static void	super_token(char *input, int *i, t_lexer *data)
 	data->token_count++;
 	data->lst_token = lst_add_token(data->lst_token, token);
 	*i += 1;
+}
+
+static void token_heredoc(char *input, int *i, t_lexer *data)
+{
+	t_token *token;
+	data->in_word = false;
+	token = malloc(sizeof(t_token) * 1);
+	token->text = malloc(sizeof(char) * 3);
+	ft_strlcpy(token->text, &input[*i], 3);
+	token->type = TOKEN_HEREDOC;
+	data->token_count++;
+	data->lst_token = lst_add_token(data->lst_token, token);
+	*i += 2;
 }
 
 void	lexer_data_init(t_lexer *data)
@@ -149,6 +165,8 @@ static void	token_word(char *input, int *i, t_lexer *data)
 	t_token *token;
 	int	word_len;
 	int	j;
+	t_token *previous;
+	t_list *lst_previous;
 
 	j = 0;
 	word_len = 0;
@@ -163,22 +181,20 @@ static void	token_word(char *input, int *i, t_lexer *data)
 	word_len = j - *i;
 	
 	token = malloc(sizeof(t_token) * 1);
-	/*
-	if (input[*i] == '$')
+	token->type = TOKEN_WORD;
+	lst_previous = ft_lstlast(data->lst_token);
+	if (lst_previous != NULL)
 	{
-		token->type = TOKEN_ENV;
-		word_len--;
-		*i += 1;
+		previous = lst_previous->content;
+		if (previous->type == TOKEN_HEREDOC)
+			token->type = TOKEN_EOF;
 	}
-	else
-	*/
-		token->type = TOKEN_WORD;
 	token->text = malloc(sizeof(char) * (word_len));
 	ft_strlcpy(token->text, &input[*i], word_len + 1);
-	//printf("token = %s, len: %d, input: %c, i: %d\n", token->text, word_len, input[*i], *i);
 	data->lst_token = lst_add_token(data->lst_token, token);
 	*i += word_len;
 }
+
 
 t_list	*lexer(char *input)
 {
@@ -195,6 +211,8 @@ t_list	*lexer(char *input)
 			while (input[i] == ' ')
       			i++;
         }
+		else if (input[i] == '<' && input[i + 1] == '<')
+			token_heredoc(input, &i, &data);
 		else if (input[i] != '\0' && input[i] != ' ' && !is_special(input[i]) && input[i] != '"' && input[i] != '\'' && data.in_quote == false)
 			token_word(input, &i, &data);
         else if (input[i] == '"' || input[i] == '\'')

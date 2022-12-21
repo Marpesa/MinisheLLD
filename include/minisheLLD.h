@@ -6,10 +6,10 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2022/12/21 01:17:54 by gle-mini         ###   ########.fr       */
+/*   Updated: 2022/12/21 19:28:59 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
+#ifndef MINISHELL_H
 #include "libft/libft.h"
 
 #include <stdio.h>
@@ -79,3 +79,5 @@ char  **ft_get_env(char **env);
 void	lst_print_token(t_list *head);
 void  ft_expand(t_list *lst_token, char **env);
 int		is_special(char c);
+
+#endif

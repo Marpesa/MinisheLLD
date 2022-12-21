@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2022/12/20 11:49:25 by lmery            ###   ########.fr        #
+#    Updated: 2022/12/21 17:23:03 by gle-mini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -105,7 +105,7 @@ fclean:
 	@$(FCLEANED)
 
 .c.o:
-	${COMPILER} ${FLAGS} $(INCLUDE) -I minisheLLD.h -c $< -o ${<:.c=.o}
+	$(COMPILER) $(FLAGS) $(INCLUDE) -c $< -o ${<:.c=.o}
 
 re: fclean all
 
