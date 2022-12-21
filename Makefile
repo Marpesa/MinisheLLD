@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2022/12/21 17:23:03 by gle-mini         ###   ########.fr        #
+#    Updated: 2022/12/21 19:52:09 by gle-mini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -61,7 +61,7 @@ COMPILER		=	cc
 
 FLAGS			=	-Wall -Wextra -Werror
 
-INCLUDE			=	-I include
+INCLUDE			=	-Iinclude -Ilibft
 
 NAME			=	minishell
 

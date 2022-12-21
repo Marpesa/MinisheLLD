@@ -6,11 +6,11 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2022/12/21 19:28:59 by gle-mini         ###   ########.fr       */
+/*   Updated: 2022/12/21 19:59:29 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #ifndef MINISHELL_H
-#include "libft/libft.h"
+#include "libft.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,27 +39,28 @@ typedef enum {
 } t_bool;
 
 enum e_token_type {
-  TOKEN_EOF,          // End of file
-  TOKEN_WORD,         // A word
-  TOKEN_REDIRECT_IN,  // < redirection
-  TOKEN_REDIRECT_OUT, // > redirection
-  TOKEN_PIPE,         // | symbol
-  TOKEN_AND,		      //  & symbol
-  TOKEN_QUOTE,	      // " symbol
-  TOKEN_IGNORE,       // Every special char to ingore (; \)
-  TOKEN_ENV           // $
+	TOKEN_EOF,				// End of file
+	TOKEN_WORD,				// A word
+	TOKEN_REDIRECT_IN,		// < redirection
+	TOKEN_REDIRECT_OUT,		// > redirection
+	TOKEN_PIPE,				// | symbol
+	TOKEN_AND,				//  & symbol
+	TOKEN_QUOTE,			// " symbol
+	TOKEN_IGNORE,			// Every special char to ignore (; \)
+	TOKEN_HEREDOC,			// <<
+	TOKEN_REDIRECT_APPEND	// >>
 };
 
 typedef struct s_token {
-  enum e_token_type type;
-  char *text;
+	enum e_token_type type;
+	char *text;
 } t_token;
 
 typedef struct s_lexer {
 	t_token *token;
-    int token_count;
+	int token_count;
 	int	token_start;
-    t_bool in_quote;
+	t_bool in_quote;
 	t_bool in_word;
 	int i;
 	t_list *lst_token;
