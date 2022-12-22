@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2022/12/21 23:32:11 by gle-mini         ###   ########.fr       */
+/*   Updated: 2022/12/22 02:37:25 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,19 +50,27 @@ static void	expand_one_token(t_token *token, char **env)
 static char *env_var_find(char *to_find, char **env)
 {
 	int i;
+	int len;
 
+	i = 0;
+	len = ft_strlen(to_find);
+	/*
+	len = 0;
+	while (to_find [len] != '\0' && to_find[len] != '\'' && to_find[len] != '"')
+		len++;
+	*/
 	i = 0;
 	while (env[i])
 	{
-		if (ft_strncmp(to_find, env[i], ft_strlen(to_find)) == 0 && env[i][ft_strlen(to_find)] == '=')
+		if (ft_strncmp(to_find, env[i], len) == 0 && env[i][len] == '=')
 		{
-			return (&env[i][ft_strlen(to_find) + 1]);
+			//printf("i = %d\n", i);
+			return (&env[i][len + 1]);
 		}
 		i++;
 	}
 	return (NULL);
 }
-
 
 static void	expand_token(t_token *token, char **env)
 {
@@ -96,18 +104,118 @@ static void	expand_token(t_token *token, char **env)
 	token->text = new_text;
 }
 
-static t_bool is_env_var(char *str)
+/*
+static	t_bool is_env_var(char *str)
 {
 	int i;
 	
 	i = 0;
 	while (str[i])
 	{
+		if (str[i] == '\'')
+		{
+			i++;
+			while (str[i] != '\'')
+				i++;
+		}
+		if (str[i] == '\0')
+		{
+			write(1, "test1\n", 6);
+			return (false);
+		}
 		if (str[i] == '$')
+		{
+			write(1, "test2\n", 6);
 			return (true);
+		}
+		i++;
+	}
+		write(1, "test3\n", 6);
+	return (false);
+}
+*/
+
+static	t_bool is_env_var(char *str)
+{
+	int i;
+	t_bool in_quote;
+
+	i = 0;
+	in_quote = false;
+	while (str[i])
+	{
+		if (str[i] == '\'')
+			in_quote = !in_quote;
+		if (str[i] == '$' && in_quote == false)
+			return (true);	
 		i++;
 	}
 	return (false);
+}
+
+static t_bool	is_simple_quotes(char *str)
+{
+	int i;
+	
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'')
+		{
+			while (str[i] && str[i] != '\'')
+				i++;
+			if (str[i] == '\'')
+				return (true);
+			else
+				return (false);
+		}
+		i++;
+	}
+	return (false);
+}
+
+static int	count_pair_quotes(char *str)
+{
+	int i;
+	int nb_quote;
+
+	i = 0;
+	nb_quote = 0;
+	while (str[i])
+	{
+		if (str[i] == '\'')
+			nb_quote++;
+		i++;
+	}
+	if (nb_quote % 2 == 1)
+		nb_quote--;
+	return (nb_quote);
+}
+
+static void	expand_simple_quotes(t_token *token)
+{
+	char *new_str;
+	int	nb_quote;
+	int i;
+	int	j;
+
+	i = 0;
+	j = 0;
+	nb_quote = count_pair_quotes(token->text);
+	new_str = malloc(sizeof(char) * ft_strlen(token->text) - nb_quote);
+	while (token->text[i])
+	{
+		if (token->text[i] == '\'')
+		{
+			nb_quote--;
+			i++;
+		}
+		new_str[j] = token->text[i];
+		j++;
+		i++;
+	}
+	free(token->text);
+	token->text = new_str;
 }
 
 void ft_expand(t_list *lst_token, char **env)
@@ -118,6 +226,8 @@ void ft_expand(t_list *lst_token, char **env)
 		token = lst_token->content;
 		if (is_env_var(token->text))
 			expand_token(token, env);	
+		if (is_simple_quotes(token->text))
+			expand_simple_quotes(token);
 		lst_token = lst_token->next;
 	}
 }

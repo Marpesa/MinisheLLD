@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2022/12/21 19:52:09 by gle-mini         ###   ########.fr        #
+#    Updated: 2022/12/22 00:15:45 by gle-mini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ _BLKB 		=	\e[48:5:0m
 
 #Files
 
-C_ROOT = main lexer expand
+C_ROOT = main lexer expand syntaxe_error
 
 #   C_[NOM_DOSSIER] = [fichiers du dossier]
 
