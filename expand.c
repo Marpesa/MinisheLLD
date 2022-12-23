@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2022/12/22 02:37:25 by gle-mini         ###   ########.fr       */
+/*   Updated: 2022/12/23 12:32:36 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,8 @@ static void	expand_token(t_token *token, char **env)
 	if (env_var_len == 0)
 		return;
 	new_env_var = env_var_find(&text[i + 1], env);
+	printf("%s\n", new_env_var);
+	//Add my function
 	if (new_env_var == NULL)
 		new_text = malloc(sizeof(char) * (i + 0));
 	//Souviens toi de gerer le fail de malloc
