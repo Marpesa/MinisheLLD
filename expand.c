@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2022/12/23 12:32:36 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/01 12:50:01 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,103 @@ static void	expand_one_token(t_token *token, char **env)
 */
 
 
+
+char *ft_strchr (const char *s, int c)
+{
+	const char ch = c;
+
+	while(*s != ch)
+	{
+		if (*s == '\0')
+			return (NULL);
+		s++;
+	}
+	return (char *) s;
+}
+
+
+
+size_t	my_strcspn (const char *s, const char *reject)
+{
+	size_t count = 0;
+	t_bool in_quote;
+
+	in_quote = false;
+	while (*s != '\0')
+	{
+		if (*s == '\'')
+			in_quote = !in_quote;
+		if ((ft_strchr (reject, *s) == NULL) || in_quote == true)
+			++s, ++count;
+		else
+			return (count);
+	}
+
+	return (count);
+}
+
+
+size_t	ft_strcspn (const char *s, const char *reject)
+{
+	size_t count = 0;
+
+	while (*s != '\0')
+		if (ft_strchr (reject, *s) == NULL)
+			++s, ++count;
+		else
+			return count;
+
+	return count;
+}
+
+size_t	ft_strspn (const char *s, const char *accept)
+{
+	size_t count = 0;
+
+	while (*s != '\0')
+		if (ft_strchr (accept, *s++) != NULL)
+			++count;
+		else
+			return count;
+
+	return count;
+}
+
+char *ft_strtok_r (char *s, const char *delim, char **save_ptr)
+{
+	char *end;
+
+	if (s == NULL)
+		s = *save_ptr;
+
+	if (*s == '\0')
+	{
+		*save_ptr = s;
+		return NULL;
+	}
+
+	/* Scan leading delimiters.  */
+	s += ft_strspn (s, delim);
+	if (*s == '\0')
+	{
+		*save_ptr = s;
+		return NULL;
+	}
+
+	/* Find the end of the token.  */
+	end = s + my_strcspn (s, delim);
+	if (*end == '\0')
+	{
+		*save_ptr = end;
+		return s;
+	}
+
+	/* Terminate the token and make *SAVE_PTR point past it.  */
+	*end = '\0';
+	*save_ptr = end + 1;
+	return s;
+}
+
 static char *env_var_find(char *to_find, char **env)
 {
 	int i;
@@ -54,11 +151,11 @@ static char *env_var_find(char *to_find, char **env)
 
 	i = 0;
 	len = ft_strlen(to_find);
-	/*
-	len = 0;
-	while (to_find [len] != '\0' && to_find[len] != '\'' && to_find[len] != '"')
-		len++;
-	*/
+	
+	//len = 0;
+	//while (to_find [len] != '\0' && to_find[len] != '\'' && to_find[len] != '"')
+	//	len++;
+	printf("find: %s\n", to_find);
 	i = 0;
 	while (env[i])
 	{
@@ -72,6 +169,71 @@ static char *env_var_find(char *to_find, char **env)
 	return (NULL);
 }
 
+char* merge_strings(char* str1, char* str2)
+{
+	int	i;
+	int	j;
+	char* result;
+
+	i = 0;
+	j = 0;
+	result = malloc(ft_secure_strlen(str1) + ft_secure_strlen(str2) + 1);
+	if (result == NULL) {
+		return NULL;
+	}
+
+	if (str1 != NULL)
+	{
+		while (str1[i] != '\0') {
+			result[i] = str1[i];
+			i++;
+		}
+		free(str1);
+	}
+	if (str2 != NULL)
+	{
+		while (str2[j] != '\0')
+		{
+			result[i + j] = str2[j];
+			j++;
+		}
+	}
+	result[i + j] = '\0';
+
+	return (result);
+}
+
+static void expand_token(t_token *token, char **env)
+{
+	char *str;
+	char *save_ptr;
+	char *new_str;
+	char *find;
+	new_str = NULL;
+	str = token->text;
+	str = ft_strtok_r(str, "$", &save_ptr);
+	if (token->text[0] != '$')
+		new_str = merge_strings(new_str, str);
+	else
+	{
+		find = env_var_find(str, env);
+		//printf("find: %s\n", find);
+		new_str = merge_strings(new_str, find);
+	}
+	while (1)
+	{
+		str = ft_strtok_r(NULL, "$", &save_ptr);
+		if (str == NULL)
+			break;
+		find = env_var_find(str, env);
+		//printf("find: %s\n", find);
+		new_str = merge_strings(new_str, find);
+	}
+	free(token->text);
+	token->text = new_str;
+}
+
+/*
 static void	expand_token(t_token *token, char **env)
 {
 	int	env_var_len;
@@ -105,6 +267,7 @@ static void	expand_token(t_token *token, char **env)
 	free(token->text);
 	token->text = new_text;
 }
+*/
 
 /*
 static	t_bool is_env_var(char *str)
@@ -137,6 +300,7 @@ static	t_bool is_env_var(char *str)
 }
 */
 
+/*
 static	t_bool is_env_var(char *str)
 {
 	int i;
@@ -154,7 +318,9 @@ static	t_bool is_env_var(char *str)
 	}
 	return (false);
 }
+*/
 
+/*
 static t_bool	is_simple_quotes(char *str)
 {
 	int i;
@@ -219,6 +385,7 @@ static void	expand_simple_quotes(t_token *token)
 	free(token->text);
 	token->text = new_str;
 }
+*/
 
 void ft_expand(t_list *lst_token, char **env)
 {
@@ -226,10 +393,10 @@ void ft_expand(t_list *lst_token, char **env)
 	while (lst_token != NULL)
 	{
 		token = lst_token->content;
-		if (is_env_var(token->text))
+		//if (is_env_var(token->text))
 			expand_token(token, env);	
-		if (is_simple_quotes(token->text))
-			expand_simple_quotes(token);
+		//if (is_simple_quotes(token->text))
+			//expand_simple_quotes(token);
 		lst_token = lst_token->next;
 	}
 }

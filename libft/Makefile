@@ -22,6 +22,7 @@ SRCS			=	ft_isalnum.c \
 					ft_putnbr_fd.c \
 					ft_strdup.c \
 					ft_strlen.c \
+					ft_secure_strlen.c \
 					ft_strrchr.c \
 					ft_toupper.c \
 					ft_calloc.c \
