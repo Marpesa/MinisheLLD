@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/02 21:31:55 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/01 14:01:17 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -143,7 +143,7 @@ char *ft_strtok_r (char *s, const char *delim, char **save_ptr)
 	*save_ptr = end + 1;
 	return s;
 }
-/*
+
 static char *env_var_find(char *to_find, char **env)
 {
 	int i;
@@ -155,10 +155,12 @@ static char *env_var_find(char *to_find, char **env)
 	//len = 0;
 	//while (to_find [len] != '\0' && to_find[len] != '\'' && to_find[len] != '"')
 	//	len++;
+	//printf("find: %s\nft_strcspn: %zu\n, len: %d\n", to_find, ft_strcspn(to_find, "\"\'"), len);
 	i = 0;
 	while (env[i])
 	{
-		if (ft_strncmp(to_find, env[i], len) == 0 && env[i][len] == '=')
+		//printf("ft_strncmp: %d\n", ft_strncmp(to_find, env[i], ft_strcspn(to_find, "\"\'")));
+		if (ft_strncmp(to_find, env[i], ft_strcspn(to_find, "\"\'")) == 0 && env[i][len] == '=')
 		{
 			//printf("i = %d\n", i);
 			return (&env[i][len + 1]);
@@ -167,7 +169,6 @@ static char *env_var_find(char *to_find, char **env)
 	}
 	return (NULL);
 }
-*/
 
 char* merge_strings(char* str1, char* str2)
 {
@@ -203,137 +204,17 @@ char* merge_strings(char* str1, char* str2)
 	return (result);
 }
 
-void ft_putstr_fd_address(char *start, char *end, int fd)
-{
-	if (!start)
-		return ;
-	if (!end)
-		return ;
-	if (start > end)
-		return ;
-	write(fd, start, end - start);
-	write(fd, "\n", 1);
-}
-
-static int quote_tokenizer(char *str, char **end, char c, int i)
-{
-	if (str[i] == c)
-	{
-		*end = &str[i];
-		return (1);
-	}
-	if (str[i - 1] == c)
-	{
-		while (str[i] != '\0' && str[i] != c)
-		{
-			i++;
-			if (str[i] == '\0')
-			{
-				*end = &str[i];
-				return (1);
-			}
-		}
-		*end = &str[i + 1];
-		return (1);
-	}
-	return (0);
-}
-
-int     custom_tokenizer(char *str, char **start, char **end)
-{
-	int	i;
-
-	i = 0;
-	*start = str;
-	if (str[i] == '$' || str[i] == '\'' || str[i] == '\"')
-		i++;
-	while (str[i] != '\0')
-	{
-		if (quote_tokenizer(str, end, '\'', i))
-			return (1);
-		if (quote_tokenizer(str, end, '\"', i))
-			return (1);
-		if (str[i] == '$')
-		{
-			*end = &str[i];
-			return (1);
-		}
-		if (str[i] != '\0')
-			i++;
-	}
-	*end = &str[i];
-	return (0);
-}
-
-static char *env_var_find(char *start, char *end, char **env)
-{
-	int i;
-
-	i = 0;
-	while (env[i])
-	{
-		if (ft_strncmp(start, env[i], end - start) == 0 && env[i][end - start] == '=')
-		{
-			return (&env[i][end - start + 1]);
-		}
-		i++;
-	}
-	return (NULL);
-}
-
-static void expand_token(t_token *token, char **env)
-{
-	char *start;
-	char *end;
-	char *append_str;
-	char *new_str;
-
-	new_str = NULL;
-	end = token->text;
-	while (custom_tokenizer(end, &start, &end) != 0)
-	{
-		if (*start == '$')
-		{
-			append_str = env_var_find(start + 1, end, env);
-			new_str = merge_strings(new_str, append_str);
-		}
-		else 
-		{
-			append_str = malloc(ft_secure_strlen(new_str) + (end - start) + 1);
-			ft_strncpy(append_str, new_str, ft_secure_strlen(new_str));
-			ft_strncat(append_str, start, end - start);
-			free(new_str);
-			new_str = append_str;
-		}
-	}
-	if (*start == '$')
-	{
-		append_str = env_var_find(start + 1, end, env);
-		new_str = merge_strings(new_str, append_str);
-	}
-	else 
-	{
-		ft_putstr_fd_address(start, end, 1);
-		append_str = malloc(ft_secure_strlen(new_str) + (end - start) + 1);
-		ft_strncpy(append_str, new_str, ft_secure_strlen(new_str));
-		ft_strncat(append_str, start, end - start);
-		free(new_str);
-		new_str = append_str;
-	}
-	free(token->text);
-	token->text = new_str;
-}
-
-/*
 static void expand_token(t_token *token, char **env)
 {
 	char *str;
 	char *save_ptr;
 	char *new_str;
 	char *find;
+
 	new_str = NULL;
 	str = token->text;
 	str = ft_strtok_r(str, "$", &save_ptr);
+	printf("str: %s\n", str);
 	if (token->text[0] != '$')
 		new_str = merge_strings(new_str, str);
 	else
@@ -345,6 +226,7 @@ static void expand_token(t_token *token, char **env)
 	while (1)
 	{
 		str = ft_strtok_r(NULL, "$", &save_ptr);
+		printf("str: %s\n", str);
 		if (str == NULL)
 			break;
 		find = env_var_find(str, env);
@@ -354,7 +236,6 @@ static void expand_token(t_token *token, char **env)
 	free(token->text);
 	token->text = new_str;
 }
-*/
 
 /*
 static void	expand_token(t_token *token, char **env)

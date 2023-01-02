@@ -1,0 +1,21 @@
+-token heredoc
+-token redirect append
+-refaire bien avec strjoin et strcat et strlcpy le expand
+-syntaxe error
+-heredoc
+
+
+
+
+
+
+expand:
+
+-Check si les " et les ' sont valide
+
+
+-Expand les variables d'environnement sans "
+
+-Expand les variables d'environnements avec les "
+
+-Expand les '

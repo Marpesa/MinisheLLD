@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2022/12/22 00:15:45 by gle-mini         ###   ########.fr        #
+#    Updated: 2023/01/02 20:18:10 by gle-mini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -59,7 +59,7 @@ LIB			=	make --silent -C libft
 
 COMPILER		=	cc
 
-FLAGS			=	-Wall -Wextra -Werror
+FLAGS			=	-Wall -Wextra -Werror -g3
 
 INCLUDE			=	-Iinclude -Ilibft
 

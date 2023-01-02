@@ -46,7 +46,7 @@ char *ft_strchr (const char *s, int c)
 }
 
 
-
+/*
 size_t	my_strcspn (const char *s, const char *reject)
 {
 	size_t count = 0;
@@ -65,7 +65,20 @@ size_t	my_strcspn (const char *s, const char *reject)
 
 	return (count);
 }
+*/
 
+size_t	my_strcspn (const char *s, const char *reject)
+{
+	size_t count = 0;
+
+	while (*s != '\0' || *s != '\'')
+		if (ft_strchr (reject, *s) == NULL)
+			++s, ++count;
+		else
+			return count;
+
+	return count;
+}
 
 size_t	ft_strcspn (const char *s, const char *reject)
 {
@@ -113,9 +126,11 @@ char *ft_strtok_r (char *s, const char *delim, char **save_ptr)
 		*save_ptr = s;
 		return NULL;
 	}
+	printf("s: %c\n", *s);
 
 	/* Find the end of the token.  */
 	end = s + my_strcspn (s, delim);
+	printf("end: %c\n", *end);
 	if (*end == '\0')
 	{
 		*save_ptr = end;

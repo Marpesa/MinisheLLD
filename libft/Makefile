@@ -15,6 +15,7 @@ SRCS			=	ft_isalnum.c \
 					ft_strlcpy.c \
 					ft_strnstr.c \
 					ft_strncat.c \
+					ft_strncpy.c \
 					ft_tolower.c \
 					ft_bzero.c \
 					ft_isascii.c \
