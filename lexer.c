@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 04:12:43 by gle-mini          #+#    #+#             */
-/*   Updated: 2022/12/22 00:42:45 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/06 18:00:48 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@ static char *get_token_type(enum e_token_type type)
 		return ("TOKEN_PIPE");
 	else if (type == TOKEN_AND)
 		return ("TOKEN_AND");
-//	else if (type == TOKEN_QUOTE)
-//		return ("TOKEN_QUOTE");
+	else if (type == TOKEN_S_QUOTE)
+		return ("TOKEN_S_QUOTE");	
+	else if (type == TOKEN_D_QUOTE)
+		return ("TOKEN_D_QUOTE");
 	else if (type == TOKEN_IGNORE)
 		return ("TOKEN_IGNORE");
 	else if (type == TOKEN_HEREDOC)
@@ -141,38 +143,42 @@ void	lexer_data_init(t_lexer *data)
 	data->token = NULL;
 	data->lst_token = NULL;
 }
-/*
-static void	token_quotes(char *input, int *i, t_lexer *data)
+
+static void	token_s_quotes(char *input, int *i, t_lexer *data)
 {
 	t_token *token;
 	int		j;
-	t_bool	closed;
 
-	closed = false;
 	token = NULL;
 	j = *i + 1;
-	char quote;
-	quote = input[*i];
-	if (input[*i] == quote)
-	{
-		while (input[j] != quote && input[j])
-		{
-			if (input[j] == quote)
-				closed = true;
+	while (input[j] != '\'' && input[j])
 			j++;
-		}
-	}
-	if (input[j] == '\0' && closed == false)
-		printf(_ORANGE2 _BOLD"Quote not terminated, learn how to type...\n" _END);
 	token = malloc(sizeof(t_token) * 1);
 	token->text = malloc(sizeof(char) * (j - *i));
 	ft_strlcpy(token->text, &input[*i + 1], (j - *i));
-	token->type = TOKEN_QUOTE;
+	token->type = TOKEN_S_QUOTE;
 	data->token_count++;
 	data->lst_token = lst_add_token(data->lst_token, token);
 	*i = j + 1;
 }
-*/
+
+static void	token_d_quotes(char *input, int *i, t_lexer *data)
+{
+	t_token *token;
+	int		j;
+
+	token = NULL;
+	j = *i + 1;
+	while (input[j] != '"' && input[j])
+			j++;
+	token = malloc(sizeof(t_token) * 1);
+	token->text = malloc(sizeof(char) * (j - *i));
+	ft_strlcpy(token->text, &input[*i + 1], (j - *i));
+	token->type = TOKEN_D_QUOTE;
+	data->token_count++;
+	data->lst_token = lst_add_token(data->lst_token, token);
+	*i = j + 1;
+}
 
 static void	token_word(char *input, int *i, t_lexer *data)
 {
@@ -206,6 +212,7 @@ static void	token_word(char *input, int *i, t_lexer *data)
 	token->text = malloc(sizeof(char) * (word_len));
 	ft_strlcpy(token->text, &input[*i], word_len + 1);
 	data->lst_token = lst_add_token(data->lst_token, token);
+	printf("test:%s\n",token->text);
 	*i += word_len;
 }
 
@@ -230,10 +237,12 @@ t_list	*lexer(char *input)
 		else if (input[i] == '>' && input[i + 1] == '>')
 			token_redirect_append(input, &i, &data);
 		//else if (input[i] != '\0' && input[i] != ' ' && !is_special(input[i]) && input[i] != '"' && input[i] != '\'' && data.in_quote == false)
+        else if (input[i] == '"')
+			token_d_quotes(input, &i, &data);
+		else if (input[i] == '\'')
+			token_s_quotes(input, &i, &data);
 		else if (input[i] != '\0' && input[i] != ' ' && !is_special(input[i]))
 			token_word(input, &i, &data);
-        //else if (input[i] == '"' || input[i] == '\'')
-			//token_quotes(input, &i, &data);
 		//else if ((is_special(input[i])) && data.in_quote == false)
         else if ((is_special(input[i])))
 			super_token(input, &i, &data);

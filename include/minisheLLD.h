@@ -6,10 +6,10 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2022/12/22 00:42:59 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/06 17:38:18 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-#ifndef MINISHELL_H
+
 #include "libft.h"
 
 #include <stdio.h>
@@ -45,7 +45,8 @@ typedef enum e_token_type {
 	TOKEN_REDIRECT_OUT,		// > redirection
 	TOKEN_PIPE,				// | symbol
 	TOKEN_AND,				//  & symbol
-	//TOKEN_QUOTE,			// " symbol
+	TOKEN_S_QUOTE,			// ' symbol
+	TOKEN_D_QUOTE,			// " symbol
 	TOKEN_IGNORE,			// Every special char to ignore (; \)
 	TOKEN_HEREDOC,			// <<
 	TOKEN_REDIRECT_APPEND	// >>
@@ -81,5 +82,6 @@ void	lst_print_token(t_list *head);
 void 	ft_expand(t_list *lst_token, char **env);
 int		is_special(char c);
 void	syntaxe_error(t_list *lst_token);
+int		check_error_input(char *input);
 
-#endif
+// #endif

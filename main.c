@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/02 21:34:20 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/06 18:02:05 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,12 +98,17 @@ int main(int argc, char **argv, char **env)
 			printf(_ORANGE "GOODBYE !\n");
 			exit(1);
 		}
-		lst_token = lexer(linebuffer);
-		lst_print_token(lst_token);
+		if (check_error_input(linebuffer))
+		{
+			lst_token = lexer(linebuffer);
+			lst_print_token(lst_token);
+		}
 		printf("---------------------------------------------------------\n");
+		/*
 		ft_expand(lst_token, env);
 		lst_print_token(lst_token);
 		syntaxe_error(lst_token);
+		*/
 	}
 	rl_clear_history();
 	free(linebuffer);
