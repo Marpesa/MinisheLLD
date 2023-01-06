@@ -6,13 +6,13 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 04:12:43 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/06 18:00:48 by lmery            ###   ########.fr       */
+/*   Updated: 2023/01/06 21:28:55 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
 
-static char *get_token_type(enum e_token_type type)
+char *ft_get_token_type(enum e_token_type type)
 {
 	if (type == TOKEN_EOF)
 		return ("TOKEN_EOF");
@@ -47,7 +47,7 @@ void	lst_print_token(t_list *head)
 	while (head)
 	{
 		t_token *token = head->content;
-		printf("token type: %s\ntoken text: %s\n", get_token_type(token->type), token->text);
+		printf("token type: %s\ntoken text: %s\n", ft_get_token_type(token->type), token->text);
 		head = head->next;
 	}
 }
@@ -88,6 +88,10 @@ int	is_special(char c)
 		return(TOKEN_PIPE);
 	if (c == '&')
 		return(TOKEN_AND);
+	if (c == '\'')
+		return(TOKEN_S_QUOTE);
+	if (c == '\"')
+		return(TOKEN_D_QUOTE);
 	if (c == '\\' || c == ';' || c == '{' || c == '}')
 		return(TOKEN_IGNORE);
 	return (0);
@@ -197,7 +201,7 @@ static void	token_word(char *input, int *i, t_lexer *data)
     data->token_start = *i;
 	j = *i;
 	//while (input[j] != '\0' && input[j] != ' ' && !is_special(input[j]) && input[j] != '"' && input[j] != '\'')
-	while (input[j] != '\0' && input[j] != ' ' && !is_special(input[j]))
+	while (input[j] != '\0' && input[j] != ' ' && !is_special(input[j]) && input[j] != '\'' && input[j] != '\"')
 		j++;
 	word_len = j - *i;
 	token = malloc(sizeof(t_token) * 1);
@@ -212,7 +216,6 @@ static void	token_word(char *input, int *i, t_lexer *data)
 	token->text = malloc(sizeof(char) * (word_len));
 	ft_strlcpy(token->text, &input[*i], word_len + 1);
 	data->lst_token = lst_add_token(data->lst_token, token);
-	printf("test:%s\n",token->text);
 	*i += word_len;
 }
 
@@ -236,14 +239,12 @@ t_list	*lexer(char *input)
 			token_heredoc(input, &i, &data);
 		else if (input[i] == '>' && input[i + 1] == '>')
 			token_redirect_append(input, &i, &data);
-		//else if (input[i] != '\0' && input[i] != ' ' && !is_special(input[i]) && input[i] != '"' && input[i] != '\'' && data.in_quote == false)
         else if (input[i] == '"')
 			token_d_quotes(input, &i, &data);
 		else if (input[i] == '\'')
 			token_s_quotes(input, &i, &data);
 		else if (input[i] != '\0' && input[i] != ' ' && !is_special(input[i]))
 			token_word(input, &i, &data);
-		//else if ((is_special(input[i])) && data.in_quote == false)
         else if ((is_special(input[i])))
 			super_token(input, &i, &data);
     }

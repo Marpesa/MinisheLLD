@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/06 17:38:18 by lmery            ###   ########.fr       */
+/*   Updated: 2023/01/06 18:15:10 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,8 @@ typedef struct s_lexer {
 #define _BOLD		"\e[1m"
 
 t_list	*lexer(char *input);
+char	*ft_get_token_type(enum e_token_type type);
+t_list	*lst_add_token(t_list *lst_token, void *content);
 char 	**ft_get_env(char **env);
 void	lst_print_token(t_list *head);
 void 	ft_expand(t_list *lst_token, char **env);

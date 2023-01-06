@@ -13,9 +13,8 @@ expand:
 
 -Check si les " et les ' sont valide
 
+-Expand les variables d'environnement dans TOKEN_WORD
 
--Expand les variables d'environnement sans "
+-Expand les variables d'environnements dans TOKEN_D_QUOTE
 
--Expand les variables d'environnements avec les "
-
--Expand les '
+-Merge les TOKEN_WORD et les TOKEN_D_QUOTE et les TOKEN_S_QUOTE
