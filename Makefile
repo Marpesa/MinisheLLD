@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2023/01/06 17:38:17 by lmery            ###   ########.fr        #
+#    Updated: 2023/01/06 22:01:04 by lmery            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ _YELLOW		=	\e[33m
 _BLUE		=	\e[34m
 _PURPLE		=	\e[35m
 _CYAN		=	\e[36m
-_WHITE		=	\e[37m
+_W			=	\e[37m
 _END		=	\e[0m
 _BOLD		=	\e[1m
 _HRED		=	\e[0;91m
@@ -84,6 +84,18 @@ FCLEANED		=	echo "$(_BBLUE)$(_BOLD)\n fclean: $(_ORANGE)Removed the executables 
 
 NOBONUS			=	echo "$(_BRED)\n Bonus haven't been processed$(_END)\n"
 
+TITLE			= 	@echo "\n\n   * $(_ORANGE)██          ██$(_BLUE_LLD)█                  $(_W)*                                          *\n"\
+					"    $(_ORANGE)████      ████$(_BLUE_LLD)█\n"\
+					"    $(_ORANGE)██$(_BLUE_LLD)█ $(_ORANGE)██  ██$(_BLUE_LLD)█▀$(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██      $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██████████$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█     $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██████████$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)████████$(_BLUE_LLD)█\n"\
+					"    $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█▀▀ $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)████    $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█▀▀▀▀▀▀▀▀   $(_ORANGE)██$(_BLUE_LLD)█     $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█▀▀▀▀▀▀▀▀   $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█▀▀▀$(_ORANGE)██$(_BLUE_LLD)█\n"\
+					"    $(_ORANGE)██$(_BLUE_LLD)█   $(_BLUE_LLD)▀▀▀   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)████▄   ██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█           $(_ORANGE)██$(_BLUE_LLD)█     $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█           $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█    $(_ORANGE)██$(_BLUE_LLD)█\n"\
+					"    $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█ $(_ORANGE)██  $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██████████$(_BLUE_LLD)█   $(_ORANGE)██████████$(_BLUE_LLD)█   $(_ORANGE)████████$(_BLUE_LLD)█     $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█    $(_ORANGE)██$(_BLUE_LLD)█\n"\
+					"    $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)████$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_BLUE_LLD)▀▀▀▀▀▀▀▀$(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█▀▀▀▀▀$(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█▀▀▀▀▀▀     $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█    $(_ORANGE)██$(_BLUE_LLD)█\n"\
+					"    $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)████$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█           $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█     $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█           $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█    $(_ORANGE)██$(_BLUE_LLD)█\n"\
+					"    $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█     $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██████████$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█     $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██████████$(_BLUE_LLD)█   $(_ORANGE)████████$(_BLUE_LLD)█   $(_ORANGE)████████$(_BLUE_LLD)█   $(_ORANGE)████████$(_BLUE_LLD)█\n"\
+					"    $(_BLUE_LLD)▀▀▀         ▀▀▀   ▀▀▀   ▀▀▀     ▀▀▀   ▀▀▀   ▀▀▀▀▀▀▀▀▀▀▀   ▀▀▀     ▀▀▀   ▀▀▀▀▀▀▀▀▀▀▀   ▀▀▀▀▀▀▀▀▀   ▀▀▀▀▀▀▀▀▀   ▀▀▀▀▀▀▀▀"
+
+
 #----------------------------- Rules -------------------------
 
 all: $(NAME)
@@ -96,7 +108,9 @@ $(NAME): $(OBJS)
 	@$(LIB) 
 	@$(LIBREADY)
 		$(COMPILER) $(FLAGS) $(OBJS) -o $(NAME) $(LIBFT) -lreadline
+	@$(TITLE)
 	@$(READY)
+
 
 test: $(OBJS_TEST)
 	@$(LIBCOMP)
