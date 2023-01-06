@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2023/01/02 20:18:10 by gle-mini         ###   ########.fr        #
+#    Updated: 2023/01/04 19:45:01 by gle-mini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,6 +41,8 @@ _BLKB 		=	\e[48:5:0m
 
 C_ROOT = main lexer expand syntaxe_error
 
+C_TEST = lexer_test lexer
+
 #   C_[NOM_DOSSIER] = [fichiers du dossier]
 
 
@@ -49,7 +51,10 @@ C_ROOT = main lexer expand syntaxe_error
 
 SRCS = $(addsuffix .c, $(C_ROOT) $(addprefix [nom_dossier]/, $(C_[NOM_DOSSIER])) )
 
+SRCS_TEST = $(addsuffix .c, $(C_TEST) $(addprefix [nom_dossier]/, $(C_[NOM_DOSSIER])) )
+
 OBJS	=	$(SRCS:.c=.o)
+OBJS_TEST = $(SRCS_TEST:.c=.o)
 
 LIBFT		=	./libft/libft.a
 LIBFT_DIR	=	./libft
@@ -92,6 +97,12 @@ $(NAME): $(OBJS)
 	@$(LIBREADY)
 		$(COMPILER) $(FLAGS) $(OBJS) -o $(NAME) $(LIBFT) -lreadline
 	@$(READY)
+
+test: $(OBJS_TEST)
+	@$(LIBCOMP)
+	@$(LIB) 
+	@$(LIBREADY)
+		$(COMPILER) $(FLAGS) $(OBJS_TEST) -o test $(LIBFT)
 
 clean:
 	rm -rf $(OBJS)
