@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2023/01/06 22:01:04 by lmery            ###   ########.fr        #
+#    Updated: 2023/01/07 16:37:44 by gle-mini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -98,12 +98,12 @@ TITLE			= 	@echo "\n\n   * $(_ORANGE)██          ██$(_BLUE_LLD)█      
 
 #----------------------------- Rules -------------------------
 
-all: $(NAME)
+all: $(NAME) 
 
 bonus: 
 	@$(NOBONUS)
 
-$(NAME): $(OBJS) 
+$(NAME): $(OBJS)
 	@$(LIBCOMP)
 	@$(LIB) 
 	@$(LIBREADY)
@@ -120,12 +120,15 @@ test: $(OBJS_TEST)
 
 clean:
 	rm -rf $(OBJS)
+	rm -rf $(OBJS_TEST)
 	@make fclean -C libft
 	@$(CLEANED)
 
 fclean: 
 	rm -rf $(OBJS)
+	rm -rf $(OBJS_TEST)
 	rm -rf $(NAME)
+	rm -rf test
 	@make fclean -C libft
 	@$(FCLEANED)
 

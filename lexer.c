@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 04:12:43 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/06 21:28:55 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/07 15:07:35 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ static void	token_d_quotes(char *input, int *i, t_lexer *data)
 	token = NULL;
 	j = *i + 1;
 	while (input[j] != '"' && input[j])
-			j++;
+		j++;
 	token = malloc(sizeof(t_token) * 1);
 	token->text = malloc(sizeof(char) * (j - *i));
 	ft_strlcpy(token->text, &input[*i + 1], (j - *i));
@@ -200,7 +200,6 @@ static void	token_word(char *input, int *i, t_lexer *data)
 	data->in_word = true;
     data->token_start = *i;
 	j = *i;
-	//while (input[j] != '\0' && input[j] != ' ' && !is_special(input[j]) && input[j] != '"' && input[j] != '\'')
 	while (input[j] != '\0' && input[j] != ' ' && !is_special(input[j]) && input[j] != '\'' && input[j] != '\"')
 		j++;
 	word_len = j - *i;
@@ -213,7 +212,7 @@ static void	token_word(char *input, int *i, t_lexer *data)
 		if (previous->type == TOKEN_HEREDOC)
 			token->type = TOKEN_EOF;
 	}
-	token->text = malloc(sizeof(char) * (word_len));
+	token->text = malloc(sizeof(char) * (word_len + 1));
 	ft_strlcpy(token->text, &input[*i], word_len + 1);
 	data->lst_token = lst_add_token(data->lst_token, token);
 	*i += word_len;
@@ -250,4 +249,3 @@ t_list	*lexer(char *input)
     }
 	return (data.lst_token);
 }
-
