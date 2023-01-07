@@ -6,16 +6,11 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/06 22:02:58 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/07 17:43:25 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
-
-char	**ft_get_env(char **env)
-{
-	return (env);
-}
 
 int	custom_tokenizer(char *str, char **start, char **end)
 {

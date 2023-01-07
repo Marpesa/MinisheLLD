@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/06 21:37:40 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/07 17:42:27 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,6 @@ int main(int argc, char **argv, char **env)
 	(void)argv;
 	t_list *lst_token;
 
-	ft_get_env(env);
 	// ignore Ctrl-\ Ctrl-C Ctrl-Z signals
 	ignore_signal_for_shell();
 

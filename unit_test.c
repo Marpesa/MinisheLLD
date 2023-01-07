@@ -144,16 +144,28 @@ void static lexer_test_pipe()
 
 }
 
+void static	expand_test_pipe(char **env)
+{
+	t_list *lst = create_lst_token(5, "|", TOKEN_PIPE, "|", TOKEN_PIPE, "|", TOKEN_PIPE, "|", TOKEN_PIPE, "|", TOKEN_PIPE);
+	ft_expand(lst, env);
+	test(create_lst_token(5, "|", TOKEN_PIPE, "|", TOKEN_PIPE, "|", TOKEN_PIPE, "|", TOKEN_PIPE, "|", TOKEN_PIPE), lst);
+}
+
+
 //void static expand_test_word()
 
-int main(void)
+int main(int argc, char **argv, char **env)
 {
+	(void)argc;
+	(void)argv;
+
 	lexer_test_s_quote();
 	lexer_test_d_quote();
 	lexer_test_heredoc();
 	lexer_test_word();
 	lexer_test_pipe();
 	//Pense a ajouter un cas pour NULL et pour '\0'
-
+	printf("-----------------------------EXPAND---------------------\n");
+	expand_test_pipe(env);
 	return (0);
 }
