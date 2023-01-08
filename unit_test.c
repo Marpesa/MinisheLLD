@@ -146,11 +146,46 @@ void static lexer_test_pipe()
 
 void static	expand_test_pipe(char **env)
 {
-	t_list *lst = create_lst_token(5, "|", TOKEN_PIPE, "|", TOKEN_PIPE, "|", TOKEN_PIPE, "|", TOKEN_PIPE, "|", TOKEN_PIPE);
+	t_list *lst;
+
+	lst = create_lst_token(5, "|", TOKEN_PIPE, "|", TOKEN_PIPE, "|", TOKEN_PIPE, "|", TOKEN_PIPE, "|", TOKEN_PIPE);
 	ft_expand(lst, env);
 	test(create_lst_token(5, "|", TOKEN_PIPE, "|", TOKEN_PIPE, "|", TOKEN_PIPE, "|", TOKEN_PIPE, "|", TOKEN_PIPE), lst);
 }
 
+void static expand_test_word(char **env)
+{
+	t_list *lst;
+
+	lst = create_lst_token(1, "hello", TOKEN_WORD);
+	ft_expand(lst, env);
+	test(create_lst_token(1, "hello", TOKEN_WORD), lst);
+
+	lst = create_lst_token(2, "hello", TOKEN_WORD, "hello", TOKEN_WORD);
+	ft_expand(lst, env);
+	test(create_lst_token(2, "hello", TOKEN_WORD, "hello", TOKEN_WORD), lst);
+}
+
+void static	expand_test_env_var(char **env)
+{	
+	t_list *lst;
+
+	lst = create_lst_token(1, "$USER", TOKEN_WORD);
+	ft_expand(lst, env);
+	test(create_lst_token(1, "gle-mini", TOKEN_WORD), lst);
+
+	lst = create_lst_token(1, "hello$USER", TOKEN_WORD);
+	ft_expand(lst, env);
+	test(create_lst_token(1, "hellogle-mini", TOKEN_WORD), lst);
+
+	lst = create_lst_token(1, "$USERRR", TOKEN_WORD);
+	ft_expand(lst, env);
+	test(create_lst_token(1, "", TOKEN_WORD), lst);
+
+	lst = create_lst_token(1, "$$USER", TOKEN_WORD);
+	ft_expand(lst, env);
+	test(create_lst_token(1, "gle-mini", TOKEN_WORD), lst);
+}
 
 //void static expand_test_word()
 
@@ -166,6 +201,9 @@ int main(int argc, char **argv, char **env)
 	lexer_test_pipe();
 	//Pense a ajouter un cas pour NULL et pour '\0'
 	printf("-----------------------------EXPAND---------------------\n");
+	expand_test_word(env);
 	expand_test_pipe(env);
+	printf("--------------------------------------------------------\n");
+	expand_test_env_var(env);
 	return (0);
 }

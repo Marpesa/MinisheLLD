@@ -6,7 +6,7 @@
 /*   By: gle-mini <gle-mini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 04:19:58 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/02 18:04:44 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/08 17:30:41 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,11 @@ size_t			ft_strlcat(char *dst, const char *src, size_t size);
 
 size_t			ft_strlcpy(char *dst, const char *src, size_t size);
 
+size_t			ft_strlcpy_secure(char *dst, const char *src, size_t size);
+
 size_t			ft_strlen(const char *s);
 
-size_t			ft_secure_strlen(const char *s);
+size_t			ft_strlen_secure(const char *s);
 
 char			*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 

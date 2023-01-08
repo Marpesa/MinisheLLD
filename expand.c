@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/07 17:43:25 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/08 17:31:47 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ char* merge_strings(char* str1, char* str2)
 
 	i = 0;
 	j = 0;
-	result = malloc(ft_secure_strlen(str1) + ft_secure_strlen(str2) + 1);
+	result = malloc(ft_strlen_secure(str1) + ft_strlen_secure(str2) + 1);
 	if (result == NULL) {
 		return NULL;
 	}
@@ -118,9 +118,10 @@ static void expand_token(t_token *token, char **env)
 		}
 		else 
 		{
-			append_str = malloc(ft_secure_strlen(new_str) + (end - start) + 1);
-			ft_strncpy(append_str, new_str, ft_secure_strlen(new_str));
-			ft_strncat(append_str, start, end - start);
+			append_str = malloc(ft_strlen_secure(new_str) + (end - start) + 1);
+			ft_bzero(append_str, ft_strlen_secure(new_str) + (end - start));
+			ft_strlcpy_secure(append_str, new_str, ft_strlen_secure(new_str));
+			ft_strlcat(append_str, start, end - start + 1);
 			free(new_str);
 			new_str = append_str;
 		}
@@ -132,10 +133,12 @@ static void expand_token(t_token *token, char **env)
 	}
 	else 
 	{
-		ft_putstr_fd_address(start, end, 1);
-		append_str = malloc(ft_secure_strlen(new_str) + (end - start) + 1);
-		ft_strncpy(append_str, new_str, ft_secure_strlen(new_str));
-		ft_strncat(append_str, start, end - start);
+		//ft_putstr_fd_address(start, end, 1);
+		append_str = malloc(ft_strlen_secure(new_str) + (end - start) + 1);
+		ft_bzero(append_str, ft_strlen_secure(new_str) + (end - start));
+		ft_putstr_fd(append_str, 1);
+		ft_strlcpy_secure(append_str, new_str, ft_strlen_secure(new_str));
+		ft_strlcat(append_str, start, end - start + 1);
 		free(new_str);
 		new_str = append_str;
 	}
