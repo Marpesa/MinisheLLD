@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/08 17:31:47 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/09 19:01:49 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -152,7 +152,7 @@ void ft_expand(t_list *lst_token, char **env)
 	while (lst_token != NULL)
 	{
 		token = lst_token->content;
-		if (token->type == TOKEN_WORD || token->type == TOKEN_D_QUOTE)
+		if (token->type == TOKEN_WORD)
 			expand_token(token, env);	
 		lst_token = lst_token->next;
 	}

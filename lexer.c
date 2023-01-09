@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 04:12:43 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/07 15:07:35 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/09 19:46:25 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,6 @@ char *ft_get_token_type(enum e_token_type type)
 		return ("TOKEN_PIPE");
 	else if (type == TOKEN_AND)
 		return ("TOKEN_AND");
-	else if (type == TOKEN_S_QUOTE)
-		return ("TOKEN_S_QUOTE");	
-	else if (type == TOKEN_D_QUOTE)
-		return ("TOKEN_D_QUOTE");
 	else if (type == TOKEN_IGNORE)
 		return ("TOKEN_IGNORE");
 	else if (type == TOKEN_HEREDOC)
@@ -88,10 +84,12 @@ int	is_special(char c)
 		return(TOKEN_PIPE);
 	if (c == '&')
 		return(TOKEN_AND);
+	/*
 	if (c == '\'')
 		return(TOKEN_S_QUOTE);
 	if (c == '\"')
 		return(TOKEN_D_QUOTE);
+	*/
 	if (c == '\\' || c == ';' || c == '{' || c == '}')
 		return(TOKEN_IGNORE);
 	return (0);
@@ -148,6 +146,7 @@ void	lexer_data_init(t_lexer *data)
 	data->lst_token = NULL;
 }
 
+/*
 static void	token_s_quotes(char *input, int *i, t_lexer *data)
 {
 	t_token *token;
@@ -183,6 +182,7 @@ static void	token_d_quotes(char *input, int *i, t_lexer *data)
 	data->lst_token = lst_add_token(data->lst_token, token);
 	*i = j + 1;
 }
+*/
 
 static void	token_word(char *input, int *i, t_lexer *data)
 {
@@ -200,7 +200,7 @@ static void	token_word(char *input, int *i, t_lexer *data)
 	data->in_word = true;
     data->token_start = *i;
 	j = *i;
-	while (input[j] != '\0' && input[j] != ' ' && !is_special(input[j]) && input[j] != '\'' && input[j] != '\"')
+	while (input[j] != '\0' && input[j] != ' ' && !is_special(input[j]))
 		j++;
 	word_len = j - *i;
 	token = malloc(sizeof(t_token) * 1);
@@ -238,14 +238,17 @@ t_list	*lexer(char *input)
 			token_heredoc(input, &i, &data);
 		else if (input[i] == '>' && input[i + 1] == '>')
 			token_redirect_append(input, &i, &data);
+		/*
         else if (input[i] == '"')
 			token_d_quotes(input, &i, &data);
 		else if (input[i] == '\'')
 			token_s_quotes(input, &i, &data);
+		*/
 		else if (input[i] != '\0' && input[i] != ' ' && !is_special(input[i]))
 			token_word(input, &i, &data);
         else if ((is_special(input[i])))
 			super_token(input, &i, &data);
+	write(1, "test\n", 5);
     }
 	return (data.lst_token);
 }

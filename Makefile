@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2023/01/07 17:57:39 by gle-mini         ###   ########.fr        #
+#    Updated: 2023/01/08 18:09:37 by gle-mini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,7 @@ _BLKB 		=	\e[48:5:0m
 
 #Files
 
-C_ROOT = main lexer expand syntaxe_error check_error_input
+C_ROOT = main lexer expand syntaxe_error check_error_input heredoc
 
 C_TEST = unit_test lexer expand
 

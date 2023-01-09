@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/07 17:42:27 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/09 14:52:56 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,9 @@ void ignore_signal_for_shell()
 /* Read a string, and return a pointer to it.  Returns NULL on EOF. */
 char	*rl_gets ()
 {
-	char *line_read = (char *)NULL;
+	char *line_read;
 
+	line_read = NULL;
 	/* If the buffer has already been allocated, return the memory
      to the free pool. */
 	char* prompt = _BLUE_LLD _BOLD"Minishe"_ORANGE"LLD"_WHITE"> " _END;
@@ -85,7 +86,7 @@ int main(int argc, char **argv, char **env)
 	char* linebuffer;
 
 	linebuffer = NULL;
-	while (1)
+	while (true)
 	{
 
 		linebuffer = rl_gets();
@@ -95,6 +96,7 @@ int main(int argc, char **argv, char **env)
 		if (linebuffer == NULL)
 		{
 			printf(_ORANGE "GOODBYE !\n");
+			//OUBLIE PAS DE GRERER LEXIT GUGU
 			exit(1);
 		}
 		if (check_error_input(linebuffer))
@@ -105,6 +107,7 @@ int main(int argc, char **argv, char **env)
 		printf("---------------------------------------------------------\n");
 		ft_expand(lst_token, env);
 		lst_print_token(lst_token);
+		heredoc(lst_token);
 		syntaxe_error(lst_token);
 	}
 	rl_clear_history();
