@@ -45,6 +45,7 @@ SRCS			=	ft_isalnum.c \
 					ft_lstmap.c \
 					ft_lstnew.c \
 					ft_lstsize.c \
+					ft_isspace.c \
 
 OBJS			= $(SRCS:.c=.o)
 

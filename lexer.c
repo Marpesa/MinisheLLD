@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 04:12:43 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/09 19:46:25 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/09 20:41:54 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,7 +200,7 @@ static void	token_word(char *input, int *i, t_lexer *data)
 	data->in_word = true;
     data->token_start = *i;
 	j = *i;
-	while (input[j] != '\0' && input[j] != ' ' && !is_special(input[j]))
+	while (input[j] != '\0' && !ft_isspace(input[j]) && !is_special(input[j]))
 		j++;
 	word_len = j - *i;
 	token = malloc(sizeof(t_token) * 1);
@@ -228,10 +228,10 @@ t_list	*lexer(char *input)
 	lexer_data_init(&data);
     while (input[i] != '\0')
 	{
-        if (input[i] == ' ')
+        if (ft_isspace(input[i]))
 		{
             data.in_word = false; 
-			while (input[i] == ' ')
+			while (ft_isspace(input[i]))
       			i++;
         }
 		else if (input[i] == '<' && input[i + 1] == '<')
@@ -244,11 +244,10 @@ t_list	*lexer(char *input)
 		else if (input[i] == '\'')
 			token_s_quotes(input, &i, &data);
 		*/
-		else if (input[i] != '\0' && input[i] != ' ' && !is_special(input[i]))
+		else if (input[i] != '\0' && !ft_isspace(input[i]) && !is_special(input[i]))
 			token_word(input, &i, &data);
         else if ((is_special(input[i])))
 			super_token(input, &i, &data);
-	write(1, "test\n", 5);
     }
 	return (data.lst_token);
 }
