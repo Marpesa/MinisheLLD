@@ -114,7 +114,7 @@ void	test(t_list *lst_expected_lexer, t_list *lst_expected_expand, char *test_co
 	printf("_____________________________________________________\n\n\n\n");
 }
 
-void static test_d_quote(char **env)
+static void test_d_quote(char **env)
 {
 	printf("=======================TEST_D_QUOTE=============================\n\n");
 	test(create_lst_token(1, "hello'$USER'", TOKEN_WORD), 
@@ -144,9 +144,6 @@ void static test_d_quote(char **env)
 	test(create_lst_token(1, "\"'$USER'\"", TOKEN_WORD),
 		create_lst_token(1, "$USER", TOKEN_WORD),
 		"\"'$USER'\"", env);
-	test(create_lst_token(1, "$'USER'", TOKEN_WORD),
-		create_lst_token(1, "USER", TOKEN_WORD),
-		"$'USER'", env);
 	test(create_lst_token(1, "$\"USER\"", TOKEN_WORD),
 		create_lst_token(1, "$USER", TOKEN_WORD),
 		"$\"USER\"", env);
@@ -155,7 +152,7 @@ void static test_d_quote(char **env)
 		"echo hello'hello'", env);
 }
 
-void static test_s_quote(char **env)
+static void test_s_quote(char **env)
 {
 	printf("=======================TEST_S_QUOTE=============================\n\n");
 	test(create_lst_token(2, "hello", TOKEN_WORD, "\"$USER\"", TOKEN_WORD),
@@ -175,22 +172,71 @@ void static test_s_quote(char **env)
 		"'\"$USER\"'", env);
 	test(create_lst_token(2, "cat", TOKEN_WORD, "'\"$USER\"'", TOKEN_WORD),
 		create_lst_token(2, "cat", TOKEN_WORD, "'\"$USER\"'", TOKEN_WORD),
-		"'\"$USER\"'", env);
+		"cat '\"$USER\"'", env);
+	test(create_lst_token(1, "$'USER'", TOKEN_WORD),
+		create_lst_token(1, "USER", TOKEN_WORD),
+		"$'USER'", env);
 	test(create_lst_token(2, "echo", TOKEN_WORD, "hello'hello'", TOKEN_WORD),
 		create_lst_token(2, "echo", TOKEN_WORD, "hellohello", TOKEN_WORD),
 		"echo hello'hello'", env);
 }
 
-/*
 
-
-void static lexer_test_heredoc()
+static void test_heredoc(char **env)
 {
-	test(create_lst_token(4, "hello", TOKEN_WORD, "$USER", TOKEN_WORD, "<<", TOKEN_HEREDOC, "Louise", TOKEN_EOF), 
-		lexer("hello'$USER' <<Louise"));
-	test(create_lst_token(4, "hello", TOKEN_WORD, "$USER", TOKEN_WORD, "<<", TOKEN_HEREDOC, "|", TOKEN_PIPE), 
-		lexer("hello'$USER' << |"));
+	test(create_lst_token(3, "hello'$USER'", TOKEN_WORD, "<<", TOKEN_HEREDOC, "Louise", TOKEN_WORD),
+		create_lst_token(3, "hello$USER", TOKEN_WORD, "<<", TOKEN_HEREDOC, "Louise", TOKEN_WORD),
+		"hello'$USER' <<Louise", env);
+	test(create_lst_token(4, "cat", TOKEN_WORD, "hello'$USER'", TOKEN_WORD, "<<", TOKEN_HEREDOC, "Louise", TOKEN_WORD),
+		create_lst_token(4, "cat", TOKEN_WORD, "hello$USER", TOKEN_WORD, "<<", TOKEN_HEREDOC, "Louise", TOKEN_WORD),
+		"cat hello'$USER' <<Louise", env);
+	test(create_lst_token(3, "hello'$USER'", TOKEN_WORD, "<<", TOKEN_HEREDOC, "|", TOKEN_WORD),
+		create_lst_token(3, "hello$USER", TOKEN_WORD, "<<", TOKEN_HEREDOC, "|", TOKEN_PIPE),
+		"hello'$USER' << |", env);
+	test(create_lst_token(3, "hello'$USER'", TOKEN_WORD, "<<", TOKEN_HEREDOC, "|", TOKEN_WORD),
+		create_lst_token(3, "hello$USER", TOKEN_WORD, "<<", TOKEN_HEREDOC, "|", TOKEN_PIPE),
+		"hello'$USER' <<|", env);
+	test(create_lst_token(3, "hello'$USER'", TOKEN_WORD, "<<", TOKEN_HEREDOC, "|", TOKEN_WORD),
+		create_lst_token(3, "hello$USER", TOKEN_WORD, "<<", TOKEN_HEREDOC, "|", TOKEN_PIPE),
+		"cat << |", env);
+	test(create_lst_token(3, "hello'$USER'", TOKEN_WORD, "<<", TOKEN_HEREDOC, "EOF", TOKEN_WORD),
+		create_lst_token(3, "hello$USER", TOKEN_WORD, "<<", TOKEN_HEREDOC, "EOF", TOKEN_PIPE),
+		"cat << EOF", env);
+	test(create_lst_token(3, "hello'$USER'", TOKEN_WORD, "<<", TOKEN_HEREDOC, "\"\"EOF", TOKEN_WORD),
+		create_lst_token(3, "hello$USER", TOKEN_WORD, "<<", TOKEN_HEREDOC, "EOF", TOKEN_WORD),
+		"cat << ""EOF", env);
+	test(create_lst_token(3, "hello'$USER'", TOKEN_WORD, "<<", TOKEN_HEREDOC, "E\"\"OF", TOKEN_WORD),
+		create_lst_token(3, "hello$USER", TOKEN_WORD, "<<", TOKEN_HEREDOC, "EOF", TOKEN_WORD),
+		"cat << E""OF", env);
+	test(create_lst_token(3, "hello'$USER'", TOKEN_WORD, "<<", TOKEN_HEREDOC, "\"EOF\"", TOKEN_WORD),
+		create_lst_token(3, "hello$USER", TOKEN_WORD, "<<", TOKEN_HEREDOC, "EOF", TOKEN_WORD),
+		"cat << \"EOF\"", env);
+	test(create_lst_token(3, "hello'$USER'", TOKEN_WORD, "<<", TOKEN_HEREDOC, "\"EOF\"\"EOF\"", TOKEN_WORD),
+		create_lst_token(3, "hello$USER", TOKEN_WORD, "<<", TOKEN_HEREDOC, "EOFEOF", TOKEN_WORD),
+		"cat << \"EOF\"\"EOF\"", env);
+	test(create_lst_token(3, "hello'$USER'", TOKEN_WORD, "<<", TOKEN_HEREDOC, "EOF''", TOKEN_WORD),
+		create_lst_token(3, "hello$USER", TOKEN_WORD, "<<", TOKEN_HEREDOC, "EOF", TOKEN_WORD),
+		"cat << EOF''", env);
+	test(create_lst_token(3, "hello'$USER'", TOKEN_WORD, "<<", TOKEN_HEREDOC, "''EOF", TOKEN_WORD),
+		create_lst_token(3, "hello$USER", TOKEN_WORD, "<<", TOKEN_HEREDOC, "EOF", TOKEN_WORD),
+		"cat << ''EOF", env);
+	test(create_lst_token(3, "hello'$USER'", TOKEN_WORD, "<<", TOKEN_HEREDOC, "E''OF", TOKEN_WORD),
+		create_lst_token(3, "hello$USER", TOKEN_WORD, "<<", TOKEN_HEREDOC, "EOF", TOKEN_WORD),
+		"cat << E''OF", env);
+	test(create_lst_token(3, "hello'$USER'", TOKEN_WORD, "<<", TOKEN_HEREDOC, "'EOF''EOF'", TOKEN_WORD),
+		create_lst_token(3, "hello$USER", TOKEN_WORD, "<<", TOKEN_HEREDOC, "EOFEOF", TOKEN_WORD),
+		"cat << 'EOF''EOF'", env);
 }
+
+static void test_word(char **env)
+{
+	test(create_lst_token(4, "HELLO", TOKEN_WORD, "JE", TOKEN_WORD, "SUIS", TOKEN_WORD, "BEAU", TOKEN_WORD),
+		create_lst_token(4, "HELLO", TOKEN_WORD, "JE", TOKEN_WORD, "SUIS", TOKEN_WORD, "BEAU", TOKEN_WORD),
+		"HELLO JE SUIS BEAU", env);
+}
+
+
+/*
 
 void static lexer_test_word()
 {
@@ -262,9 +308,9 @@ int main(int argc, char **argv, char **env)
 
 	test_d_quote(env);
 	test_s_quote(env);
+	test_heredoc(env);
+	test_word(env);
 	/*
-	lexer_test_heredoc();
-	lexer_test_word();
 	lexer_test_pipe();
 	//Pense a ajouter un cas pour NULL et pour '\0'
 	printf("-----------------------------EXPAND---------------------\n");
@@ -276,7 +322,6 @@ int main(int argc, char **argv, char **env)
 
 
 
-	//echo $"USER"
 
 	/*-----------TEST-HEREDOC-------------*/
 	//cat << EOF""

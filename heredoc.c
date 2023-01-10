@@ -44,18 +44,21 @@ static int	create_temporary_file(void)
 
 static void	heredoc_quit(int signum, siginfo_t *si, void *context)
 {
+	int *readline_exit; 
+	
 	(void)signum;
 	(void)si;
 	(void)context;
 
-	//rl_done = 1;
-	t_bool *readline_exit = si->si_ptr;
-	*readline_exit = false;
-	printf("rl_done is set to 1\n");
+	readline_exit = si->si_ptr;
+	*readline_exit = !(*readline_exit);
+	//printf("number = %d\n", *readline_exit);
+	//printf("number = %d\n", *readline_exit);
+	printf("SIIIIIIIIIIIIGGGGGGGGGGGINNNNNNNNNTTTTTT\n");
 }
 
 
-void	heredoc_signal(t_bool *readline_exit)
+void	heredoc_signal(int *readline_exit)
 {
 	struct sigaction action_heredoc_quit;
 	
@@ -68,22 +71,21 @@ void	heredoc_signal(t_bool *readline_exit)
 
 	union sigval value;
 	value.sival_ptr = readline_exit;
-	sigaction(SIGINT, &action_heredoc_quit, NULL);
 	//sigaction(SIGINT, &action_heredoc_quit, &value);
-	//sigqueue(getpid(), SIGINT, value);
+	sigaction(SIGINT, &action_heredoc_quit, NULL);
+	sigqueue(getpid(), SIGINT, value);
 }
 
 void	heredoc_prompt(char *eof)
 {
 	char *input;
-	t_bool readline_exit;
+	int readline_exit;
 
-	readline_exit = false;
+	readline_exit = 1;
 	input = NULL;
-	write(1, "test\n", 5);
 	heredoc_signal(&readline_exit);
 	write(1, "test\n", 5);
-	while (readline_exit == false)
+	while (true)
 	{
 		input = readline("> ");
 		if (input == NULL)
@@ -99,11 +101,18 @@ void	heredoc_prompt(char *eof)
 		else 
 		{
 			//close(fd);
-			readline_exit = true;
+			//readline_exit = true;
 			printf("exit normal\n");
 			free(input);
 			break;
 		}
+		/*
+		if (readline_exit == 1)
+		{
+			printf("quit by sigint\n");
+			break;
+		}
+		*/
 	}
 	ignore_signal_for_shell();
 }
