@@ -27,11 +27,45 @@ int	custom_tokenizer(char *str, char **start, char **end)
 
 	i = 0;
 	*start = str;
-	if (str[i] == '$' || str[i] == ' ')
+	if (str[i] == '$' || str[i] == ' ' || str[i] == '\"')
+		i++;
+	if (str[i] == '\'' && str[i - 1] == '$')
 		i++;
 	while (str[i] != '\0')
 	{
+		if (str[i] == '\'' && str[i - 1] == '$')
+		{
+			write(1, "test\n", 5);
+			*end = &str[i - 1];
+			return (1);
+		}
 		if (str[i] == '$')
+		{
+			*end = &str[i];
+			return (1);
+		}
+
+			
+		if (str[i] == '\'')
+		{
+			i++;
+			while (str[i] != '\0' && str[i] != '\'')
+				i++;
+		}
+		/*
+		if (str[i] == '$' && str[i + 1] != '\'')
+		{
+			*end = &str[i];
+			return (1);
+		}
+		if (str[i] == '$' && str[i + 1] == '\'')
+		{
+			*end = &str[i];
+			i++;
+			return (1);
+		}
+		*/
+		if (str[i] == '\"')
 		{
 			*end = &str[i];
 			return (1);
@@ -49,7 +83,11 @@ int	custom_tokenizer(char *str, char **start, char **end)
 
 int main(void)
 {
-	char *text = strdup("HI Lol$HELLO$$USER$$$$WORLD$$USER lol");
+	char *text = strdup("HI Lol\"$HELLO\"$$USER$$'$USER'hello\"Louise'$USER'Gurvan\"$$WORLD$$USER lol");
+	//char *text = strdup("\"'$USER'\"");
+	//char *text = strdup("'\"$USER\"'");
+	//char *test = strdup("\"''\"\"'$USER'\"\"''\""); //Loulou's test ''$USER''
+	//char *text = strdup("echo $'USER'");
 	char *start;
 	char *end;
 

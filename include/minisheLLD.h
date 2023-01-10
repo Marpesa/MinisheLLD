@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/09 19:00:55 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/10 17:41:03 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef enum {
 } t_bool;
 
 typedef enum e_token_type {
-	TOKEN_EOF,				// End of file
+	TOKEN_EOF,				// heredoc limitor 
 	TOKEN_WORD,				// A word
 	TOKEN_REDIRECT_IN,		// < redirection
 	TOKEN_REDIRECT_OUT,		// > redirection

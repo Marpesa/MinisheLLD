@@ -6,12 +6,13 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/09 19:01:49 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/10 19:31:18 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
 
+/*
 int	custom_tokenizer(char *str, char **start, char **end)
 {
 	int	i;
@@ -33,6 +34,44 @@ int	custom_tokenizer(char *str, char **start, char **end)
 			return (1);
 		}
 		i++;
+	}
+	*end = &str[i];
+	return (0);
+}
+*/
+
+int	custom_tokenizer(char *str, char **start, char **end)
+{
+	int	i;
+
+	i = 0;
+	*start = str;
+	if (str[i] == '$' || str[i] == ' ' || str[i] == '\"')
+		i++;
+	while (str[i] != '\0')
+	{
+		if (str[i] == '\'')
+		{
+			i++;
+			while (str[i] != '\0' && str[i] != '\'')
+				i++;
+		}
+		if (str[i] == '$')
+		{
+			*end = &str[i];
+			return (1);
+		}
+		if (str[i] == '\"')
+		{
+			*end = &str[i];
+			return (1);
+		}
+		if (str[i] == ' ')
+		{
+			*end = &str[i];
+			return (1);
+		}
+				i++;
 	}
 	*end = &str[i];
 	return (0);
@@ -152,8 +191,12 @@ void ft_expand(t_list *lst_token, char **env)
 	while (lst_token != NULL)
 	{
 		token = lst_token->content;
+		//AJOUTER CAS PARTICULIER POUR LE EOF DU HEREDOC
 		if (token->type == TOKEN_WORD)
-			expand_token(token, env);	
+		{
+			expand_token(token, env);
+			
+		}
 		lst_token = lst_token->next;
 	}
 }

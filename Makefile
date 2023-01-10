@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2023/01/08 18:09:37 by gle-mini         ###   ########.fr        #
+#    Updated: 2023/01/10 17:21:14 by gle-mini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -62,7 +62,7 @@ LIB			=	make --silent -C libft
 
 #----------------------- Constant strings --------------------
 
-COMPILER		=	cc
+COMPILER		=	gcc
 
 FLAGS			=	-Wall -Wextra -Werror -g3
 

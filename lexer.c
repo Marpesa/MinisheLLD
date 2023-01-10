@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 04:12:43 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/09 20:41:54 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/10 17:41:32 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,8 +189,8 @@ static void	token_word(char *input, int *i, t_lexer *data)
 	t_token *token;
 	int	word_len;
 	int	j;
-	t_token *previous;
-	t_list *lst_previous;
+	//t_token *previous;
+	//t_list *lst_previous;
 
 	j = 0;
 	word_len = 0;
@@ -205,6 +205,7 @@ static void	token_word(char *input, int *i, t_lexer *data)
 	word_len = j - *i;
 	token = malloc(sizeof(t_token) * 1);
 	token->type = TOKEN_WORD;
+	/*
 	lst_previous = ft_lstlast(data->lst_token);
 	if (lst_previous != NULL)
 	{
@@ -212,6 +213,7 @@ static void	token_word(char *input, int *i, t_lexer *data)
 		if (previous->type == TOKEN_HEREDOC)
 			token->type = TOKEN_EOF;
 	}
+	*/
 	token->text = malloc(sizeof(char) * (word_len + 1));
 	ft_strlcpy(token->text, &input[*i], word_len + 1);
 	data->lst_token = lst_add_token(data->lst_token, token);
