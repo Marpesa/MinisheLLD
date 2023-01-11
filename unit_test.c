@@ -236,7 +236,7 @@ static void test_word(char **env)
 		"HELLO JE SUIS BEAU", env);
 test(create_lst_token(2, "cat", TOKEN_WORD, "'\"$USER\"'", TOKEN_WORD),
 	create_lst_token(2, "cat", TOKEN_WORD, "gle-mini", TOKEN_WORD),
-	"cat \"$USER\"", env);
+	"cat '\"$USER\"'", env);
 
 }
 

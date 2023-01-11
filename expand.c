@@ -6,77 +6,11 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/10 19:31:18 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/11 12:21:55 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
-
-/*
-int	custom_tokenizer(char *str, char **start, char **end)
-{
-	int	i;
-
-	i = 0;
-	*start = str;
-	if (str[i] == '$' || str[i] == ' ')
-		i++;
-	while (str[i] != '\0')
-	{
-		if (str[i] == '$')
-		{
-			*end = &str[i];
-			return (1);
-		}
-		if (str[i] == ' ')
-		{
-			*end = &str[i];
-			return (1);
-		}
-		i++;
-	}
-	*end = &str[i];
-	return (0);
-}
-*/
-/*
-int	custom_tokenizer(char *str, char **start, char **end)
-{
-	int	i;
-
-	i = 0;
-	*start = str;
-	if (str[i] == '$' || str[i] == ' ' || str[i] == '\"')
-		i++;
-	while (str[i] != '\0')
-	{
-		if (str[i] == '\'')
-		{
-			i++;
-			while (str[i] != '\0' && str[i] != '\'')
-				i++;
-		}
-		if (str[i] == '$')
-		{
-			*end = &str[i];
-			return (1);
-		}
-		if (str[i] == '\"')
-		{
-			*end = &str[i];
-			return (1);
-		}
-		if (str[i] == ' ')
-		{
-			*end = &str[i];
-			return (1);
-		}
-				i++;
-	}
-	*end = &str[i];
-	return (0);
-}
-*/
 
 int	custom_tokenizer(char *str, char **start, char **end)
 {
@@ -202,27 +136,28 @@ static void expand_token(t_token *token, char **env)
 		}
 		else 
 		{
+			//ft_putstr_fd_address(start, end, 1);
 			append_str = malloc(ft_strlen_secure(new_str) + (end - start) + 1);
-			ft_bzero(append_str, ft_strlen_secure(new_str) + (end - start));
-			ft_strlcpy_secure(append_str, new_str, ft_strlen_secure(new_str));
-			ft_strlcat(append_str, start, end - start + 1);
+			ft_bzero(append_str, ft_strlen_secure(new_str) + (end - start) + 1);
+			ft_strlcpy_secure(append_str, new_str, ft_strlen_secure(new_str) + 1);
+		//	ft_strlcat(append_str, start, end - start + 1);
+			ft_strlcat(append_str, start, ft_strlen_secure(append_str) + (end - start) + 1);
 			free(new_str);
 			new_str = append_str;
 		}
 	}
-	if (*start == '$')
+	if (*start == '$' && *(start + 1) != '\"')
 	{
 		append_str = env_var_find(start + 1, end, env);
 		new_str = merge_strings(new_str, append_str);
 	}
 	else 
 	{
-		//ft_putstr_fd_address(start, end, 1);
 		append_str = malloc(ft_strlen_secure(new_str) + (end - start) + 1);
-		ft_bzero(append_str, ft_strlen_secure(new_str) + (end - start));
-		ft_putstr_fd(append_str, 1);
-		ft_strlcpy_secure(append_str, new_str, ft_strlen_secure(new_str));
-		ft_strlcat(append_str, start, end - start + 1);
+		ft_bzero(append_str, ft_strlen_secure(new_str) + (end - start) + 1);
+		ft_strlcpy_secure(append_str, new_str, ft_strlen_secure(new_str) + 1);
+		//ft_strlcat(append_str, start, end - start + 1);
+		ft_strlcat(append_str, start, ft_strlen_secure(append_str) + (end - start) + 1);
 		free(new_str);
 		new_str = append_str;
 	}
@@ -258,7 +193,7 @@ int		trim_len(char *str)
 	return (len);
 }
 
-char	*trim(char *str)
+char	*trim_quote(char *str)
 {
 	int	i;
 	int	j;
@@ -274,7 +209,7 @@ char	*trim(char *str)
 	if (str == NULL)
 		return (NULL);
 	len = trim_len(str);
-	new_str = malloc(sizeof(char) * (strlen(str) - len + 1));
+	new_str = malloc(sizeof(char) * (ft_strlen(str) - len + 1));
 	while (str[i])
 	{
 		if (str[i] == '\"' && in_s_quote == false)
@@ -294,9 +229,26 @@ char	*trim(char *str)
 	return (new_str);
 }
 
+void	trim(char **str)
+{
+	int nb_quotes;
+	char *new_str;
+
+	new_str = NULL;
+	nb_quotes = trim_len(*str);
+	if (nb_quotes > 0)
+	{
+		new_str = trim_quote(*str);
+		free(*str);
+		*str = new_str;
+	}
+
+}
+
 void ft_expand(t_list *lst_token, char **env)
 {
 	t_token *token;
+
 	while (lst_token != NULL)
 	{
 		token = lst_token->content;
@@ -304,7 +256,7 @@ void ft_expand(t_list *lst_token, char **env)
 		if (token->type == TOKEN_WORD)
 		{
 			expand_token(token, env);
-			trim(token->text);		
+			trim(&token->text);		
 		}
 		lst_token = lst_token->next;
 	}
