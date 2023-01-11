@@ -36,12 +36,41 @@ int		trim_len(char *str)
 	return (len);
 }
 
-/*
 char	*trim(char *str)
 {
+	int	i;
+	int	j;
+	int len;
+	char *new_str;
+	t_bool in_d_quote;
+	t_bool in_s_quote;
 
+	i = 0;
+	j = 0;
+	in_d_quote = false;
+	in_s_quote = false;
+	if (str == NULL)
+		return (NULL);
+	len = trim_len(str);
+	new_str = malloc(sizeof(char) * (strlen(str) - len + 1));
+	while (str[i])
+	{
+		if (str[i] == '\"' && in_s_quote == false)
+		{
+			in_d_quote = !in_d_quote;	
+			i++;
+		}
+		if (str[i] == '\'' && in_d_quote == false)
+		{
+			in_s_quote = !in_s_quote;	
+			i++;
+		}
+		new_str[j] = str[i];
+		j++;
+		i++;
+	}
+	return (new_str);
 }
-*/
 
 int main(void)
 {
@@ -54,7 +83,7 @@ int main(void)
 					   //Salut USER Hello 'Lwize' $USER gle-mini
 					   //		2 + 	2 +			0 +	2 +				2  = 6
 	
-	printf("len: %d\n", trim_len(text));
+	printf("%s\n", trim(text));
 	return (0);
 }
 
