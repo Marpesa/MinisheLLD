@@ -6,13 +6,14 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/11 12:21:55 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/11 21:39:14 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
 
-int	custom_tokenizer(char *str, char **start, char **end)
+/*
+int	custom_tokenizer(char *str, char **start, char **end, t_bool *in_d_quote)
 {
 	int	i;
 
@@ -20,7 +21,8 @@ int	custom_tokenizer(char *str, char **start, char **end)
 	*start = str;
 	if (str[i] == '$' || str[i] == ' ' || str[i] == '\"')
 		i++;
-	if (str[i] == '\'' && i == 0)
+	
+	if (str[i] == '\'' && i == 0 && *in_d_quote == false)
 	{
 		i++;
 		while (str[i] != '\0' && str[i] != '\'')
@@ -30,7 +32,7 @@ int	custom_tokenizer(char *str, char **start, char **end)
 	}
 	while (str[i] != '\0')
 	{
-		if (str[i] == '\'')
+		if ((str[i] == '\'' && *in_d_quote == false) || (str[i] == '\'' && *in_d_quote == true && i != 0))
 		{
 			*end = &str[i];
 			return (1);
@@ -40,8 +42,10 @@ int	custom_tokenizer(char *str, char **start, char **end)
 			*end = &str[i];
 			return (1);
 		}
+
 		if (str[i] == '\"')
 		{
+			*in_d_quote = !*in_d_quote;
 			*end = &str[i];
 			return (1);
 		}
@@ -55,6 +59,60 @@ int	custom_tokenizer(char *str, char **start, char **end)
 	*end = &str[i];
 	return (0);
 }
+*/
+
+int	custom_tokenizer(char *str, char **start, char **end, t_bool *in_d_quote)
+{
+	int	i;
+
+	i = 0;
+	*start = str;
+	if (str[i] == '\"' && *in_d_quote == false)
+		*in_d_quote = !*in_d_quote;
+	if (str[i] == '$' || str[i] == ' ' || str[i] == '\"')
+		i++;
+
+	if (str[i] == '\'' && i == 0 && *in_d_quote == false)
+	{
+		i++;
+		while (str[i] != '\0' && str[i] != '\'')
+			i++;
+		if (str[i] != '\0')
+			i++;
+	}
+	while (str[i] != '\0')
+	{
+		if ((str[i] == '\'' && *in_d_quote == false) || (str[i] == '\'' && *in_d_quote == true && i != 0))
+		{
+			*end = &str[i];
+			return (1);
+		}
+		if (str[i] == '$')
+		{
+			*end = &str[i];
+			return (1);
+		}
+
+		if (str[i] == '\"')
+		{
+			*in_d_quote = !*in_d_quote;
+			*end = &str[i];
+			return (1);
+		}
+		if (str[i] == ' ')
+		{
+			*end = &str[i];
+			return (1);
+		}
+		i++;
+	}
+	*end = &str[i];
+	return (0);
+}
+
+
+
+
 
 char* merge_strings(char* str1, char* str2)
 {
@@ -124,11 +182,14 @@ static void expand_token(t_token *token, char **env)
 	char *end;
 	char *append_str;
 	char *new_str;
+	t_bool in_d_quote;
 
+	in_d_quote = false;
 	new_str = NULL;
 	end = token->text;
-	while (custom_tokenizer(end, &start, &end) != 0)
+	while (custom_tokenizer(end, &start, &end, &in_d_quote) != 0)
 	{
+	//ft_putstr_fd_address(start, end, 1);
 		if (*start == '$' && *(start + 1) != '\"')
 		{
 			append_str = env_var_find(start + 1, end, env);
@@ -212,14 +273,12 @@ char	*trim_quote(char *str)
 	new_str = malloc(sizeof(char) * (ft_strlen(str) - len + 1));
 	while (str[i])
 	{
-		if (str[i] == '\"' && in_s_quote == false)
+		while ((str[i] == '\'' && in_d_quote == false) || (str[i] == '\"' && in_s_quote == false))
 		{
-			in_d_quote = !in_d_quote;
-			i++;
-		}
-		if (str[i] == '\'' && in_d_quote == false)
-		{
-			in_s_quote = !in_s_quote;
+			if (str[i] == '\'')
+				in_s_quote = !in_s_quote;
+			if (str[i] == '\"')
+				in_d_quote = !in_d_quote;
 			i++;
 		}
 		new_str[j] = str[i];
@@ -248,7 +307,7 @@ void	trim(char **str)
 void ft_expand(t_list *lst_token, char **env)
 {
 	t_token *token;
-
+	
 	while (lst_token != NULL)
 	{
 		token = lst_token->content;

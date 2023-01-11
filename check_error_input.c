@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 17:24:59 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/06 21:31:43 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/11 21:23:32 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 static int	closed_quotes(char *input, int *i)
 {
 	char quote;
+	int	res;
 
+	res = 0;
 	quote = input[*i];
 	*i += 1;
 	while (input [*i])
@@ -23,12 +25,11 @@ static int	closed_quotes(char *input, int *i)
 		if (input[*i] == quote)
 		{
 			*i += 1;
-			return (1);
+			res = 1;
 		}
 		*i += 1;
 	}
-	printf( _ORANGE "Quote not closed dumbass\n" _END);
-	return (0);
+	return (res);
 }
 
 int	check_error_input(char *input)
@@ -52,6 +53,8 @@ int	check_error_input(char *input)
 	{
 		if (input[i] == '\'' || input[i] == '"')
 			res = closed_quotes(input, &i);
+		if (res == 0)
+			printf( _ORANGE "Quote not closed dumbass\n" _END);
 		i++;
 	}
 	return (res);
