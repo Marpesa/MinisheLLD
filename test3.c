@@ -67,11 +67,11 @@ int	custom_tokenizer(char *str, char **start, char **end)
 
 int main(void)
 {
-	char *text = strdup("HI Lol\"$HELLO\"$$USER$$'$USER'hello\"Louise'$USER'Gurvan\"$$WORLD$$USER lol");
+	//char *text = strdup("HI Lol\"$HELLO\"$$USER$$'$USER'hello\"Louise'$USER'Gurvan\"$$WORLD$$USER lol");
 	//char *text = strdup("\"'$USER'\"");
 	//char *text = strdup("'\"$USER\"'");
 	//char *test = strdup("\"''\"\"'$USER'\"\"''\""); //Loulou's test ''$USER''
-	//char *text = strdup("echo $'USER'");
+	char *text = strdup("hello'$USER'");
 	char *start;
 	char *end;
 
