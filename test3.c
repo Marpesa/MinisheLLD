@@ -29,14 +29,19 @@ int	custom_tokenizer(char *str, char **start, char **end)
 	*start = str;
 	if (str[i] == '$' || str[i] == ' ' || str[i] == '\"')
 		i++;
-	if (str[i] == '\'' && str[i - 1] == '$')
+	if (str[i] == '\'' && i == 0)
+	{
 		i++;
+		while (str[i] != '\0' && str[i] != '\'')
+			i++;
+		if (str[i] != '\0')
+			i++;
+	}
 	while (str[i] != '\0')
 	{
-		if (str[i] == '\'' && str[i - 1] == '$')
+		if (str[i] == '\'')
 		{
-			write(1, "test\n", 5);
-			*end = &str[i - 1];
+			*end = &str[i];
 			return (1);
 		}
 		if (str[i] == '$')
@@ -44,27 +49,6 @@ int	custom_tokenizer(char *str, char **start, char **end)
 			*end = &str[i];
 			return (1);
 		}
-
-			
-		if (str[i] == '\'')
-		{
-			i++;
-			while (str[i] != '\0' && str[i] != '\'')
-				i++;
-		}
-		/*
-		if (str[i] == '$' && str[i + 1] != '\'')
-		{
-			*end = &str[i];
-			return (1);
-		}
-		if (str[i] == '$' && str[i + 1] == '\'')
-		{
-			*end = &str[i];
-			i++;
-			return (1);
-		}
-		*/
 		if (str[i] == '\"')
 		{
 			*end = &str[i];
