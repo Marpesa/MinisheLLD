@@ -12,54 +12,6 @@
 
 #include "minisheLLD.h"
 
-/*
-int	custom_tokenizer(char *str, char **start, char **end, t_bool *in_d_quote)
-{
-	int	i;
-
-	i = 0;
-	*start = str;
-	if (str[i] == '$' || str[i] == ' ' || str[i] == '\"')
-		i++;
-	
-	if (str[i] == '\'' && i == 0 && *in_d_quote == false)
-	{
-		i++;
-		while (str[i] != '\0' && str[i] != '\'')
-			i++;
-		if (str[i] != '\0')
-			i++;
-	}
-	while (str[i] != '\0')
-	{
-		if ((str[i] == '\'' && *in_d_quote == false) || (str[i] == '\'' && *in_d_quote == true && i != 0))
-		{
-			*end = &str[i];
-			return (1);
-		}
-		if (str[i] == '$')
-		{
-			*end = &str[i];
-			return (1);
-		}
-
-		if (str[i] == '\"')
-		{
-			*in_d_quote = !*in_d_quote;
-			*end = &str[i];
-			return (1);
-		}
-		if (str[i] == ' ')
-		{
-			*end = &str[i];
-			return (1);
-		}
-		i++;
-	}
-	*end = &str[i];
-	return (0);
-}
-*/
 
 int	custom_tokenizer(char *str, char **start, char **end, t_bool *in_d_quote)
 {
@@ -109,10 +61,6 @@ int	custom_tokenizer(char *str, char **start, char **end, t_bool *in_d_quote)
 	*end = &str[i];
 	return (0);
 }
-
-
-
-
 
 char* merge_strings(char* str1, char* str2)
 {
@@ -190,7 +138,8 @@ static void expand_token(t_token *token, char **env)
 	while (custom_tokenizer(end, &start, &end, &in_d_quote) != 0)
 	{
 	//ft_putstr_fd_address(start, end, 1);
-		if (*start == '$' && *(start + 1) != '\"')
+	//if (*start == '$' && *(start + 1) != '\"' && (end - start) > 1)
+	if ((*start == '$' && *(start + 1) != '\"' && (end - start) > 1) || (*start == '$' && (end - start) > 1 && *(start + 1) != '\''))
 		{
 			append_str = env_var_find(start + 1, end, env);
 			new_str = merge_strings(new_str, append_str);
@@ -207,7 +156,9 @@ static void expand_token(t_token *token, char **env)
 			new_str = append_str;
 		}
 	}
-	if (*start == '$' && *(start + 1) != '\"')
+//	if (*start == '$' && *(start + 1) != '\"')
+	//if (*start == '$' && *(start + 1) != '\"' && (end - start) > 1)
+	if ((*start == '$' && *(start + 1) != '\"' && (end - start) > 1) || (*start == '$' && (end - start) > 1 && *(start + 1) != '\''))
 	{
 		append_str = env_var_find(start + 1, end, env);
 		new_str = merge_strings(new_str, append_str);
@@ -285,6 +236,7 @@ char	*trim_quote(char *str)
 		j++;
 		i++;
 	}
+	new_str[j] = '\0';
 	return (new_str);
 }
 

@@ -157,7 +157,9 @@ static void test_d_quote(char **env)
 		create_lst_token(2, "echo", TOKEN_WORD, "helloLOUISE'gle-mini'gle-minigle-mini", TOKEN_WORD),
 		"echo hello\"LOUISE'$USER'\"$USER\"$USER\"", env);
 
-
+	test(create_lst_token(2, "echo", TOKEN_WORD, "\"\"hello", TOKEN_WORD),
+		create_lst_token(2, "echo", TOKEN_WORD, "hello", TOKEN_WORD),
+		"echo \"\"hello", env);
 }
 
 static void test_s_quote(char **env)
@@ -241,15 +243,21 @@ static void test_word(char **env)
 	test(create_lst_token(4, "HELLO", TOKEN_WORD, "JE", TOKEN_WORD, "SUIS", TOKEN_WORD, "BEAU", TOKEN_WORD),
 		create_lst_token(4, "HELLO", TOKEN_WORD, "JE", TOKEN_WORD, "SUIS", TOKEN_WORD, "BEAU", TOKEN_WORD),
 		"HELLO JE SUIS BEAU", env);
-test(create_lst_token(2, "cat", TOKEN_WORD, "'\"$USER\"'", TOKEN_WORD),
-	create_lst_token(2, "cat", TOKEN_WORD, "gle-mini", TOKEN_WORD),
-	"cat '\"$USER\"'", env);
+test(create_lst_token(2, "cat", TOKEN_WORD, "\"'$USER'\"", TOKEN_WORD),
+	create_lst_token(2, "cat", TOKEN_WORD, "'gle-mini'", TOKEN_WORD),
+	"cat \"'$USER'\"", env);
 test(create_lst_token(2, "echo", TOKEN_WORD, "'\"$USER\"'", TOKEN_WORD),
-	create_lst_token(2, "echo", TOKEN_WORD, "gle-mini", TOKEN_WORD),
+	create_lst_token(2, "echo", TOKEN_WORD, "\"$USER\"", TOKEN_WORD),
 	"echo '\"$USER\"'", env);
 test(create_lst_token(2, "echo", TOKEN_WORD, "'$\"$USER\"'", TOKEN_WORD),
-	create_lst_token(2, "echo", TOKEN_WORD, "$\"gle-mini\"", TOKEN_WORD),
-	"echo $gle-mini", env);
+	create_lst_token(2, "echo", TOKEN_WORD, "$\"$USER\"", TOKEN_WORD),
+	"echo '$\"$USER\"'", env);
+test(create_lst_token(2, "echo", TOKEN_WORD, "\"$'$USER'\"", TOKEN_WORD),
+	create_lst_token(2, "echo", TOKEN_WORD, "$'gle-mini'", TOKEN_WORD),
+	"echo \"$'$USER'\"", env);
+test(create_lst_token(2, "echo", TOKEN_WORD, "$'$USER'", TOKEN_WORD),
+	create_lst_token(2, "echo", TOKEN_WORD, "$USER", TOKEN_WORD),
+	"echo $'$USER'", env);
 test(create_lst_token(2, "echo", TOKEN_WORD, "$", TOKEN_WORD),
 	create_lst_token(2, "echo", TOKEN_WORD, "$", TOKEN_WORD),
 	"echo $", env);
