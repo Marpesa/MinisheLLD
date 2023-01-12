@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 04:12:43 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/10 17:41:32 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/13 00:24:51 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 char *ft_get_token_type(enum e_token_type type)
 {
-	if (type == TOKEN_EOF)
-		return ("TOKEN_EOF");
+	if (type == TOKEN_LIM)
+		return ("TOKEN_LIM");
 	else if (type == TOKEN_WORD)
 		return ("TOKEN_WORD");
 	else if (type == TOKEN_REDIRECT_IN)

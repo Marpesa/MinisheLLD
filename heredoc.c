@@ -6,7 +6,7 @@
 /*   By: gle-mini <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 17:51:49 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/09 17:56:07 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/13 00:25:45 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ t_bool	is_heredoc(t_list *lst_token)
 		return (false);
 	token = lst_token->content;
 	token_next = lst_token->next->content;
-	if (token->type == TOKEN_HEREDOC && token_next->type == TOKEN_EOF)
+	if (token->type == TOKEN_HEREDOC && token_next->type == TOKEN_LIM)
 		return (true);
 	return (false);
 }

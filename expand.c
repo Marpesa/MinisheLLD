@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/11 21:39:14 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/13 00:22:14 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ static void expand_token(t_token *token, char **env)
 	{
 	//ft_putstr_fd_address(start, end, 1);
 	//if (*start == '$' && *(start + 1) != '\"' && (end - start) > 1)
-	if ((*start == '$' && *(start + 1) != '\"' && (end - start) > 1) || (*start == '$' && (end - start) > 1 && *(start + 1) != '\''))
+	if ((*start == '$' && *(start + 1) != '\"' && (end - start) > 1) || (*start == '$' && (end - start) == 1 && *(start + 1) == '\'' && in_d_quote == false))
 		{
 			append_str = env_var_find(start + 1, end, env);
 			new_str = merge_strings(new_str, append_str);
@@ -158,7 +158,7 @@ static void expand_token(t_token *token, char **env)
 	}
 //	if (*start == '$' && *(start + 1) != '\"')
 	//if (*start == '$' && *(start + 1) != '\"' && (end - start) > 1)
-	if ((*start == '$' && *(start + 1) != '\"' && (end - start) > 1) || (*start == '$' && (end - start) > 1 && *(start + 1) != '\''))
+	if ((*start == '$' && *(start + 1) != '\"' && (end - start) > 1) || (*start == '$' && (end - start) == 1 && *(start + 1) == '\'' && in_d_quote == false))
 	{
 		append_str = env_var_find(start + 1, end, env);
 		new_str = merge_strings(new_str, append_str);
@@ -259,13 +259,23 @@ void	trim(char **str)
 void ft_expand(t_list *lst_token, char **env)
 {
 	t_token *token;
-	
+	t_token *token_next;
+
+	token = NULL;
+	token_next = NULL;
 	while (lst_token != NULL)
 	{
 		token = lst_token->content;
-		//AJOUTER CAS PARTICULIER POUR LE EOF DU HEREDOC
-		if (token->type == TOKEN_WORD)
+		if (lst_token->next != NULL)
+			token_next = lst_token->next->content;
+		//AJOUTER CAS PARTICULIER POUR LE LIM DU HEREDOC
+		if (token_next != NULL && token->type == TOKEN_HEREDOC)
 		{
+			if (lst_token->next != NULL && token_next->type == TOKEN_WORD)
+				token_next->type = TOKEN_LIM;
+		}
+		if (token->type == TOKEN_WORD)
+		{			
 			expand_token(token, env);
 			trim(&token->text);		
 		}
