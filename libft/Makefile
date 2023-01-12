@@ -4,6 +4,7 @@ SRCS			=	ft_isalnum.c \
 					ft_putchar_fd.c \
 					ft_split.c \
 					ft_strlcat.c \
+					ft_strlcat_secure.c \
 					ft_strncmp.c \
 					ft_substr.c \
 					ft_atoi.c \
@@ -13,6 +14,7 @@ SRCS			=	ft_isalnum.c \
 					ft_putendl_fd.c \
 					ft_strchr.c \
 					ft_strlcpy.c \
+					ft_strlcpy_secure.c \
 					ft_strnstr.c \
 					ft_strncat.c \
 					ft_strncpy.c \
@@ -23,7 +25,7 @@ SRCS			=	ft_isalnum.c \
 					ft_putnbr_fd.c \
 					ft_strdup.c \
 					ft_strlen.c \
-					ft_secure_strlen.c \
+					ft_strlen_secure.c \
 					ft_strrchr.c \
 					ft_toupper.c \
 					ft_calloc.c \
@@ -44,6 +46,7 @@ SRCS			=	ft_isalnum.c \
 					ft_lstmap.c \
 					ft_lstnew.c \
 					ft_lstsize.c \
+					ft_isspace.c \
 
 OBJS			= $(SRCS:.c=.o)
 

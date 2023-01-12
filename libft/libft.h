@@ -6,7 +6,7 @@
 /*   By: gle-mini <gle-mini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 04:19:58 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/02 18:04:44 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/11 11:38:08 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ typedef struct s_split_next
 	size_t	start;
 	size_t	length;
 }				t_split_next;
+
+int				ft_isspace(char c);
 
 int				ft_atoi(const char *str);
 
@@ -76,11 +78,15 @@ char			*ft_strjoin(char const *s1, char const *s2);
 
 size_t			ft_strlcat(char *dst, const char *src, size_t size);
 
+size_t			ft_strlcat_secure(char *dst, const char *src, size_t size);
+
 size_t			ft_strlcpy(char *dst, const char *src, size_t size);
+
+size_t			ft_strlcpy_secure(char *dst, const char *src, size_t size);
 
 size_t			ft_strlen(const char *s);
 
-size_t			ft_secure_strlen(const char *s);
+size_t			ft_strlen_secure(const char *s);
 
 char			*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 

@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/06 18:15:10 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/13 00:20:09 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,21 +39,19 @@ typedef enum {
 } t_bool;
 
 typedef enum e_token_type {
-	TOKEN_EOF,				// End of file
+	TOKEN_LIM,				// heredoc limitor 
 	TOKEN_WORD,				// A word
 	TOKEN_REDIRECT_IN,		// < redirection
 	TOKEN_REDIRECT_OUT,		// > redirection
 	TOKEN_PIPE,				// | symbol
 	TOKEN_AND,				//  & symbol
-	TOKEN_S_QUOTE,			// ' symbol
-	TOKEN_D_QUOTE,			// " symbol
 	TOKEN_IGNORE,			// Every special char to ignore (; \)
 	TOKEN_HEREDOC,			// <<
 	TOKEN_REDIRECT_APPEND	// >>
 } t_token_type;
 
 typedef struct s_token {
-	enum e_token_type type;
+	t_token_type type;
 	char *text;
 } t_token;
 
@@ -85,5 +83,7 @@ void 	ft_expand(t_list *lst_token, char **env);
 int		is_special(char c);
 void	syntaxe_error(t_list *lst_token);
 int		check_error_input(char *input);
+void ignore_signal_for_shell();
+void	heredoc(t_list *lst_token);
 
 // #endif

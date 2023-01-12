@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 07:07:12 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/06 16:57:58 by lmery            ###   ########.fr       */
+/*   Updated: 2023/01/08 17:31:06 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,3 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 	}
 	return (srcsize);
 }
-
-/*
-size_t ft_strlcpy(char *dst, const char *src, size_t size)
-{
- 
-    size_t i;
-	i = 0;
-    while (i < size && src[i] != '\0')
-	{
-        dst[i] = src[i];
-		i++;
-    }
-    if (i <= size) {
-        dst[i] = '\0';
-    } else if (size > 0) {
-        dst[size - 1] = '\0';
-    }
-    return i;
-}*/
-
