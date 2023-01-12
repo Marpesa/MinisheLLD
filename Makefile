@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2023/01/10 19:42:25 by lmery            ###   ########.fr        #
+#    Updated: 2023/01/12 17:03:22 by lmery            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -84,16 +84,22 @@ FCLEANED		=	echo "$(_BBLUE)$(_BOLD)\n fclean: $(_ORANGE)Removed the executables 
 
 NOBONUS			=	echo "$(_BRED)\n Bonus haven't been processed$(_END)\n"
 
-TITLE			= 	@echo "\n\n   * $(_ORANGE)██          ██$(_BLUE_LLD)█                  $(_W)*                                          *\n"\
+TITLE			= 	@echo " \n *                      *                              *\n"\
+					"	           *                                     *                             *\n"\
+					"  * $(_ORANGE)██          ██$(_BLUE_LLD)█                  $(_W)*                                        \n"\
 					"    $(_ORANGE)████    $(_W)* $(_ORANGE)████$(_BLUE_LLD)█  $(_W)*                                $(_W)*            $(_W)*                               $(_W)*\n"\
-					"    $(_ORANGE)██$(_BLUE_LLD)█ $(_ORANGE)██  ██$(_BLUE_LLD)█▀$(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█ $(_W)* $(_ORANGE)██      $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██████████$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█$(_W)*    $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██████████$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█      $(_W)*  $(_ORANGE)████████$(_BLUE_LLD)█\n"\
-					"    $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█▀▀ $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)████  $(_W)* $(_ORANGE)██$(_BLUE_LLD)█ $(_W)* $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█▀▀▀▀▀▀▀▀   $(_ORANGE)██$(_BLUE_LLD)█     $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█▀▀▀▀▀▀▀▀ $(_W)* $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█  $(_W)*      $(_ORANGE)██$(_BLUE_LLD)█▀▀▀$(_ORANGE)██$(_BLUE_LLD)█  $(_W)*\n"\
+					"    $(_ORANGE)██$(_BLUE_LLD)█▀$(_ORANGE)██  ██$(_BLUE_LLD)█▀$(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█ $(_W)* $(_ORANGE)██      $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██████████$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█$(_W)*    $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██████████$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█      $(_W)*  $(_ORANGE)████████$(_BLUE_LLD)█\n"\
+					"    $(_ORANGE)██$(_BLUE_LLD)█ ▀▀$(_ORANGE)██$(_BLUE_LLD)█▀▀ $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)████  $(_W)* $(_ORANGE)██$(_BLUE_LLD)█ $(_W)* $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█▀▀▀▀▀▀▀▀   $(_ORANGE)██$(_BLUE_LLD)█     $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█▀▀▀▀▀▀▀▀ $(_W)* $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█  $(_W)*      $(_ORANGE)██$(_BLUE_LLD)█▀▀▀$(_ORANGE)██$(_BLUE_LLD)█  $(_W)*\n"\
 					"    $(_ORANGE)██$(_BLUE_LLD)█ $(_W)* $(_BLUE_LLD)▀▀▀   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)█████   ██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█  $(_W)*$(_ORANGE)██$(_BLUE_LLD)█       $(_W)*   $(_ORANGE)██$(_BLUE_LLD)█     $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█ $(_W)*         $(_ORANGE)██$(_BLUE_LLD)█     $(_W)*   $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█    $(_ORANGE)██$(_BLUE_LLD)█\n"\
 					" $(_W)*  $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█ $(_W)* $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█ $(_ORANGE)██  $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██████████$(_BLUE_LLD)█   $(_ORANGE)██████████$(_BLUE_LLD)█ $(_W)* $(_ORANGE)████████$(_BLUE_LLD)█     $(_ORANGE)██$(_BLUE_LLD)█  $(_W)*      $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█ $(_W)*  $(_ORANGE)██$(_BLUE_LLD)█\n"\
 					"    $(_ORANGE)██$(_BLUE_LLD)█       $(_W)* $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█  $(_ORANGE)█████$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_BLUE_LLD)▀▀▀▀▀▀▀▀$(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█▀▀▀▀▀$(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█▀▀▀▀▀▀     $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█    $(_ORANGE)██$(_BLUE_LLD)█\n"\
-					"    $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)████$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█           $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█     $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█           $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█    $(_ORANGE)██$(_BLUE_LLD)█\n"\
+					"    $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█  $(_W)*$(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)████$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█    $(_W)*      $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█  $(_W)*  $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█           $(_ORANGE)██$(_BLUE_LLD)█       $(_W)* $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█▀\n"\
 					"    $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█     $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██████████$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█     $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██████████$(_BLUE_LLD)█   $(_ORANGE)████████$(_BLUE_LLD)█   $(_ORANGE)████████$(_BLUE_LLD)█   $(_ORANGE)████████$(_BLUE_LLD)█\n"\
-					"    $(_BLUE_LLD)▀▀▀         ▀▀▀   ▀▀▀   ▀▀▀     ▀▀▀   ▀▀▀   ▀▀▀▀▀▀▀▀▀▀▀   ▀▀▀     ▀▀▀   ▀▀▀▀▀▀▀▀▀▀▀   ▀▀▀▀▀▀▀▀▀   ▀▀▀▀▀▀▀▀▀   ▀▀▀▀▀▀▀▀"
+					"    $(_BLUE_LLD)▀▀▀ $(_W)*       $(_BLUE_LLD)▀▀▀   ▀▀▀   ▀▀▀ $(_W)*   $(_BLUE_LLD)▀▀▀   ▀▀▀ $(_W)* $(_BLUE_LLD)▀▀▀▀▀▀▀▀▀▀▀   ▀▀▀     ▀▀▀   ▀▀▀▀▀▀▀▀▀▀▀$(_W)*  $(_BLUE_LLD)▀▀▀▀▀▀▀▀▀   ▀▀▀▀▀▀▀▀▀   ▀▀▀▀▀▀▀▀▀  $(_W)*\n"\
+					"   $(_W)*                                     $(_W)*                          *                                               $(_W)*                                       $(_W)*\n"\
+					"                              $(_W)*                                                            $(_W)*                $(_W)*\n"\
+					"                 *                                                           *                      *\n                                            *\n"\
+					" 				         $(_PURPLE)~ Made with talent by gle-mini & lmery ~\n"
 
 
 #----------------------------- Rules -------------------------
