@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/13 05:50:36 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/13 17:49:04 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,55 +78,52 @@ static void	replace_env_var_in_new_str(char *start, char *end, char **new_str)
 	*new_str = append_str;
 }
 
-/*
-static void append_to_new_str(char *start, char *end, char *new_str)
-{
-	char *append_str;
-
-	append_str = NULL;
-
-	append_str = env_var_find(start + 1, end, env);
-	new_str = merge_strings(new_str, append_str);
-}
-*/
 
 static void	expand_token(t_token *token, char **env)
 {
 	char	*start;
 	char	*end;
-	char	*append_str;
 	char	*new_str;
 	t_bool	in_d_quote;
 
 	in_d_quote = false;
 	new_str = NULL;
 	end = token->text;
-	while (custom_tokenizer(end, &start, &end, &in_d_quote) != 0)
+	int result;
+	//t_bool conditionMet = false;
+	while (1)
 	{
-		if ((*start == '$' && *(start + 1) != '\"' && (end - start) > 1) || \
+		result = custom_tokenizer(end, &start, &end, &in_d_quote);
+		if ((*start == '$' && (end - start) > 1) || \
 			(*start == '$' && (end - start) == 1 && \
 			*(start + 1) == '\'' && in_d_quote == false))
-		{
-			append_str = env_var_find(start + 1, end, env);
-			new_str = merge_strings(new_str, append_str);
-		}
+			new_str = merge_strings(new_str, env_var_find(start + 1, end, env));
 		else
 			replace_env_var_in_new_str(start, end, &new_str);
+		if (result == 0)
+			break;
 	}
-	if ((*start == '$' && *(start + 1) != '\"' && (end - start) > 1) || \
-			(*start == '$' && (end - start) == 1 && \
-			*(start + 1) == '\'' && in_d_quote == false))
-	{
-		append_str = env_var_find(start + 1, end, env);
-		new_str = merge_strings(new_str, append_str);
-	}
-	else
-		replace_env_var_in_new_str(start, end, &new_str);
+		
 	free(token->text);
 	token->text = new_str;
 }
 
-void ft_expand(t_list *lst_token, char **env)
+
+
+/*
+ boolean conditionMet = false;
+
+while (!conditionMet) {
+    // Code to be executed
+
+    if (condition) {
+        conditionMet = true;
+    }
+}
+
+ */
+
+void	ft_expand(t_list *lst_token, char **env)
 {
 	t_token *token;
 	t_token *token_next;
