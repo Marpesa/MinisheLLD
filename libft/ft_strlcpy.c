@@ -6,12 +6,11 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 07:07:12 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/08 17:31:06 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/13 04:26:07 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
-
 
 size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize)
 {
