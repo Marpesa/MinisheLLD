@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2023/01/10 17:21:14 by gle-mini         ###   ########.fr        #
+#    Updated: 2023/01/13 01:46:06 by gle-mini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,19 +39,30 @@ _BLKB 		=	\e[48:5:0m
 
 #Files
 
-C_ROOT = main lexer expand syntaxe_error check_error_input heredoc
 
-C_TEST = unit_test lexer expand
+#C_TEST = unit_test lexer expand
 
 #   C_[NOM_DOSSIER] = [fichiers du dossier]
+
+C_ROOT = main 
+
+C_LEXER = lexer
+
+C_EXPAND = expand
+
+C_HEREDOC = heredoc
+
+C_ERROR = syntaxe_error check_error_input
+
+C_UNIT_TEST = unit_test
 
 
 				
 #----------------------Sources and objects-------------------
 
-SRCS = $(addsuffix .c, $(C_ROOT) $(addprefix [nom_dossier]/, $(C_[NOM_DOSSIER])) )
+SRCS = $(addsuffix .c, $(C_ROOT) $(addprefix lexer/, $(C_LEXER)) $(addprefix expand/, $(C_EXPAND)) $(addprefix error/, $(C_ERROR)) $(addprefix heredoc/, $(C_HEREDOC)))
 
-SRCS_TEST = $(addsuffix .c, $(C_TEST) $(addprefix [nom_dossier]/, $(C_[NOM_DOSSIER])) )
+SRCS_TEST = $(addsuffix .c, $(addprefix unit_test/, $(C_UNIT_TEST)) $(addprefix lexer/, $(C_LEXER)) $(addprefix expand/, $(C_EXPAND)) $(addprefix error/, $(C_ERROR)) )
 
 OBJS	=	$(SRCS:.c=.o)
 OBJS_TEST = $(SRCS_TEST:.c=.o)
@@ -122,8 +133,7 @@ test: $(OBJS_TEST)
 	@$(LIBCOMP)
 	@$(LIB) 
 	@$(LIBREADY)
-		$(COMPILER) $(FLAGS) $(OBJS_TEST) -o test $(LIBFT)
-
+		$(COMPILER) $(FLAGS)  $(OBJS_TEST) -o test $(LIBFT)
 clean:
 	rm -rf $(OBJS)
 	rm -rf $(OBJS_TEST)
