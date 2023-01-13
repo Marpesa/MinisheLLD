@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/13 17:49:04 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/13 18:30:03 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,55 +78,43 @@ static void	replace_env_var_in_new_str(char *start, char *end, char **new_str)
 	*new_str = append_str;
 }
 
-
 static void	expand_token(t_token *token, char **env)
 {
+	int		result;
+	t_bool	in_d_quote;
 	char	*start;
 	char	*end;
 	char	*new_str;
-	t_bool	in_d_quote;
 
 	in_d_quote = false;
 	new_str = NULL;
 	end = token->text;
-	int result;
-	//t_bool conditionMet = false;
 	while (1)
 	{
 		result = custom_tokenizer(end, &start, &end, &in_d_quote);
 		if ((*start == '$' && (end - start) > 1) || \
 			(*start == '$' && (end - start) == 1 && \
 			*(start + 1) == '\'' && in_d_quote == false))
+		{
+			if (new_str == NULL)
+				printf("new_str = NULL\n");
+			else
+				printf("new_str = %s\n", new_str);
 			new_str = merge_strings(new_str, env_var_find(start + 1, end, env));
+		}
 		else
 			replace_env_var_in_new_str(start, end, &new_str);
 		if (result == 0)
-			break;
+			break ;
 	}
-		
 	free(token->text);
 	token->text = new_str;
 }
 
-
-
-/*
- boolean conditionMet = false;
-
-while (!conditionMet) {
-    // Code to be executed
-
-    if (condition) {
-        conditionMet = true;
-    }
-}
-
- */
-
 void	ft_expand(t_list *lst_token, char **env)
 {
-	t_token *token;
-	t_token *token_next;
+	t_token	*token;
+	t_token	*token_next;
 
 	token = NULL;
 	token_next = NULL;
@@ -143,9 +131,8 @@ void	ft_expand(t_list *lst_token, char **env)
 		if (token->type == TOKEN_WORD)
 		{			
 			expand_token(token, env);
-			trim(&token->text);		
+			trim(&token->text);
 		}
 		lst_token = lst_token->next;
 	}
 }
-

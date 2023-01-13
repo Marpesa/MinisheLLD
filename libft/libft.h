@@ -6,7 +6,7 @@
 /*   By: gle-mini <gle-mini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 04:19:58 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/13 04:26:39 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/13 21:33:37 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ char			*ft_strjoin(char const *s1, char const *s2);
 char			*ft_str_merge_secure(char *str1, char *str2);
 
 size_t			ft_strlcat(char *dst, const char *src, size_t size);
+
+size_t			ft_strlcat_secure(char *dst, const char *src, size_t size);
 
 size_t			ft_strlcat_secure(char *dst, const char *src, size_t size);
 

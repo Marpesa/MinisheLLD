@@ -6,7 +6,7 @@
 /*   By: gle-mini <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 04:14:35 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/13 04:30:29 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/13 18:02:23 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,7 @@
 char	*ft_str_merge_secure(char *str1, char *str2)
 {
 	char	*result;
-	int		i;
-	int		j;
 
-	i = 0;
-	j = 0;
 	result = malloc(ft_strlen_secure(str1) + ft_strlen_secure(str2) + 1);
 	if (result == NULL)
 		return (NULL);
