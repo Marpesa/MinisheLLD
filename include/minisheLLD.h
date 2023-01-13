@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/13 03:12:28 by lmery            ###   ########.fr       */
+/*   Updated: 2023/01/13 03:45:00 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,9 +83,12 @@ void ignore_signal_for_shell();
 // Lexer 
 
 t_list	*lexer(char *input);
-char	*ft_get_token_type(enum e_token_type type);
-t_list	*lst_add_token(t_list *lst_token, void *content);
 char 	**ft_get_env(char **env);
+
+char	*ft_get_token_type(enum e_token_type type);
+void	lexer_data_init(t_lexer *data);
+t_list	*lst_add_token(t_list *lst_token, void *content);
+int		is_special(char c);
 void	lst_print_token(t_list *head);
 
 // Expand
@@ -100,6 +103,7 @@ void	heredoc(t_list *lst_token);
 // Error
 void	syntaxe_error(t_list *lst_token);
 int		check_error_input(char *input);
+void	exit_error(char *msg);
 
 // Test
 
