@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gle-mini <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 17:51:49 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/13 00:25:45 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/13 04:14:15 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@
 
 t_bool	is_heredoc(t_list *lst_token)
 {
-	t_token *token;
-	t_token *token_next;
+	t_token	*token;
+	t_token	*token_next;
 
 	if (lst_token == NULL || lst_token->next == NULL)
 		return (false);
@@ -27,7 +27,6 @@ t_bool	is_heredoc(t_list *lst_token)
 		return (true);
 	return (false);
 }
-
 
 //t_bool is_already_heredoc_file -> append_heredoc : create_heredoc
 
@@ -44,12 +43,11 @@ static int	create_temporary_file(void)
 
 static void	heredoc_quit(int signum, siginfo_t *si, void *context)
 {
-	int *readline_exit; 
-	
+	int	*readline_exit;
+
 	(void)signum;
 	(void)si;
 	(void)context;
-
 	readline_exit = si->si_ptr;
 	*readline_exit = !(*readline_exit);
 	//printf("number = %d\n", *readline_exit);
@@ -57,19 +55,15 @@ static void	heredoc_quit(int signum, siginfo_t *si, void *context)
 	printf("SIIIIIIIIIIIIGGGGGGGGGGGINNNNNNNNNTTTTTT\n");
 }
 
-
 void	heredoc_signal(int *readline_exit)
 {
-	struct sigaction action_heredoc_quit;
-	
+	struct sigaction	action_heredoc_quit;
+	union sigval		value;
+
 	ft_memset(&action_heredoc_quit, 0, sizeof(heredoc_quit));
 	action_heredoc_quit.sa_sigaction = heredoc_quit;
-
 	sigemptyset(&action_heredoc_quit.sa_mask);
-  	action_heredoc_quit.sa_flags = SA_SIGINFO;
-
-
-	union sigval value;
+	action_heredoc_quit.sa_flags = SA_SIGINFO;
 	value.sival_ptr = readline_exit;
 	//sigaction(SIGINT, &action_heredoc_quit, &value);
 	sigaction(SIGINT, &action_heredoc_quit, NULL);
@@ -78,8 +72,8 @@ void	heredoc_signal(int *readline_exit)
 
 void	heredoc_prompt(char *eof)
 {
-	char *input;
-	int readline_exit;
+	char	*input;
+	int		readline_exit;
 
 	readline_exit = 1;
 	input = NULL;
@@ -93,18 +87,18 @@ void	heredoc_prompt(char *eof)
 			//Entre dedans quand il y a un ctrl + D
 			printf("OUBLIE PAS DE GERER LERREUR GUGU\n");
 			//close(fd);
-			break;
+			break ;
 		}
 		if (ft_strncmp(input, eof, ft_strlen(eof)))
 		{
 		}
-		else 
+		else
 		{
 			//close(fd);
 			//readline_exit = true;
 			printf("exit normal\n");
 			free(input);
-			break;
+			break ;
 		}
 		/*
 		if (readline_exit == 1)
@@ -129,7 +123,7 @@ void	heredoc_open(char *eof)
 
 void	heredoc(t_list *lst_token)
 {
-	t_token *token;
+	t_token	*token;
 
 	while (lst_token)
 	{
