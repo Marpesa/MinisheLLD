@@ -30,7 +30,7 @@ typedef struct s_split_next
 	size_t	length;
 }				t_split_next;
 
-int				ft_extend_malloc(void **ptr, size_t new_size);
+void			*ft_extend_malloc(void *ptr, size_t new_size);
 
 int				ft_isspace(char c);
 

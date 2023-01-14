@@ -103,7 +103,7 @@ void	get_absolute_path(char **cmd)
 		// On boucle sur chaque dossier du path pour trouver l'emplacement du binaire
 		for (int i = 0; path_split[i]; i++) {
 			// alloc len du path + '/' + len du binaire + 1 pour le '\0'
-			ft_extend_malloc((void **)&bin, sizeof(char) * (strlen(path_split[i]) + 1 + strlen(cmd[0]) + 1));
+			bin = malloc(sizeof(char) * (strlen(path_split[i]) + 1 + strlen(cmd[0]) + 1));
 			if (bin == NULL)
 				break ;
 
