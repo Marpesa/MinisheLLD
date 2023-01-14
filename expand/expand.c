@@ -96,10 +96,6 @@ static void	expand_token(t_token *token, char **env)
 			(*start == '$' && (end - start) == 1 && \
 			*(start + 1) == '\'' && in_d_quote == false))
 		{
-			if (new_str == NULL)
-				printf("new_str = NULL\n");
-			else
-				printf("new_str = %s\n", new_str);
 			new_str = merge_strings(new_str, env_var_find(start + 1, end, env));
 		}
 		else

@@ -23,7 +23,8 @@ char	*merge_strings(char *str1, char *str2)
 	if (str1 != NULL)
 		ft_strlcpy_secure(result, str1, ft_strlen_secure(str1) + 1);
 	if (str2 != NULL)
-		ft_strlcat_secure(result, str2, ft_strlen_secure(result) + ft_strlen_secure(str2) + 1);
+		ft_strlcat_secure(result, str2, ft_strlen_secure(result) \
+				+ ft_strlen_secure(str2) + 1);
 	free(str1);
 	str1 = NULL;
 	return (result);

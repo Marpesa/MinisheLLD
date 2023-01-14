@@ -12,12 +12,12 @@
 
 #include "minisheLLD.h"
 
-static int		trim_len(char *str)
+static int	trim_len(char *str)
 {
-	int	i;
-	int	len;
-	t_bool in_d_quote;
-	t_bool in_s_quote;
+	int		i;
+	int		len;
+	t_bool	in_d_quote;
+	t_bool	in_s_quote;
 
 	i = 0;
 	len = 0;
@@ -40,14 +40,27 @@ static int		trim_len(char *str)
 	return (len);
 }
 
+static void	skip_quote(char *str, int *i, \
+		t_bool *in_d_quote, t_bool *in_s_quote)
+{
+	while ((str[*i] == '\'' && *in_d_quote == false) || \
+			(str[*i] == '\"' && *in_s_quote == false))
+	{
+		if (str[*i] == '\'')
+			*in_s_quote = !(*in_s_quote);
+		if (str[*i] == '\"')
+			*in_d_quote = !(*in_d_quote);
+		*i += 1;
+	}
+}
+
 static char	*trim_quote(char *str)
 {
-	int	i;
-	int	j;
-	int len;
-	char *new_str;
-	t_bool in_d_quote;
-	t_bool in_s_quote;
+	int		i;
+	int		j;
+	char	*new_str;
+	t_bool	in_d_quote;
+	t_bool	in_s_quote;
 
 	i = 0;
 	j = 0;
@@ -55,21 +68,16 @@ static char	*trim_quote(char *str)
 	in_s_quote = false;
 	if (str == NULL)
 		return (NULL);
-	len = trim_len(str);
-	new_str = malloc(sizeof(char) * (ft_strlen(str) - len + 1));
+	new_str = malloc(sizeof(char) * (ft_strlen(str) - trim_len(str) + 1));
 	while (str[i])
 	{
-		while ((str[i] == '\'' && in_d_quote == false) || (str[i] == '\"' && in_s_quote == false))
+		skip_quote(str, &i, &in_d_quote, &in_s_quote);
+		new_str[j] = str[i];
+		if (str[i])
 		{
-			if (str[i] == '\'')
-				in_s_quote = !in_s_quote;
-			if (str[i] == '\"')
-				in_d_quote = !in_d_quote;
+			j++;
 			i++;
 		}
-		new_str[j] = str[i];
-		j++;
-		i++;
 	}
 	new_str[j] = '\0';
 	return (new_str);
@@ -77,8 +85,8 @@ static char	*trim_quote(char *str)
 
 void	trim(char **str)
 {
-	int nb_quotes;
-	char *new_str;
+	int		nb_quotes;
+	char	*new_str;
 
 	new_str = NULL;
 	nb_quotes = trim_len(*str);
@@ -88,6 +96,4 @@ void	trim(char **str)
 		free(*str);
 		*str = new_str;
 	}
-
 }
-
