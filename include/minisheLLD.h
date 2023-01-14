@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/14 15:07:25 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/14 17:36:20 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ void	exit_error(char *msg);
 // Parser
 char	**convert_to_map(t_list *lst_token);
 void	print_map(char **map);
+//void	get_absolute_path(char **cmd);
 
 // Exec
 void	exec_cmd(char **cmd);

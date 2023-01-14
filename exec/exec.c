@@ -6,7 +6,7 @@
 /*   By: gle-mini <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/14 15:05:36 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/14 15:06:27 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/14 17:57:47 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	exec_cmd(char **cmd)
 		kill(pid, SIGTERM);
 	} else {
 		// Le processus enfant execute la commande ou exit si execve echoue
+		printf("cmd[0]: %s\n", cmd[0]);
 		if (execve(cmd[0], cmd, NULL) == -1)
 			perror("shell");
 		exit(EXIT_FAILURE);

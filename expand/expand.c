@@ -6,46 +6,11 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/13 18:30:03 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/14 15:32:11 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
-
-/*
-char	*merge_strings(char *str1, char *str2)
-{
-	char	*result;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	result = malloc(ft_strlen_secure(str1) + ft_strlen_secure(str2) + 1);
-	if (result == NULL)
-		return (NULL);
-	if (str1 != NULL)
-	{
-		while (str1[i] != '\0')
-		{
-			result[i] = str1[i];
-			i++;
-		}
-		free(str1);
-	}
-	if (str2 != NULL)
-	{
-		while (str2[j] != '\0')
-		{
-			result[i + j] = str2[j];
-			j++;
-		}
-		//free(str2);
-	}
-	result[i + j] = '\0';
-	return (result);
-}
-*/
 
 static char	*env_var_find(char *start, char *end, char **env)
 {

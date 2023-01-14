@@ -6,7 +6,7 @@
 /*   By: gle-mini <gle-mini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 04:19:58 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/13 21:33:37 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/14 18:31:58 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ typedef struct s_split_next
 	size_t	start;
 	size_t	length;
 }				t_split_next;
+
+int				ft_extend_malloc(void **ptr, size_t new_size);
 
 int				ft_isspace(char c);
 
