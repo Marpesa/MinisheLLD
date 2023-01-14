@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2023/01/13 05:56:18 by gle-mini         ###   ########.fr        #
+#    Updated: 2023/01/14 15:05:19 by gle-mini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,15 +54,18 @@ C_HEREDOC = heredoc
 
 C_ERROR = syntaxe_error check_error_input exit_error
 
-C_UNIT_TEST = unit_test
+C_PARSER = parser
 
+C_EXEC = exec
+
+C_UNIT_TEST = unit_test
 
 				
 #----------------------Sources and objects-------------------
 
-SRCS = $(addsuffix .c, $(C_ROOT) $(addprefix lexer/, $(C_LEXER)) $(addprefix expand/, $(C_EXPAND)) $(addprefix error/, $(C_ERROR)) $(addprefix heredoc/, $(C_HEREDOC)))
+SRCS = $(addsuffix .c, $(C_ROOT) $(addprefix lexer/, $(C_LEXER)) $(addprefix expand/, $(C_EXPAND)) $(addprefix error/, $(C_ERROR)) $(addprefix heredoc/, $(C_HEREDOC)) $(addprefix parser/, $(C_PARSER)) $(addprefix exec/, $(C_EXEC)))
 
-SRCS_TEST = $(addsuffix .c, $(addprefix unit_test/, $(C_UNIT_TEST)) $(addprefix lexer/, $(C_LEXER)) $(addprefix expand/, $(C_EXPAND)) $(addprefix error/, $(C_ERROR)) )
+SRCS_TEST = $(addsuffix .c, $(addprefix unit_test/, $(C_UNIT_TEST)) $(addprefix lexer/, $(C_LEXER)) $(addprefix expand/, $(C_EXPAND)) $(addprefix error/, $(C_ERROR)))
 
 OBJS	=	$(SRCS:.c=.o)
 OBJS_TEST = $(SRCS_TEST:.c=.o)
