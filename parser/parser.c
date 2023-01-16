@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 18:20:24 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/16 18:52:37 by lmery            ###   ########.fr       */
+/*   Updated: 2023/01/16 19:06:12 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ t_command	*parser(t_list *lst_token)
 		}
 		lst_token = lst_token->next;
 	}
-	printf (_BOLD "TEST = %s\n"_END, command->cmd[0]);
+	command->cmd[i] = NULL;
+	command->redir[j] = NULL;
+	//printf (_BOLD "TEST = %s\n"_END, command->cmd[0]);
 	return (command);
 }
