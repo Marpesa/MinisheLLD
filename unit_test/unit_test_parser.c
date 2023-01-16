@@ -6,13 +6,85 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 19:07:12 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/16 20:20:16 by lmery            ###   ########.fr       */
+/*   Updated: 2023/01/16 21:27:24 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
 
-command *create_command_test(int s)
+size_t	ft_maplen(char *map)
+{
+	char **end_map;
+
+	end_map = map;
+	while (end_map != NULL)
+		end_map++;
+	return (map - end_map); 
+}
+
+char **create_map(int size, ...)
+{
+	va_list	args;
+	char	**map;
+	//char	*str;
+	int		i;
+
+	i = 0;
+	if (size == 0)
+		return (NULL);
+	map = malloc(sizeof(char *) * (size + 1));	
+	if (map == NULL)
+		return (NULL);
+	va_start(args, size);
+	while (i < size)
+	{
+		char *str = va_arg(args, char *);
+		map[i] = ft_strdup(str);
+		i++;
+	}
+	va_end(args);
+	map[i] = NULL;
+	return (map);
+}
+// NOUBLIE PAS QUE CE SONT DES LST COMMANDE QUE ON COMPARE
+command *create_command_test(char **cmd, char **redir) 
+{
+	t_command	*command;
+
+	command = NULL;
+	command = malloc(sizeof(command));
+	if (command = NULL)
+		return (NULL);
+	command->cmd = cmd;	
+	command->redir = redir;	
+	return (command);
+}
+
+t_bool	command_compare(t_command *expected, t_command *result)
+{
+	int	i;
+	
+	i = 0;
+	if (ft_maplen(expected->cmd) != ft_maplen(result->cmd))
+	{
+		printf("cmd size expected : %d | cmd size resultj %d", ft_maplen(expected->cmd), ft_maplen(result->cmd));
+		return (false);
+	}
+	if (ft_maplen(expected->redir) != ft_maplen(result->redir))
+	{
+		printf("redir size expected : %d | redir size resultj %d", ft_maplen(expected->redir), ft_maplen(result->redir));
+		return (false);
+	}
+	while (i < ft_maplen(expected->cmd))
+	{
+		if (strncmp(expected->cmd[i], result->cmd[i], ft_strlen(expected->cmd[i])) != 0)
+		{
+			printf("expected command->cmd[%d] = ");
+		}
+		i++;
+	}
+
+}
 
 
 int	str_compare(t_list	*str_expected, t_list *str_result)

@@ -46,7 +46,7 @@ int ft_lst_size(t_list *lst)
 	return (i);
 }
 
-int	lst_compare(t_list	*lst_expected, t_list *lst_result)
+t_bool	lst_compare(t_list	*lst_expected, t_list *lst_result)
 {
 	t_token *tkn_expected;
 	t_token *tkn_result;
