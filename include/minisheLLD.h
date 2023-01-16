@@ -6,9 +6,12 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/13 03:45:00 by lmery            ###   ########.fr       */
+/*   Updated: 2023/01/16 18:43:32 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#ifndef MINISHELLD_H
+# define MINISHELLD_H
 
 #include "libft.h"
 
@@ -66,7 +69,7 @@ typedef struct s_lexer {
 } t_lexer;
 
 
-// Colors LLD
+/*                   Colors LLD                    */
 #define _ORANGE		"\e[38:5:208m"
 #define _ORANGE2	"\e[38:5:202m"
 #define _BLUE_LLD	"\e[38:5:25m"
@@ -75,12 +78,12 @@ typedef struct s_lexer {
 #define _BOLD		"\e[1m"
 
 
-// Main fonctions
+/*---------------- Main fonctions -----------------*/
 
 void ignore_signal_for_shell();
 
 
-// Lexer 
+/*--------------------- Lexer ---------------------*/ 
 
 t_list	*lexer(char *input);
 char 	**ft_get_env(char **env);
@@ -91,20 +94,29 @@ t_list	*lst_add_token(t_list *lst_token, void *content);
 int		is_special(char c);
 void	lst_print_token(t_list *head);
 
-// Expand
+/*-------------------- Expand ---------------------*/ 
 
 void 	ft_expand(t_list *lst_token, char **env);
 int		is_special(char c);
 
-// Heredoc
+/*-------------------- Heredoc --------------------*/
 
 void	heredoc(t_list *lst_token);
 
-// Error
+/*-------------------- Error ----------------------*/
+
 void	syntaxe_error(t_list *lst_token);
 int		check_error_input(char *input);
 void	exit_error(char *msg);
 
+/*-------------------- Parser ---------------------*/ 
+
+typedef struct s_command {
+	char	**cmd;
+	char	**redir;
+} t_command;
+
+
 // Test
 
-// #endif
+#endif

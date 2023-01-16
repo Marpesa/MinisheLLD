@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2023/01/13 01:46:06 by gle-mini         ###   ########.fr        #
+#    Updated: 2023/01/16 18:42:43 by lmery            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,13 +46,15 @@ _BLKB 		=	\e[48:5:0m
 
 C_ROOT = main 
 
-C_LEXER = lexer
+C_LEXER = lexer lexer_utils
 
 C_EXPAND = expand
 
 C_HEREDOC = heredoc
 
-C_ERROR = syntaxe_error check_error_input
+C_ERROR = syntaxe_error check_error_input exit_error
+
+C_PARSER = parser
 
 C_UNIT_TEST = unit_test
 
@@ -60,7 +62,8 @@ C_UNIT_TEST = unit_test
 				
 #----------------------Sources and objects-------------------
 
-SRCS = $(addsuffix .c, $(C_ROOT) $(addprefix lexer/, $(C_LEXER)) $(addprefix expand/, $(C_EXPAND)) $(addprefix error/, $(C_ERROR)) $(addprefix heredoc/, $(C_HEREDOC)))
+SRCS = $(addsuffix .c, $(C_ROOT) $(addprefix lexer/, $(C_LEXER)) $(addprefix expand/, $(C_EXPAND)) \
+		$(addprefix error/, $(C_ERROR)) $(addprefix heredoc/, $(C_HEREDOC)) $(addprefix parser/, $(C_PARSER)))
 
 SRCS_TEST = $(addsuffix .c, $(addprefix unit_test/, $(C_UNIT_TEST)) $(addprefix lexer/, $(C_LEXER)) $(addprefix expand/, $(C_EXPAND)) $(addprefix error/, $(C_ERROR)) )
 
@@ -107,7 +110,7 @@ TITLE			= 	@echo " \n *                      *                              *\n"
 					"    $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█  $(_W)*$(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)████$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█    $(_W)*      $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█  $(_W)*  $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█           $(_ORANGE)██$(_BLUE_LLD)█       $(_W)* $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█▀\n"\
 					"    $(_ORANGE)██$(_BLUE_LLD)█         $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█     $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██████████$(_BLUE_LLD)█   $(_ORANGE)██$(_BLUE_LLD)█     $(_ORANGE)██$(_BLUE_LLD)█   $(_ORANGE)██████████$(_BLUE_LLD)█   $(_ORANGE)████████$(_BLUE_LLD)█   $(_ORANGE)████████$(_BLUE_LLD)█   $(_ORANGE)████████$(_BLUE_LLD)█\n"\
 					"    $(_BLUE_LLD)▀▀▀ $(_W)*       $(_BLUE_LLD)▀▀▀   ▀▀▀   ▀▀▀ $(_W)*   $(_BLUE_LLD)▀▀▀   ▀▀▀ $(_W)* $(_BLUE_LLD)▀▀▀▀▀▀▀▀▀▀▀   ▀▀▀     ▀▀▀   ▀▀▀▀▀▀▀▀▀▀▀$(_W)*  $(_BLUE_LLD)▀▀▀▀▀▀▀▀▀   ▀▀▀▀▀▀▀▀▀   ▀▀▀▀▀▀▀▀▀  $(_W)*\n"\
-					"   $(_W)*                                     $(_W)*                          *                                               $(_W)*                                       $(_W)*\n"\
+					"   $(_W)*                                     $(_W)*                          *                                               $(_W)*                                     \n"\
 					"                              $(_W)*                                                            $(_W)*                $(_W)*\n"\
 					"                 *                                                           *                      *\n                                            *\n"\
 					" 				         $(_PURPLE)~ Made with talent by gle-mini & lmery ~\n"
