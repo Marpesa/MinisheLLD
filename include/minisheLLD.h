@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/16 18:43:32 by lmery            ###   ########.fr       */
+/*   Updated: 2023/01/16 19:00:35 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,9 @@ void	lst_print_token(t_list *head);
 
 void 	ft_expand(t_list *lst_token, char **env);
 int		is_special(char c);
+void	trim(char **str);
+int	custom_tokenizer(char *str, char **start, char **end, t_bool *in_d_quote);
+char *merge_strings(char *str1, char *str2);
 
 /*-------------------- Heredoc --------------------*/
 

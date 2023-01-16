@@ -6,7 +6,11 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
+<<<<<<< HEAD
 #    Updated: 2023/01/16 18:42:43 by lmery            ###   ########.fr        #
+=======
+#    Updated: 2023/01/13 05:56:18 by gle-mini         ###   ########.fr        #
+>>>>>>> d6859e378200fc15e34e5f1e5dc9ca05d208443b
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +52,7 @@ C_ROOT = main
 
 C_LEXER = lexer lexer_utils
 
-C_EXPAND = expand
+C_EXPAND = expand trim custom_tokenizer merge_strings
 
 C_HEREDOC = heredoc
 

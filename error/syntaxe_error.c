@@ -56,6 +56,8 @@ t_bool	redirect(t_list *lst_token)
 
 void	syntaxe_error(t_list *lst_token)
 {
+	if (lst_token == NULL)
+		return ;
 	if (start_or_finish_pipe(lst_token))
 	{
 		return ;
