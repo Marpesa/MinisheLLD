@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/16 19:03:21 by lmery            ###   ########.fr       */
+/*   Updated: 2023/01/17 19:51:27 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,11 +115,12 @@ void	exit_error(char *msg);
 /*-------------------- Parser ---------------------*/ 
 
 typedef struct s_command {
-	char	**cmd;
+	char	**word;
 	char	**redir;
 } t_command;
-
-t_command	*parser(t_list *lst_token);
+	
+t_list	*parser(t_list *lst_token);
+void	lst_print_command(t_list *cmd);
 
 
 // Test
