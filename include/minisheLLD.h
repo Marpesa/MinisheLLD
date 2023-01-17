@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/16 19:03:21 by lmery            ###   ########.fr       */
+/*   Updated: 2023/01/17 20:09:18 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 #include <errno.h>
 #include <signal.h>
 #include <stdlib.h>
+#include <stdarg.h>
 
 #include <stdlib.h>
 #include <string.h>
@@ -115,7 +116,7 @@ void	exit_error(char *msg);
 /*-------------------- Parser ---------------------*/ 
 
 typedef struct s_command {
-	char	**cmd;
+	char	**word;
 	char	**redir;
 } t_command;
 
@@ -123,5 +124,9 @@ t_command	*parser(t_list *lst_token);
 
 
 // Test
+void	print_command(t_command *command);
+char	**create_map(int size, ...);
+t_list	*create_lst_command_test(int size, ...);
+
 
 #endif

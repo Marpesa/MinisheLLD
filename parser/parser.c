@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 18:20:24 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/16 21:27:49 by lmery            ###   ########.fr       */
+/*   Updated: 2023/01/17 19:52:24 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ unset
 exit[___]
 */
 
+/*
 //A modifier pour etre utiliser dans le parser et associer les cmd
 t_list	*lst_add_token(t_list *lst_token, void *content)
 {
@@ -30,6 +31,7 @@ t_list	*lst_add_token(t_list *lst_token, void *content)
 	ft_lstadd_back(&lst_token, new);
 	return (lst_token);
 }
+*/
 
 t_command	*parser(t_list *lst_token)
 {

@@ -1,5 +1,4 @@
 #include "minisheLLD.h"
-#include <stdarg.h>
 
 t_token *ft_tokencpy(char *str, t_token_type token_type)
 {
@@ -330,6 +329,7 @@ int main(int argc, char **argv, char **env)
 {
 	(void)argc;
 	(void)argv;
+	(void)env;
 
 	test_d_quote(env);
 	test_s_quote(env);
@@ -371,6 +371,19 @@ int main(int argc, char **argv, char **env)
 	je suis $USER
 	gle-mini@e1r2p12:~/MinisheLLD$
 	*/
+
+	t_list		*lst_command;
+	t_command	*command;
+
+	lst_command = NULL;
+	lst_command = create_lst_command_test(2, create_map(2, "echo", "bonjour"), create_map(2, "<" "LOUISE"), create_map(2, "cat", "main.c"), create_map(2, ">", "test"));
+	while (lst_command != NULL)
+	{
+		command = lst_command->content;
+		print_command(command);
+		lst_command = lst_command->next;
+	}
+
 
 	return (0);
 }

@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2023/01/16 19:01:29 by lmery            ###   ########.fr        #
+#    Updated: 2023/01/17 19:49:47 by gle-mini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,7 +56,7 @@ C_ERROR = syntaxe_error check_error_input exit_error
 
 C_PARSER = parser
 
-C_UNIT_TEST = unit_test
+C_UNIT_TEST = unit_test unit_test_parser
 
 
 				
