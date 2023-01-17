@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/17 20:09:18 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/17 19:51:27 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,8 +119,9 @@ typedef struct s_command {
 	char	**word;
 	char	**redir;
 } t_command;
-
-t_command	*parser(t_list *lst_token);
+	
+t_list	*parser(t_list *lst_token);
+void	lst_print_command(t_list *cmd);
 
 
 // Test
