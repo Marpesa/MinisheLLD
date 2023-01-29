@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 19:07:12 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/17 20:10:51 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/01/29 17:41:37 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,8 @@ char	**ft_mapdup(char **map)
 	while (map[i] != NULL)
 	{
 		dup_map[i] = ft_strdup(map[i]);	
-		ft_putstr_fd("\n", 1);
 		i++;
 	}
-		ft_putstr_fd("NULL\n", 1);
 	return (map);
 }
 
@@ -112,9 +110,9 @@ while (i < size)
 void	print_command(t_command *command)
 {
 	printf("-------word-------\n");
-	print_map(command->word);	
+	print_map(command->word);
 	printf("-------redir-------\n");
-	print_map(command->redir);	
+	print_map(command->redir);
 }
 
 void	print_lst_command_test(t_list *lst_command)
@@ -127,6 +125,75 @@ void	print_lst_command_test(t_list *lst_command)
 		print_command(command);
 		lst_command = lst_command->next;	
 	}
+}
+static size_t	ft_min(size_t a, size_t b)
+{
+	if (a > b)
+		return (b);
+	return (a);
+}
+
+t_bool	command_compare(t_command *command1, t_command *command2)
+{
+	//t_command	*command1;
+	//t_command	*command2;
+	char		**word1;
+	char 		**word2;
+	char		**redir1; 
+	char		**redir2; 
+	int			i;
+	int			j;
+
+	i = 0;
+	j = 0;
+	word1 = command1->word;
+	word2 = command2->word;
+	if (ft_maplen(word1) != ft_maplen(word2))
+	{
+		printf("command word size if different, word1: %ld | word2: %ld", ft_maplen(word1), ft_maplen(word2));
+	}
+	while (word1[i] != NULL && word2[j] != NULL)
+	{
+		if (strncmp(word1[i], word2[j], ft_min(ft_strlen(word1[i]), ft_strlen(word2[j]))) != 0)
+		{
+			printf("word1: %s | word2: %s\n", word1[i], word2[j]);
+			return (false);
+		}
+		i++;
+		j++;
+	}
+	i = 0;
+	j = 0;
+	redir1 = command1->word;
+	redir2 = command2->word;
+	while (redir1[i] != NULL && redir2[j] != NULL)
+	{
+		if (strncmp(redir1[i], redir2[j], ft_min(ft_strlen(redir1[i]), ft_strlen(redir2[j]))) != 0)
+		{
+			printf("word1: %s | word2: %s\n", redir1[i], redir2[j]);
+			return (false);
+		}
+		i++;
+		j++;
+	}
+	return (true);
+}
+
+t_bool	lst_command_compare(t_list *lst_command1, t_list *lst_command2)
+{
+	if (ft_lstsize(lst_command1) != ft_lstsize(lst_command2))
+	{
+		printf("size of lst_command is different, size lst_command1 : %d | size lst_command2 : %d\n", ft_lstsize(lst_command1), ft_lstsize(lst_command2));
+		return (false);
+	}
+	while (lst_command1 && lst_command2)
+	{
+		if (command_compare(lst_command1->content, lst_command2->content) == false)
+			return (false);
+		lst_command1 = lst_command1->next;
+		lst_command2 = lst_command2->next;
+	}
+	return (true);
 }
 
 /*

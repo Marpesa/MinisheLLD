@@ -340,7 +340,7 @@ int main(int argc, char **argv, char **env)
 	//Pense a ajouter un cas pour NULL et pour '\0'
 	printf("-----------------------------EXPAND---------------------\n");
 	expand_test_word(env);
-	expand_test_pipe(env);
+
 	printf("--------------------------------------------------------\n");
 	expand_test_env_var(env);
 	*/
@@ -372,13 +372,17 @@ int main(int argc, char **argv, char **env)
 	gle-mini@e1r2p12:~/MinisheLLD$
 	*/
 
+
+	/*
 	t_list		*lst_command;
 
 	lst_command = NULL;
 	lst_command = create_lst_command_test(2, create_map(2, "echo", "bonjour"), create_map(2, "<", "LOUISE"), create_map(2, "cat", "main.c"), create_map(2, ">", "test"));
 
-
 	print_lst_command_test(lst_command);
+	*/
+
+
 	/*
 	while (lst_command != NULL)
 	{
