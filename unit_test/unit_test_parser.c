@@ -14,12 +14,12 @@
 
 size_t	ft_maplen(char **map)
 {
-	char **end_map;
+	size_t	i;
 
-	end_map = map;
-	while (end_map != NULL)
-		end_map++;
-	return (map - end_map); 
+	i = 0;
+	while (map[i] != NULL)
+		i++;
+	return (i); 
 }
 
 void	print_map(char **map)
@@ -27,6 +27,8 @@ void	print_map(char **map)
 	int		i;
 
 	i = 0;
+	if (map == NULL)
+		return ;
 	while (map[i])
 	{
 		printf("%s ", map[i]);
@@ -35,11 +37,29 @@ void	print_map(char **map)
 	printf("\n");
 }
 
+char	**ft_mapdup(char **map)
+{
+	size_t	i;
+	char	**dup_map;
+	
+	i = 0;
+	dup_map = malloc(sizeof(char **) * ft_maplen(map));
+	if (dup_map == NULL)
+		return (NULL);
+	while (map[i] != NULL)
+	{
+		dup_map[i] = ft_strdup(map[i]);	
+		ft_putstr_fd("\n", 1);
+		i++;
+	}
+		ft_putstr_fd("NULL\n", 1);
+	return (map);
+}
+
 char **create_map(int size, ...)
 {
 	va_list	args;
 	char	**map;
-	//char	*str;
 	int		i;
 
 	i = 0;
@@ -59,7 +79,7 @@ char **create_map(int size, ...)
 	map[i] = NULL;
 	return (map);
 }
-// NOUBLIE PAS QUE CE SONT DES LST COMMANDE QUE ON COMPAR
+// NOUBLIE PAS QUE CE SONT DES LST COMMANDE QUE ON COMPARt
 t_list	*create_lst_command_test(int size, ...) 
 {
 	t_list		*lst_command;
@@ -70,14 +90,18 @@ t_list	*create_lst_command_test(int size, ...)
 	i = 0;
 	lst_command = NULL;
 	va_start(args, size);
-	while (i < size)
+while (i < size)
 	{
 		command = NULL;
-		command = malloc(sizeof(command));
+		command = malloc(sizeof(t_command));
 		if (command == NULL)
 			return (NULL);
-		command->word = va_arg(args, char **);
-		command->redir = va_arg(args, char **);	
+		char **word = va_arg(args, char **);
+		command->word = ft_mapdup(word);
+	//	print_map(command->word);
+		char **redir = va_arg(args, char **);	
+		command->redir = ft_mapdup(redir);
+	//	print_map(command->redir);
 		lst_command= lst_add_token(lst_command, command);
 		i++;
 	}
@@ -85,13 +109,24 @@ t_list	*create_lst_command_test(int size, ...)
 	return (lst_command);
 }
 
-
 void	print_command(t_command *command)
 {
 	printf("-------word-------\n");
 	print_map(command->word);	
 	printf("-------redir-------\n");
 	print_map(command->redir);	
+}
+
+void	print_lst_command_test(t_list *lst_command)
+{
+	t_command	*command;
+
+	while (lst_command != NULL)
+	{
+		command = lst_command->content;
+		print_command(command);
+		lst_command = lst_command->next;	
+	}
 }
 
 /*
