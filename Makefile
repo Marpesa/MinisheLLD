@@ -56,6 +56,8 @@ C_ERROR = syntaxe_error check_error_input exit_error
 
 C_PARSER = parser
 
+C_DEBUG = debug
+
 C_UNIT_TEST = unit_test unit_test_parser
 
 
@@ -63,7 +65,7 @@ C_UNIT_TEST = unit_test unit_test_parser
 #----------------------Sources and objects-------------------
 
 SRCS = $(addsuffix .c, $(C_ROOT) $(addprefix lexer/, $(C_LEXER)) $(addprefix expand/, $(C_EXPAND)) \
-		$(addprefix error/, $(C_ERROR)) $(addprefix heredoc/, $(C_HEREDOC)) $(addprefix parser/, $(C_PARSER)))
+		$(addprefix error/, $(C_ERROR)) $(addprefix heredoc/, $(C_HEREDOC)) $(addprefix parser/, $(C_PARSER)) $(addprefix debug/, $(C_DEBUG)))
 
 SRCS_TEST = $(addsuffix .c, $(addprefix unit_test/, $(C_UNIT_TEST)) $(addprefix lexer/, $(C_LEXER)) $(addprefix expand/, $(C_EXPAND)) $(addprefix error/, $(C_ERROR)) )
 

@@ -126,6 +126,7 @@ void	lst_print_command(t_list *cmd);
 
 // Test
 void	print_command(t_command *command);
+void	print_lst_command_test(t_list *lst_command);
 char	**create_map(int size, ...);
 t_list	*create_lst_command_test(int size, ...);
 void	print_lst_command_test(t_list *lst_command);

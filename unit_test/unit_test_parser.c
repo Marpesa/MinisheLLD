@@ -22,6 +22,7 @@ size_t	ft_maplen(char **map)
 	return (i); 
 }
 
+/*
 void	print_map(char **map)
 {
 	int		i;
@@ -36,6 +37,7 @@ void	print_map(char **map)
 	}
 	printf("\n");
 }
+*/
 
 char	**ft_mapdup(char **map)
 {
@@ -107,6 +109,7 @@ while (i < size)
 	return (lst_command);
 }
 
+/*
 void	print_command(t_command *command)
 {
 	printf("-------word-------\n");
@@ -126,6 +129,8 @@ void	print_lst_command_test(t_list *lst_command)
 		lst_command = lst_command->next;	
 	}
 }
+*/
+
 static size_t	ft_min(size_t a, size_t b)
 {
 	if (a > b)

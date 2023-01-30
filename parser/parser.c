@@ -63,6 +63,21 @@ void	lst_print_command(t_list *cmd)
 	}
 }
 
+/*
+void	print_lst_command_test(t_list *lst_command)
+{
+	t_command	*command;
+
+	while (lst_command != NULL)
+	{
+		command = lst_command->content;
+		print_command(command);
+		lst_command = lst_command->next;
+	}
+}
+*/
+
+
 t_list	*parser(t_list *lst_token)
 {
 	t_token	*token;
@@ -140,5 +155,6 @@ t_list	*parser(t_list *lst_token)
 			printf (_BOLD "Redir %d = %s\n"_END, j, command->redir[j]);
 			j++;
 		}
+	print_lst_command_test(lst_command);
 	return (lst_command);
 }
