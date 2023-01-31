@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/17 19:51:27 by lmery            ###   ########.fr       */
+/*   Updated: 2023/01/20 16:24:16 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,9 +115,17 @@ void	exit_error(char *msg);
 
 /*-------------------- Parser ---------------------*/ 
 
+typedef enum e_cmd_type {
+	CMD_WORD,				// word command 
+	CMD_REDIR,				// redir < or >, and associated word
+	CMD_PIPE,				//
+	CMD_EOF,
+} t_cmd_type;
+
 typedef struct s_command {
-	char	**word;
-	char	**redir;
+	t_cmd_type	type;
+	char		*text;
+	int			inedx_cmd;
 } t_command;
 	
 t_list	*parser(t_list *lst_token);
