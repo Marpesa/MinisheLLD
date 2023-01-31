@@ -155,6 +155,7 @@ t_list	*parser(t_list *lst_token)
 			printf (_BOLD "Redir %d = %s\n"_END, j, command->redir[j]);
 			j++;
 		}
-	print_lst_command_test(lst_command);
+//	printf("============PRINT_LST_COMMAND_TEST============\n");
+//	print_lst_command_test(lst_command);
 	return (lst_command);
 }

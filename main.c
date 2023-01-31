@@ -109,7 +109,9 @@ int main(int argc, char **argv, char **env)
 		//lst_print_token(lst_token);
 		heredoc(lst_token);
 		syntaxe_error(lst_token);
-		lst_print_command(parser(lst_token));
+		printf("============PRINT_LST_COMMAND_TEST============\n");
+		print_lst_command_test(parser(lst_token));
+		//lst_print_command(parser(lst_token));
 	}
 	rl_clear_history();
 	free(linebuffer);
