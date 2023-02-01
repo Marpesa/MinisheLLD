@@ -131,5 +131,7 @@ char	**create_map(int size, ...);
 t_list	*create_lst_command_test(int size, ...);
 void	print_lst_command_test(t_list *lst_command);
 
+/*------------------Debug------------------------*/
+void	print_map(char **map);
 
 #endif

@@ -49,6 +49,8 @@ SRCS			=	ft_isalnum.c \
 					ft_isspace.c \
 					ft_putstr_fd_address.c \
 					ft_str_merge_secure.c \
+					ft_maplen.c \
+					ft_maplen_secure.c \
 
 OBJS			= $(SRCS:.c=.o)
 

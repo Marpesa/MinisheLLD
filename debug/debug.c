@@ -7,6 +7,7 @@ void	print_map(char **map)
 	i = 0;
 	if (map == NULL)
 		return ;
+	printf("TEST\n");
 	while (map[i])
 	{
 		printf("%s ", map[i]);
@@ -17,7 +18,7 @@ void	print_map(char **map)
 
 void	print_command(t_command *command)
 {
-	printf("-------word-------\n");
+	printf("-------word--------\n");
 	print_map(command->word);
 	printf("-------redir-------\n");
 	print_map(command->redir);
@@ -32,6 +33,7 @@ void	print_lst_command_test(t_list *lst_command)
 		command = lst_command->content;
 		print_command(command);
 		lst_command = lst_command->next;	
+		printf("__________________\n");
 	}
 }
 
