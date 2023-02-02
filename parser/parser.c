@@ -26,14 +26,20 @@ static char **add_str_to_map(char *str, char **map)
 	if (str == NULL)
 		return (map);
 	new_map = malloc(sizeof(char *) * (ft_maplen_secure(map) + 2));
-	while (i < ft_maplen_secure(map) && map != NULL)
+	while (i < ft_maplen_secure(map))
 	{
-		ft_memcpy(new_map[i], map[i], ft_strlen_secure(map[i]) + 1);
+		printf("test: %s\n", map[0]);
+		printf("i < maplen | %ld < %ld\n", i, ft_maplen_secure(map));
+		ft_strncpy(new_map[i], map[i], ft_strlen_secure(map[i]));
 		i++;
 	}
 	new_map[i] = str;
 	new_map[i + 1] = NULL;
-	free_map(map);
+	if (map != NULL)
+	{
+		free_map(map);
+		map = NULL;
+	}
 	return (new_map);
 }
 
@@ -58,6 +64,7 @@ t_list	*parser(t_list	*lst_token)
 	command = malloc(sizeof(t_command));
 	command->word = NULL;
 	command->redir = NULL;
+	lst_command = NULL;
 	lst_add_command(&lst_command, command);
 	while (lst_token)
 	{
@@ -80,6 +87,7 @@ t_list	*parser(t_list	*lst_token)
 		else if (token->type == TOKEN_WORD)
 		{
 			printf("%s\n", token->text);
+			
 			command->word = add_str_to_map(token->text, command->word);
 			print_map(command->word);
 	//		print_command(command);
