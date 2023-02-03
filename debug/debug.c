@@ -1,14 +1,26 @@
 #include "minisheLLD.h"
 
+size_t	funct_maplen_secure(char **map)
+{
+	size_t	i;
+
+	i = 0;
+	if (map == NULL)
+		return (0);
+	while (map[i] != NULL)
+		i++;
+	return (i);
+}
+
+
 void	print_map(char **map)
 {
-	int		i;
+	size_t		i;
 
 	i = 0;
 	if (map == NULL)
 		return ;
-	printf("TEST\n");
-	while (map[i])
+	while (i < funct_maplen_secure(map))
 	{
 		printf("%s ", map[i]);
 		i++;
