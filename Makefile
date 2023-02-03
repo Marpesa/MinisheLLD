@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2023/01/17 19:49:47 by gle-mini         ###   ########.fr        #
+#    Updated: 2023/02/03 16:27:26 by gle-mini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -67,7 +67,7 @@ C_UNIT_TEST = unit_test unit_test_parser
 SRCS = $(addsuffix .c, $(C_ROOT) $(addprefix lexer/, $(C_LEXER)) $(addprefix expand/, $(C_EXPAND)) \
 		$(addprefix error/, $(C_ERROR)) $(addprefix heredoc/, $(C_HEREDOC)) $(addprefix parser/, $(C_PARSER)) $(addprefix debug/, $(C_DEBUG)))
 
-SRCS_TEST = $(addsuffix .c, $(addprefix unit_test/, $(C_UNIT_TEST)) $(addprefix lexer/, $(C_LEXER)) $(addprefix expand/, $(C_EXPAND)) $(addprefix error/, $(C_ERROR)) )
+SRCS_TEST = $(addsuffix .c, $(addprefix unit_test/, $(C_UNIT_TEST)) $(addprefix lexer/, $(C_LEXER)) $(addprefix expand/, $(C_EXPAND)) $(addprefix error/, $(C_ERROR)) $(addprefix parser/, $(C_PARSER)) $(addprefix debug/, $(C_DEBUG)))
 
 OBJS	=	$(SRCS:.c=.o)
 OBJS_TEST = $(SRCS_TEST:.c=.o)
@@ -138,7 +138,7 @@ test: $(OBJS_TEST)
 	@$(LIBCOMP)
 	@$(LIB) 
 	@$(LIBREADY)
-		$(COMPILER) $(FLAGS)  $(OBJS_TEST) -o test $(LIBFT)
+		$(COMPILER) $(FLAGS)  $(OBJS_TEST) -o test $(LIBFT) -lreadline
 clean:
 	rm -rf $(OBJS)
 	rm -rf $(OBJS_TEST)

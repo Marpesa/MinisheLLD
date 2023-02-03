@@ -1,18 +1,5 @@
 #include "minisheLLD.h"
 
-size_t	funct_maplen_secure(char **map)
-{
-	size_t	i;
-
-	i = 0;
-	if (map == NULL)
-		return (0);
-	while (map[i] != NULL)
-		i++;
-	return (i);
-}
-
-
 void	print_map(char **map)
 {
 	size_t		i;
@@ -20,7 +7,7 @@ void	print_map(char **map)
 	i = 0;
 	if (map == NULL)
 		return ;
-	while (i < funct_maplen_secure(map))
+	while (i < ft_maplen_secure(map))
 	{
 		printf("%s ", map[i]);
 		i++;
@@ -36,7 +23,7 @@ void	print_command(t_command *command)
 	print_map(command->redir);
 }
 
-void	print_lst_command_test(t_list *lst_command)
+void	print_lst_command(t_list *lst_command)
 {
 	t_command	*command;
 

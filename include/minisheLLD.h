@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/17 19:51:27 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/03 16:18:09 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,5 +133,6 @@ void	print_lst_command_test(t_list *lst_command);
 
 /*------------------Debug------------------------*/
 void	print_map(char **map);
+void	print_lst_command(t_list *lst_command);
 
 #endif

@@ -373,14 +373,12 @@ int main(int argc, char **argv, char **env)
 	*/
 
 
-	/*
 	t_list		*lst_command;
 
 	lst_command = NULL;
 	lst_command = create_lst_command_test(2, create_map(2, "echo", "bonjour"), create_map(2, "<", "LOUISE"), create_map(2, "cat", "main.c"), create_map(2, ">", "test"));
 
-	print_lst_command_test(lst_command);
-	*/
+	print_lst_command(lst_command);
 
 
 	/*
