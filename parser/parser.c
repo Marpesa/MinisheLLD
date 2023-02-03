@@ -30,7 +30,8 @@ static char **add_str_to_map(char *str, char **map)
 	{
 		printf("test: %s\n", map[0]);
 		printf("i < maplen | %ld < %ld\n", i, ft_maplen_secure(map));
-		ft_strncpy(new_map[i], map[i], ft_strlen_secure(map[i]));
+		//ft_strncpy(new_map[i], map[i], ft_strlen_secure(map[i]));
+		ft_strdup(map[i]);
 		i++;
 	}
 	new_map[i] = str;
