@@ -329,7 +329,6 @@ int main(int argc, char **argv, char **env)
 {
 	(void)argc;
 	(void)argv;
-	(void)env;
 
 	test_d_quote(env);
 	test_s_quote(env);
@@ -372,14 +371,21 @@ int main(int argc, char **argv, char **env)
 	gle-mini@e1r2p12:~/MinisheLLD$
 	*/
 
+/*
+	t_list		*lst_command_expected;
+	t_list		*lst_command_test;
+	t_bool		result;
 
-	t_list		*lst_command;
+	lst_command_expected = NULL;
+	lst_command_test = NULL;
+	lst_command_expected = create_lst_command_test(2, create_map(2, "echo", "bonjour"), create_map(2, "<", "LOUISE"), create_map(2, "cat", "main.c"), create_map(2, ">", "test"));
 
-	lst_command = NULL;
-	lst_command = create_lst_command_test(2, create_map(2, "echo", "bonjour"), create_map(2, "<", "LOUISE"), create_map(2, "cat", "main.c"), create_map(2, ">", "test"));
+	lst_command_test = parser(ft_expand(lexer("echo bonjour < LOUISE | cat main.c > test"), env));
 
-	print_lst_command(lst_command);
+	result = lst_command_compare(lst_command_expected, lst_command_test);
 
+	printf("result %d", result);
+	*/
 
 	/*
 	while (lst_command != NULL)

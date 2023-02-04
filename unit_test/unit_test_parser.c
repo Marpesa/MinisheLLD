@@ -200,20 +200,3 @@ t_bool	lst_command_compare(t_list *lst_command1, t_list *lst_command2)
 	}
 	return (true);
 }
-
-/*
-int main()
-{
-	t_list		*lst_command;
-	t_command	*command;
-
-	lst_command = NULL;
-	lst_command = create_lst_command_test(2, create_map(2, "echo", "bonjour"), NULL, create_map(2, "cat", "main.c"), create_map(1, "test"));
-	while (lst_command != NULL)
-	{
-		command = lst_command->content;
-		print_command(command);
-		lst_command = lst_command->next;
-	}
-}
-*/

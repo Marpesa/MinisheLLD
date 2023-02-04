@@ -100,8 +100,8 @@ void	lst_print_token(t_list *head);
 void 	ft_expand(t_list *lst_token, char **env);
 int		is_special(char c);
 void	trim(char **str);
-int	custom_tokenizer(char *str, char **start, char **end, t_bool *in_d_quote);
-char *merge_strings(char *str1, char *str2);
+int		custom_tokenizer(char *str, char **start, char **end, t_bool *in_d_quote);
+char 	*merge_strings(char *str1, char *str2);
 
 /*-------------------- Heredoc --------------------*/
 
@@ -130,6 +130,7 @@ void	print_lst_command_test(t_list *lst_command);
 char	**create_map(int size, ...);
 t_list	*create_lst_command_test(int size, ...);
 void	print_lst_command_test(t_list *lst_command);
+t_bool	lst_command_compare(t_list *lst_command1, t_list *lst_command2);
 
 /*------------------Debug------------------------*/
 void	print_map(char **map);
