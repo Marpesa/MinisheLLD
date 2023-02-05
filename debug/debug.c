@@ -17,9 +17,9 @@ void	print_map(char **map)
 
 void	print_command(t_command *command)
 {
-	printf("-------word--------\n");
+	printf(_BOLD _BLUE_LLD"\n------- WORD --------\n"_END);
 	print_map(command->word);
-	printf("-------redir-------\n");
+	printf(_BOLD _BLUE_LLD"\n------- REDIR -------\n" _END);
 	print_map(command->redir);
 }
 

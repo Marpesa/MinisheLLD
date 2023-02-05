@@ -1,0 +1,20 @@
+
+-syntaxe error
+
+-garbage collector
+
+-heredoc (gestion lim)
+
+-changer le custom tokenizer (+, - et $)
+
+-exec
+
+-debug
+
+-faire le env secret
+
+-valgrind fd
+
+-norm
+
+-Gerer dans get_absolute_path le cas ou on ne trouve pas de binaire

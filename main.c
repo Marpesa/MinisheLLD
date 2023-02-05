@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/03 16:17:17 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/05 17:13:19 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,9 +109,13 @@ int main(int argc, char **argv, char **env)
 		//lst_print_token(lst_token);
 		heredoc(lst_token);
 		syntaxe_error(lst_token);
-		printf("============PRINT_LST_COMMAND_TEST============\n");
-		print_lst_command(parser(lst_token));
+		//printf("============PRINT_LST_COMMAND_TEST============\n");
+		t_list *lst_command = parser(lst_token);
+		//print_lst_command(lst_command);
+		t_command *command = lst_command->content;
+		execute_command_with_redirection(command->word, command->redir, env);
 		//lst_print_command(parser(lst_token));
+		// usleep (800);
 	}
 	rl_clear_history();
 	free(linebuffer);

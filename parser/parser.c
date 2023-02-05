@@ -80,9 +80,9 @@ t_list	*parser(t_list	*lst_token)
 				 token->type == TOKEN_REDIRECT_OUT || 
 				 token->type == TOKEN_REDIRECT_APPEND) 
 		{
-			printf("%s\n", token->text);
+			//printf("%s\n", token->text);
 			command->redir = add_str_to_map(token->text, command->redir);
-			print_map(command->redir);
+			//print_map(command->redir);
 			
 		}
 		else if (token_previous != NULL && 
@@ -91,18 +91,18 @@ t_list	*parser(t_list	*lst_token)
 				 token_previous->type == TOKEN_REDIRECT_APPEND))
 		{
 			command->redir = add_str_to_map(token->text, command->redir);
-			print_map(command->redir);
+			//print_map(command->redir);
 		}
 		else if (token->type == TOKEN_WORD)
 		{
-			printf("%s\n", token->text);
+			//printf("%s\n", token->text);
 			command->word = add_str_to_map(token->text, command->word);
-			print_map(command->word);
+			//print_map(command->word);
 			//print_command(command);
 		}
 		else
 		{
-			printf("\nERROR\n");
+			printf(_ORANGE "\nERROR\n" _END);
 		}
 		token_previous = lst_token->content;
 		lst_token = lst_token->next;
