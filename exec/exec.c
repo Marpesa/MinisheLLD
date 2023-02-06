@@ -41,13 +41,10 @@ static void	get_absolute_path(char **cmd)
 
 
 void execute_command_with_redirection(char **command, char **redirection, char **env) {
-	(void) redirection;
-	(void) command;
-	(void) env;
-
 	int stat_loc;
     int child_pid = fork();
 	get_absolute_path(command);
+	/*
 	if (child_pid == 0)
 	{
 		execve(command[0], command, env);
@@ -55,17 +52,17 @@ void execute_command_with_redirection(char **command, char **redirection, char *
 		exit(0);
 	}
 	waitpid(child_pid, &stat_loc, 0);
+	*/
 	//printf("%d", child_pid);
 
-	/*
     if (child_pid == 0) {
-
-	printf("--------------EXEC------------\n");
-
+		printf("in child\n");
         // Child process
         int redirect_index = 0;
         while (redirection[redirect_index] != NULL) {
+			printf("test\n");
             if (redirection[redirect_index][0] == '<') {
+				printf("test1\n");
                 // Standard input redirection
                 int input_fd = open(redirection[redirect_index + 1], O_RDONLY);
                 if (input_fd == -1) {
@@ -82,6 +79,7 @@ void execute_command_with_redirection(char **command, char **redirection, char *
                 }
                 redirect_index += 2;
             } else if (redirection[redirect_index][0] == '>') {
+				printf("test2\n");
                 // Standard output redirection
                 int output_fd = open(redirection[redirect_index + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
                 if (output_fd == -1) {
@@ -97,32 +95,17 @@ void execute_command_with_redirection(char **command, char **redirection, char *
                     exit(EXIT_FAILURE);
                 }
                 redirect_index += 2;
-            } else if (redirection[redirect_index][0] == '2' && redirection[redirect_index][1] == '>') {
-                // Standard error redirection
-                int error_fd = open(redirection[redirect_index + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
-                if (error_fd == -1) {
-                    perror("open");
-                    exit(EXIT_FAILURE);
-                }
-                if (dup2(error_fd, STDERR_FILENO) == -1) {
-                    perror("dup2");
-                    exit(EXIT_FAILURE);
-                }
-                if (close(error_fd) == -1) {
-                    perror("close");
-                    exit(EXIT_FAILURE);
-                }
-                redirect_index += 2;
-            }
-			else {
+            } else {
+				printf("test3\n");
 				// Invalid redirection
 				fprintf(stderr, "Error: Invalid redirection operator '%s'\n", redirection[redirect_index]);
 				exit(EXIT_FAILURE);
 			}
+			printf("end redirection\n");
 		}
-		//execve(command[0], command, NULL);
-		execve("/bin/echo", command, env);
+		printf("execve\n");
+		execve(command[0], command, env);
 	}
-	*/
+	waitpid(child_pid, &stat_loc, 0);
 }
 
