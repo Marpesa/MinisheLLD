@@ -39,34 +39,66 @@ static void	get_absolute_path(char **cmd)
 	}
 }
 
+int main() {
+    int fd[2];
+    pid_t pid;
+
+    if (pipe(fd) == -1) {
+        perror("pipe");
+        exit(exit_failure);
+    }
+
+    pid = fork();
+    if (pid == -1) {
+        perror("fork");
+        exit(EXIT_FAILURE);
+    }
+
+    if (pid == 0) {
+        // Child process
+        close(fd[0]);
+        dup2(fd[1], STDOUT_FILENO);
+        execlp("ls", "ls", "-l", NULL);
+    } 
+    return 0;
+}
+
 
 void execute_command_with_redirection(char **command, char **redirection, char **env) {
+	int	fd[2];	
 	int stat_loc;
     int redirect_index;
-    int child_pid = fork();
+    int child_pid;
 	
 	get_absolute_path(command);
+	if (pipe(fd) == -1) {
+        perror("pipe");
+        exit(EXIT_FAILURE);
+    }
+    child_pid = fork();
     if (child_pid == 0) {
         // Child process
         redirect_index = 0;
+		
+		close(fd[0]);
         while (redirection != NULL && redirection[redirect_index] != NULL) {
-            if (redirection[redirect_index][0] == '<') {
+            if (ft_strncmp(redirection[redirect_index], "<", 1) == 0) {
                 // Standard input redirection
-                int input_fd = open(redirection[redirect_index + 1], O_RDONLY);
-                if (input_fd == -1) {
+                fd[1] = open(redirection[redirect_index + 1], O_RDONLY);
+                if (fd[1] == -1) {
                     perror("open");
                     exit(EXIT_FAILURE);
                 }
-                if (dup2(input_fd, STDIN_FILENO) == -1) {
+                if (dup2(fd[1], STDIN_FILENO) == -1) {
                     perror("dup2");
                     exit(EXIT_FAILURE);
                 }
-                if (close(input_fd) == -1) {
+                if (close(fd[1]) == -1) {
                     perror("close");
                     exit(EXIT_FAILURE);
                 }
                 redirect_index += 2;
-            } else if (redirection[redirect_index][0] == '>') {
+            } else if (ft_strncmp(redirection[redirect_index], ">", 1) == 0) {
                 // Standard output redirection
                 int output_fd = open(redirection[redirect_index + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
                 if (output_fd == -1) {
@@ -82,7 +114,27 @@ void execute_command_with_redirection(char **command, char **redirection, char *
                     exit(EXIT_FAILURE);
                 }
                 redirect_index += 2;
-            } else {
+            }
+			/*
+			else if (ft_strncmp(redirection[redirect_index], ">>", 3)) {
+                // Standard output redirection
+                int output_fd = open(redirection[redirect_index + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+                if (output_fd == -1) {
+                    perror("open");
+                    exit(EXIT_FAILURE);
+                }
+                if (dup2(output_fd, STDOUT_FILENO) == -1) {
+                    perror("dup2");
+                    exit(EXIT_FAILURE);
+                }
+                if (close(output_fd) == -1) {
+                    perror("close");
+                    exit(EXIT_FAILURE);
+                }
+                redirect_index += 2;
+            } 
+			*/
+			else {
 				// Invalid redirection
 				fprintf(stderr, "Error: Invalid redirection operator '%s'\n", redirection[redirect_index]);
 				exit(EXIT_FAILURE);
@@ -92,4 +144,48 @@ void execute_command_with_redirection(char **command, char **redirection, char *
 	}
 	waitpid(child_pid, &stat_loc, 0);
 }
+
+
+void	exec()
+{
+	fd[2];
+    pid_t pid;
+    int i;
+
+	i = 0;
+    while (i < command_count - 1)
+	{
+        if (pipe(fd) == -1) {
+            perror("pipe");
+            exit(EXIT_FAILURE);
+        }
+
+        pid = fork();
+        if (pid == -1) {
+            perror("fork");
+            exit(EXIT_FAILURE);
+        }
+
+        if (pid == 0) {
+            // Child process
+            close(fd[0]);
+            dup2(fd[1], STDOUT_FILENO);
+
+            char *args[] = { command[i], NULL };
+            execve(command[i], args, NULL);
+        } else {
+            // Parent process
+            close(fd[1]);
+            dup2(fd[0], STDIN_FILENO);
+        }
+		i++;
+    }
+
+    // Execute the last command
+    char *args[] = { command[i], NULL };
+    execve(command[i], args, NULL);
+
+    return 0;
+}
+
 
