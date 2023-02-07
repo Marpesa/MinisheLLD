@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/05 15:51:30 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/07 20:01:33 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -137,5 +137,5 @@ void	print_map(char **map);
 void	print_lst_command(t_list *lst_command);
 
 /*------------------Exec-------------------------*/
-void execute_command_with_redirection(char **command, char **redirection, char **env);
+void	exec(t_list *lst_command, char **env);
 #endif
