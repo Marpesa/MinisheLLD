@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/07 20:01:33 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/09 05:09:56 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,7 @@ void	heredoc(t_list *lst_token);
 
 /*-------------------- Error ----------------------*/
 
-void	syntaxe_error(t_list *lst_token);
+int	syntaxe_error(t_list *lst_token);
 int		check_error_input(char *input);
 void	exit_error(char *msg);
 
