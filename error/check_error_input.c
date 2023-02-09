@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 17:24:59 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/13 03:54:05 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/09 05:04:46 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,10 @@ int	check_error_input(char *input)
 	while (input[i])
 	{
 		if (input[i] == '(' || input[i] == ')' || input[i] == ';' \
-		|| input[i] == '{' || input[i] == '}')
+		|| input[i] == '{' || input[i] == '}' || input[i] == '&')
 		{
-			printf(_ORANGE "Unauthorized charcacter in prompt: \
-			'%c'\n"_END, input[i]);
+			printf(_ORANGE "Unauthorized charcacter in prompt: '%c'\n"\
+			_END, input[i]);
 			return (0);
 		}
 		i++;

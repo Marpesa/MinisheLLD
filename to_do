@@ -19,4 +19,4 @@
 
 -Gerer dans get_absolute_path le cas ou on ne trouve pas de binaire
 
--les builts in
+-les builts in (ne pas fork pour les cd)
