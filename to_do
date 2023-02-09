@@ -1,13 +1,9 @@
 
--syntaxe error
-
 -garbage collector
 
--heredoc (gestion lim si "lim" 'lim' ou lim) et verifier si on imbriquer plusieurs heredoc et gerer le sigint
+-heredoc (gestion lim si "lim" 'lim' ou lim) et verifier si on imbriquer plusieurs heredoc et gerer le sigint, echo hola <<<< bjr)
 
 -changer le custom tokenizer (+, - et $)
-
--exec
 
 -debug
 

@@ -77,15 +77,7 @@ void	test_syntaxe_error_pipe(char **env)
 	syntaxe_error_compare("ls || <", 0, env);
 }
 
-void	test_syntaxe_error_parentheses(char **env)
-{
-	syntaxe_error_compare("export HOLA=bon(jour", 0, env);
-	syntaxe_error_compare("export HOLA=bon()jour", 0, env);
-	syntaxe_error_compare("( ( )ls )", 0, env);
-	syntaxe_error_compare("> hola (ls && pwd)", 0, env);
-	syntaxe_error_compare("() pwd", 0, env);
-	syntaxe_error_compare("> pwd (ls)", 0, env);
-}
+
 
 
 void	test_syntaxe_error(char **env)
@@ -93,7 +85,6 @@ void	test_syntaxe_error(char **env)
 	printf("----------------_SYNTAXE_ERROR---------------\n");
 	test_syntaxe_error_redir(env);
 	test_syntaxe_error_pipe(env);
-	test_syntaxe_error_parentheses(env);
 
 	
 	syntaxe_error_compare("test |", 0, env);

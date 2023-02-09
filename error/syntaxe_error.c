@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 00:04:24 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/02/09 06:07:08 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/09 06:46:21 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,24 @@ static char *return_token_text(t_list *lst_token)
 
 t_bool	start_or_finish_pipe(t_list *lst_token)
 {
+	t_list	*lst_current;
+
+	lst_current = lst_token;
 	if (return_token_type(lst_token) == TOKEN_PIPE \
 	|| return_token_type(ft_lstlast(lst_token)) == TOKEN_PIPE)
 	{
 		printf("MinisheLLD:\tsyntax error near unexpected token `|'\n");
 		return (true);
+	}
+	while (lst_current)
+	{
+		if (return_token_type(lst_current) == TOKEN_PIPE \
+		&& lst_current->next && return_token_type(lst_current->next) == TOKEN_PIPE)
+		{
+			printf("MinisheLLD:\tsyntax error near unexpected token `|'\n");
+			return (true);
+		}
+		lst_current = lst_current->next;
 	}
 	return (false);
 }
@@ -56,6 +69,10 @@ t_bool	redirect(t_list *lst_token)
 		if (return_token_type(lst_current) == TOKEN_REDIRECT_APPEND || \
 		return_token_type(lst_current) == TOKEN_HEREDOC)
 		{
+			if (return_token_type(lst_current) == TOKEN_HEREDOC && 
+			return_token_type(lst_current->next) == TOKEN_REDIRECT_IN)
+				if(return_token_type(lst_current->next) != TOKEN_HEREDOC)
+					break;
 			if (return_token_type(lst_current->next) == TOKEN_REDIRECT_IN || \
 			return_token_type(lst_current->next) == TOKEN_REDIRECT_OUT || \
 			return_token_type(lst_current->next) != TOKEN_WORD)
@@ -65,6 +82,14 @@ t_bool	redirect(t_list *lst_token)
 				return (true);
 			}
 		}
+		if ((return_token_type(lst_current) == TOKEN_REDIRECT_IN || \
+			return_token_type(lst_current) == TOKEN_REDIRECT_OUT) && lst_current->next && \
+			return_token_type(lst_current->next) != TOKEN_WORD)
+			{
+				printf("MinisheLLD:\tsyntax error near unexpected token `%s'\n", \
+				return_token_text(lst_current));
+				return (true);
+			}
 		lst_current = lst_current->next;
 	}
 	return (false);
