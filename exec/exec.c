@@ -38,142 +38,216 @@ static void	get_absolute_path(char **cmd)
 
 	}
 }
+
 /*
-int main() {
-    int fd[2];
-    pid_t pid;
-
-    if (pipe(fd) == -1) {
-        perror("pipe");
-        exit(exit_failure);
-    }
-
-    pid = fork();
-    if (pid == -1) {
-        perror("fork");
-        exit(EXIT_FAILURE);
-    }
-
-    if (pid == 0) {
-        // Child process
-        close(fd[0]);
-        dup2(fd[1], STDOUT_FILENO);
-        execlp("ls", "ls", "-l", NULL);
-    } 
-    return 0;
-}
-*/
-
-
 void execute_command_with_redirection(char **command, char **redirection, char **env, int output_fd, int input_fd, int child_pid)
 {
-	int stat_loc;
     int redirect_index;
 
 	get_absolute_path(command);
-    if (child_pid == 0) {
+    if (child_pid == 0)
+	{
         // Child process
         redirect_index = 0;
 		
-		close(output_fd);
+		//close(output_fd);
         while (redirection != NULL && redirection[redirect_index] != NULL) {
             if (ft_strncmp(redirection[redirect_index], "<", 1) == 0) {
                 // Standard input redirection
                 input_fd = open(redirection[redirect_index + 1], O_RDONLY);
-                if (input_fd == -1) {
+                if (input_fd == -1)
+				{
                     perror("open");
-                    exit(EXIT_FAILURE);
                 }
-                if (dup2(input_fd, STDIN_FILENO) == -1) {
+                if (dup2(input_fd, STDIN_FILENO) == -1)
+				{
                     perror("dup2");
-                    exit(EXIT_FAILURE);
                 }
-                if (close(input_fd) == -1) {
+                if (close(input_fd) == -1)
+				{
                     perror("close");
-                    exit(EXIT_FAILURE);
                 }
                 redirect_index += 2;
-            } else if (ft_strncmp(redirection[redirect_index], ">", 1) == 0) {
+            }
+			else if (ft_strncmp(redirection[redirect_index], ">", 1) == 0)
+			{
                 // Standard output redirection
             	output_fd = open(redirection[redirect_index + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
                 if (output_fd == -1) {
                     perror("open");
-                    exit(EXIT_FAILURE);
                 }
                 if (dup2(output_fd, STDOUT_FILENO) == -1) {
                     perror("dup2");
-                    exit(EXIT_FAILURE);
                 }
                 if (close(output_fd) == -1) {
                     perror("close");
-                    exit(EXIT_FAILURE);
                 }
                 redirect_index += 2;
             }
-			/*
-			else if (ft_strncmp(redirection[redirect_index], ">>", 3)) {
-                // Standard output redirection
-                int output_fd = open(redirection[redirect_index + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
-                if (output_fd == -1) {
-                    perror("open");
-                    exit(EXIT_FAILURE);
-                }
-                if (dup2(output_fd, STDOUT_FILENO) == -1) {
-                    perror("dup2");
-                    exit(EXIT_FAILURE);
-                }
-                if (close(output_fd) == -1) {
-                    perror("close");
-                    exit(EXIT_FAILURE);
-                }
-                redirect_index += 2;
-            } 
-			*/
+
 			else {
 				// Invalid redirection
+				printf("ERROR\n");
 				fprintf(stderr, "Error: Invalid redirection operator '%s'\n", redirection[redirect_index]);
-				exit(EXIT_FAILURE);
 			}
 		}
 		execve(command[0], command, env);
 	}
-	waitpid(child_pid, &stat_loc, 0);
 }
 
 void	exec(t_list	*lst_command, char **env)
 {
 	int	fd[2];
     int pid;
+	int stat_loc;
+	int	index;
+	t_list *head = lst_command;
 	t_command	*command;
 
+	index = 0;
     while (lst_command != NULL)
 	{
 		command = lst_command->content;
         if (pipe(fd) == -1) {
             perror("pipe");
-            exit(EXIT_FAILURE);
+            //exit(EXIT_FAILURE);
         }
 
         pid = fork();
         if (pid == -1) {
             perror("fork");
-            exit(EXIT_FAILURE);
+            //exit(EXIT_FAILURE);
         }
 
-        if (pid == 0) {
-      		execute_command_with_redirection(command->word, command->redir, env, fd[0], fd[1], pid);
-        } else {
+        if (pid == 0) 
+		{
+			if (index == 0)
+			{
+				//close(fd[0]);
+				dup2(fd[1], STDOUT_FILENO);
+      			execute_command_with_redirection(command->word, command->redir, env, fd[1], STDIN_FILENO, pid);
+			}
+			else if (ft_lstsize(lst_command) == 1)
+			{
+				//close(fd[1]);
+				dup2(fd[0], STDIN_FILENO);
+      			execute_command_with_redirection(command->word, command->redir, env, STDOUT_FILENO, fd[1], pid);
+			}
+			else
+			{
+      			execute_command_with_redirection(command->word, command->redir, env, fd[1], fd[0], pid);
+			}
+        } 
+		else 
+		{
             // Parent process
-            close(fd[1]);
-            dup2(fd[0], STDIN_FILENO);
+            //close(fd[1]);
+            //dup2(fd[0], STDIN_FILENO);
         }
 		lst_command = lst_command->next;
+		index++;
     }
-
-	/*
-    // Execute the last command
-    char *args[] = { command[i], NULL };
-    execve(command[i], args, NULL);
-	*/
+	lst_command = head;
+	while (lst_command != NULL)
+	{
+		waitpid(-1, &stat_loc, 0);
+		lst_command = lst_command->next;
+	}
+	
 }
+*/
 
+/*
+void exec_pipe(int	pid, int *child_fd)
+{
+	if (pid == 0)
+	{
+		dup2(child_fd[1], STDOUT_FILENO);
+		close(child_fd[0]);
+		close(child_fd[1]);
+	}
+}
+*/
+
+
+void	exec(t_list	*lst_command, char **env)
+{
+	int	fd[2];
+	(void)env;
+	int	save_fd[2];
+	//int	old_fd;
+	t_list *lst_current;
+	int	stat_loc;
+	int pid1;
+	int	pid2;
+	int	pid3;
+	t_command *command;
+
+	save_fd[0] = dup(STDOUT_FILENO);
+	save_fd[1] = dup(STDIN_FILENO);
+	//old_fd = dup(STDOUT_FILENO);
+	lst_current = lst_command;
+	while (lst_current != NULL && ft_lstsize(lst_command) > 1)
+	{
+		command = lst_current->content;
+		get_absolute_path(command->word);
+		//printf("test %d\n", ft_lstsize(lst_current));
+		int old_pipe;
+		pid1 = fork();
+		if (pid1 == 0)
+		{
+			pipe(fd);
+			dup2(fd[1], STDOUT_FILENO);
+			close(fd[0]);
+			close(fd[1]);
+			execve((command->word)[0], command->word, env);
+			exit (1);
+		}
+		old_pipe = fd[0];
+		lst_current = lst_current->next;
+		command = lst_current->content;
+		get_absolute_path(command->word);
+
+		pid2 = fork();
+		if (pid2 == 0)
+		{
+			pipe(fd);
+			dup2(fd[1], old_pipe);
+			close(fd[0]);
+			close(fd[1]);
+			execve((command->word)[0], command->word, env);
+			exit (1);
+		}
+		old_pipe = fd[0];
+		lst_current = lst_current->next;
+		command = lst_current->content;
+		get_absolute_path(command->word);
+
+		pid3 = fork();
+		if (pid3 == 0)
+		{
+			pipe(fd);
+			dup2(fd[1], old_pipe);
+			close(fd[0]);
+			close(fd[1]);
+			execve((command->word)[0], command->word, env);
+			exit (1);
+		}
+
+		waitpid(pid1, &stat_loc, 0);
+		waitpid(pid2, &stat_loc, 0);
+		lst_current = lst_current->next;
+	}
+	lst_current = lst_command;
+	/*
+	while (lst_current != NULL)
+	{
+		waitpid(-1, &stat_loc, 0);
+		lst_current = lst_current->next;
+	}
+	*/
+	dup2(save_fd[1], STDIN_FILENO);
+	close(save_fd[1]);
+	dup2(save_fd[0], STDOUT_FILENO);
+	close(save_fd[0]);
+}

@@ -3,7 +3,7 @@
 
 -garbage collector
 
--heredoc (gestion lim)
+-heredoc (gestion lim si "lim" 'lim' ou lim) et verifier si on imbriquer plusieurs heredoc et gerer le sigint
 
 -changer le custom tokenizer (+, - et $)
 
@@ -18,3 +18,5 @@
 -norm
 
 -Gerer dans get_absolute_path le cas ou on ne trouve pas de binaire
+
+-les builts in
