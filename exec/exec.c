@@ -169,85 +169,58 @@ void exec_pipe(int	pid, int *child_fd)
 }
 */
 
+void	create_pipe(int	*old_pipe_in, t_list *lst_current)
+{
+	int	new_pipe[2];
+	(void) lst_current;
+
+	
+	dup2(*old_pipe_in, STDIN_FILENO);
+	if (*old_pipe_in != 0)
+		close(*old_pipe_in);
+	if (ft_lstsize(lst_current) <= 1)
+		return ;
+	pipe(new_pipe);
+	dup2(new_pipe[1], STDOUT_FILENO);
+	close(new_pipe[1]);
+	*old_pipe_in = dup(new_pipe[0]);
+	close(new_pipe[0]);
+}
+
 
 void	exec(t_list	*lst_command, char **env)
 {
-	int	fd[2];
-	(void)env;
+	t_list 	*lst_current;
+	t_command	*command;
+	int	old_pipe_in;
 	int	save_fd[2];
-	//int	old_fd;
-	t_list *lst_current;
-	int	stat_loc;
-	int pid1;
-	int	pid2;
-	int	pid3;
-	t_command *command;
+	int stat_loc;
+	int	pid;
 
-	save_fd[0] = dup(STDOUT_FILENO);
-	save_fd[1] = dup(STDIN_FILENO);
-	//old_fd = dup(STDOUT_FILENO);
+	old_pipe_in = 0;
 	lst_current = lst_command;
-	while (lst_current != NULL && ft_lstsize(lst_command) > 1)
-	{
-		command = lst_current->content;
-		get_absolute_path(command->word);
-		//printf("test %d\n", ft_lstsize(lst_current));
-		int old_pipe;
-		pid1 = fork();
-		if (pid1 == 0)
-		{
-			pipe(fd);
-			dup2(fd[1], STDOUT_FILENO);
-			close(fd[0]);
-			close(fd[1]);
-			execve((command->word)[0], command->word, env);
-			exit (1);
-		}
-		old_pipe = fd[0];
-		lst_current = lst_current->next;
-		command = lst_current->content;
-		get_absolute_path(command->word);
-
-		pid2 = fork();
-		if (pid2 == 0)
-		{
-			pipe(fd);
-			dup2(fd[1], old_pipe);
-			close(fd[0]);
-			close(fd[1]);
-			execve((command->word)[0], command->word, env);
-			exit (1);
-		}
-		old_pipe = fd[0];
-		lst_current = lst_current->next;
-		command = lst_current->content;
-		get_absolute_path(command->word);
-
-		pid3 = fork();
-		if (pid3 == 0)
-		{
-			pipe(fd);
-			dup2(fd[1], old_pipe);
-			close(fd[0]);
-			close(fd[1]);
-			execve((command->word)[0], command->word, env);
-			exit (1);
-		}
-
-		waitpid(pid1, &stat_loc, 0);
-		waitpid(pid2, &stat_loc, 0);
-		lst_current = lst_current->next;
-	}
-	lst_current = lst_command;
-	/*
 	while (lst_current != NULL)
 	{
-		waitpid(-1, &stat_loc, 0);
+		command = lst_current->content;
+		
+		save_fd[0] = dup(STDIN_FILENO);
+		save_fd[1] = dup(STDOUT_FILENO);
+			create_pipe(&old_pipe_in, lst_current);
+
+		pid = fork();
+		if (pid == 0)
+		{
+			get_absolute_path(command->word);
+			execve(command->word[0], command->word, env);
+		}
+		waitpid(pid, &stat_loc, 0);
+		dup2(save_fd[0], STDIN_FILENO);
+		close(save_fd[0]);
+		dup2(save_fd[1], STDOUT_FILENO);
+		close(save_fd[1]);
 		lst_current = lst_current->next;
-	}
-	*/
-	dup2(save_fd[1], STDIN_FILENO);
-	close(save_fd[1]);
-	dup2(save_fd[0], STDOUT_FILENO);
-	close(save_fd[0]);
+	}	
+	lst_current = lst_command;
+	if (old_pipe_in != 0)
+		close(old_pipe_in);
 }
