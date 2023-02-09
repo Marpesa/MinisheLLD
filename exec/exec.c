@@ -220,11 +220,7 @@ void	exec(t_list	*lst_command, char **env)
 		lst_current = lst_current->next;
 	}	
 	lst_current = lst_command;
-	while (lst_command != NULL)
-	{
-		waitpid(-1, &stat_loc, 0);
-		lst_command = lst_command->next;
-	}
+	waitpid(-1, &stat_loc, 0);
 	
 	if (old_pipe_in != 0)
 		close(old_pipe_in);
