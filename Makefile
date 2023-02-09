@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2023/02/05 15:27:30 by lmery            ###   ########.fr        #
+#    Updated: 2023/02/09 05:17:01 by gle-mini         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,7 +58,7 @@ C_PARSER = parser
 
 C_DEBUG = debug
 
-C_UNIT_TEST = unit_test unit_test_parser
+C_UNIT_TEST = unit_test unit_test_parser unit_test_syntaxe_error
 
 C_EXEC = exec
 

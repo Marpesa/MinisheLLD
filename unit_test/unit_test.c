@@ -334,6 +334,7 @@ int main(int argc, char **argv, char **env)
 	test_s_quote(env);
 	test_heredoc(env);
 	test_word(env);
+	test_syntaxe_error(env);
 	/*
 	lexer_test_pipe();
 	//Pense a ajouter un cas pour NULL et pour '\0'

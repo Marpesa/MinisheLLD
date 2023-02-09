@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/09 05:09:56 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/09 05:19:04 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ char	**create_map(int size, ...);
 t_list	*create_lst_command_test(int size, ...);
 void	print_lst_command_test(t_list *lst_command);
 t_bool	lst_command_compare(t_list *lst_command1, t_list *lst_command2);
+void	test_syntaxe_error(char **env);
 
 /*------------------Debug------------------------*/
 void	print_map(char **map);

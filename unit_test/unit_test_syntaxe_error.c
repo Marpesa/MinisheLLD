@@ -1,10 +1,14 @@
 #include "minisheLLD.h"
 
-t_bool syntaxe_error_compare(int value_expected)
+t_bool syntaxe_error_compare(char *str, int value_expected, char **env)
 {
+	t_list	*lst_token;
 	int	value_tested;
 
-	value_expected = syntaxe_error(heredoc(ft_expand(lexer("test |"))));
+	printf("Command tested: %s\n", str);
+	lst_token = lexer(str);
+	ft_expand(lst_token, env);
+	value_tested = syntaxe_error(lst_token);
 	if (value_expected == value_tested)
 	{
 		printf(_BOLD _BLUE_LLD "OK\n" _END);
@@ -17,9 +21,81 @@ t_bool syntaxe_error_compare(int value_expected)
 
 }
 
+void	test_syntaxe_error_redir(char **env)
+{
+	syntaxe_error_compare("<", 0, env);
+	syntaxe_error_compare(">", 0, env);
+	syntaxe_error_compare(">>", 0, env);
+	syntaxe_error_compare("<<", 0, env);
+	syntaxe_error_compare("<<<<", 0, env);
+	syntaxe_error_compare("<<<< <<", 0, env);
+	syntaxe_error_compare(">>>>", 0, env);
+	syntaxe_error_compare(">>>>>>>>>>>>>>>>>>>", 0, env);
+	syntaxe_error_compare(">>>>>>>>>>>>>>>>>>>>", 0, env);
+	syntaxe_error_compare("<<<<<<<<<<<<", 0, env);
+	syntaxe_error_compare("<<<<<<<<<<<<<", 0, env);
+	syntaxe_error_compare(" > > > > >", 0, env);
+	syntaxe_error_compare(" <  < < <", 0, env);
+	syntaxe_error_compare(">>>> >> > >>> <", 0, env);
+	syntaxe_error_compare(">echo>", 0, env);
+	syntaxe_error_compare("<echo<", 0, env);
+	syntaxe_error_compare(">>echo>>", 0, env);
+	syntaxe_error_compare("echo > <", 0, env);
+	syntaxe_error_compare("echo hola > > bonjour", 0, env);
+	syntaxe_error_compare("echo hola < < bonjour", 0, env);
+	syntaxe_error_compare("echo hola >> >> bonjour", 0, env);
+	syntaxe_error_compare("echo hola >>> bonjour", 0, env);
+	syntaxe_error_compare("echo hola << << bonjour", 0, env);
+	syntaxe_error_compare("cat >>", 0, env);
+	syntaxe_error_compare("cat <<", 0, env);
+	syntaxe_error_compare("cat >>>", 0, env);
+	syntaxe_error_compare("cat >> <<", 0, env);
+	syntaxe_error_compare("cat >> > >> << >>", 0, env);
+	syntaxe_error_compare("echo hola <<< bonjour", 1, env);
+	syntaxe_error_compare("echo hola <<<< bonjour", 0, env);
+	syntaxe_error_compare("echo hola <<<<< bonjour", 0, env);
+	syntaxe_error_compare("echo hola <<<<<< bonjour", 0, env);
+	
+}
 
-void	test_syntaxe_error()
+void	test_syntaxe_error_pipe(char **env)
+{
+	syntaxe_error_compare("|", 0, env);
+	syntaxe_error_compare("test |", 0, env);
+	syntaxe_error_compare("| hola", 0, env);
+	syntaxe_error_compare("| |", 0, env);
+	syntaxe_error_compare("|    | |", 0, env);
+	syntaxe_error_compare("||", 0, env);
+	syntaxe_error_compare("|||||||", 0, env);
+	syntaxe_error_compare("||||||||", 0, env);
+	syntaxe_error_compare(">>|<<", 0, env);
+	syntaxe_error_compare(">> | >>", 0, env);
+	syntaxe_error_compare("|echo|", 0, env);
+	syntaxe_error_compare("|echo -n hola", 0, env);
+	syntaxe_error_compare("echo | | ", 0, env);
+	syntaxe_error_compare("ech|o hola ||| cat ", 0, env);
+	syntaxe_error_compare("ls || <", 0, env);
+}
+
+void	test_syntaxe_error_parentheses(char **env)
+{
+	syntaxe_error_compare("export HOLA=bon(jour", 0, env);
+	syntaxe_error_compare("export HOLA=bon()jour", 0, env);
+	syntaxe_error_compare("( ( )ls )", 0, env);
+	syntaxe_error_compare("> hola (ls && pwd)", 0, env);
+	syntaxe_error_compare("() pwd", 0, env);
+	syntaxe_error_compare("> pwd (ls)", 0, env);
+}
+
+
+void	test_syntaxe_error(char **env)
 {
 	printf("----------------_SYNTAXE_ERROR---------------\n");
-	syntaxe_error_compare("test |", 0);
+	test_syntaxe_error_redir(env);
+	test_syntaxe_error_pipe(env);
+	test_syntaxe_error_parentheses(env);
+
+	
+	syntaxe_error_compare("test |", 0, env);
+	syntaxe_error_compare("test |", 0, env);
 }
