@@ -213,7 +213,6 @@ void	exec(t_list	*lst_command, char **env)
 			get_absolute_path(command->word);
 			execve(command->word[0], command->word, env);
 		}
-		waitpid(pid, &stat_loc, 0);
 		dup2(save_fd[0], STDIN_FILENO);
 		close(save_fd[0]);
 		dup2(save_fd[1], STDOUT_FILENO);
@@ -221,6 +220,12 @@ void	exec(t_list	*lst_command, char **env)
 		lst_current = lst_current->next;
 	}	
 	lst_current = lst_command;
+	while (lst_command != NULL)
+	{
+		waitpid(-1, &stat_loc, 0);
+		lst_command = lst_command->next;
+	}
+	
 	if (old_pipe_in != 0)
 		close(old_pipe_in);
 }
