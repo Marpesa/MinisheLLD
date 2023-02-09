@@ -100,10 +100,10 @@ t_list	*parser(t_list	*lst_token)
 			//print_map(command->word);
 			//print_command(command);
 		}
-		else
-		{
-			printf(_ORANGE "\nERROR\n" _END);
-		}
+		// else
+		// {
+		// 	printf(_ORANGE "\nERROR\n" _END);
+		// }
 		token_previous = lst_token->content;
 		lst_token = lst_token->next;
 	}
