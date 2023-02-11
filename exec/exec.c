@@ -6,7 +6,7 @@
 /*   By: gle-mini <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/02/11 19:42:50 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/11 22:12:24 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,11 +111,13 @@ void	exec(t_list	*lst_command, char **env)
 	int			old_pipe_in;
 	int			save_fd[2];
 
+	lst_current = NULL;
 	old_pipe_in = 0;
 	lst_current = lst_command;
 	while (lst_current != NULL)
 	{
-		command = lst_current->content;
+		if (lst_current->content != NULL)
+			command = lst_current->content;
 		save_fd[0] = dup(STDIN_FILENO);
 		save_fd[1] = dup(STDOUT_FILENO);
 		create_pipe(&old_pipe_in, lst_current);

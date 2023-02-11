@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/11 20:46:15 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/11 21:58:20 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ void	lst_print_token(t_list *head);
 
 /*-------------------- Expand ---------------------*/ 
 
-void 	ft_expand(t_list *lst_token, char **env);
+int	ft_expand(t_list *lst_token, char **env);
 int		is_special(char c);
 void	trim(char **str);
 int		custom_tokenizer(char *str, char **start, char **end, t_bool *in_d_quote);
@@ -103,12 +103,13 @@ void	heredoc(t_list *lst_token);
 
 /*-------------------- Error ----------------------*/
 
-int	syntaxe_error(t_list *lst_token);
+int				syntaxe_error(t_list *lst_token);
 t_token_type	return_token_type(t_list *lst_token);
-char	*return_token_text(t_list *lst_token);
-t_bool	start_or_finish_pipe(t_list *lst_token);
-int		check_error_input(char *input);
-void	exit_error(char *msg);
+char			*return_token_text(t_list *lst_token);
+t_bool			start_or_finish_pipe(t_list *lst_token);
+int				check_error_input(char *input);
+void			exit_error(char *msg);
+void			free_and_exit(t_list *lst_token, t_list *lst_command, char **linebuffer);
 
 /*-------------------- Parser ---------------------*/ 
 
@@ -117,7 +118,7 @@ typedef struct s_command {
 	char	**redir;
 } t_command;
 	
-t_list	*parser(t_list *lst_token);
+int		parser(t_list *lst_token, t_list **lst_command);
 void	lst_print_command(t_list *cmd);
 
 

@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/11 21:09:21 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/11 21:57:09 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,10 +81,11 @@ int main(int argc, char **argv, char **env)
 	t_list	*lst_token;
 	t_list	*lst_command;
 	char	*linebuffer;
-	int		*err_status;
 
 	// ignore Ctrl-\ Ctrl-C Ctrl-Z signals
 	linebuffer = NULL;
+	lst_token = NULL;
+	lst_command = NULL;
 	ignore_signal_for_shell();
 	while (true)
 	{
@@ -103,17 +104,18 @@ int main(int argc, char **argv, char **env)
 		{
 			//lst_token = lexer(linebuffer);
 			if (lexer(linebuffer, &lst_token))
-				free_and_exit(lst_token, lst_command);
+				free_and_exit(lst_token, lst_command, &linebuffer);
 			//lst_print_token(lst_token);
 			//printf("---------------------------------------------------------\n");
 			if (ft_expand(lst_token, env))
-				free_and_exit(lst_token, lst_command);
+				free_and_exit(lst_token, lst_command, &linebuffer);
 			//lst_print_token(lst_token);
 			heredoc(lst_token);
 			if (syntaxe_error(lst_token))
 			{
 			//printf("============PRINT_LST_COMMAND_TEST============\n");
-				parser(lst_token, &lst_command);
+				if (parser(lst_token, &lst_command))
+					free_and_exit(lst_token, lst_command, &linebuffer);
 				exec(lst_command, env);
 			}
 			//print_lst_command(lst_command);

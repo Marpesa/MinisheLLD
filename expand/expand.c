@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/13 18:30:03 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/11 23:06:19 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ static void	expand_token(t_token *token, char **env)
 	token->text = new_str;
 }
 
-void	ft_expand(t_list *lst_token, char **env)
+int	ft_expand(t_list *lst_token, char **env)
 {
 	t_token	*token;
 	t_token	*token_next;
@@ -131,4 +131,5 @@ void	ft_expand(t_list *lst_token, char **env)
 		}
 		lst_token = lst_token->next;
 	}
+	return (1);
 }
