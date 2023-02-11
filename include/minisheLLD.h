@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/11 19:45:32 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/11 20:46:15 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void ignore_signal_for_shell();
 
 /*--------------------- Lexer ---------------------*/ 
 
-t_list	*lexer(char *input);
+int		lexer(char *input, t_list **lst_token);
 char 	**ft_get_env(char **env);
 
 char	*ft_get_token_type(enum e_token_type type);

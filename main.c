@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/11 19:38:35 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/11 21:09:21 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,14 +78,14 @@ int main(int argc, char **argv, char **env)
 {
 	(void)argc;
 	(void)argv;
-	t_list *lst_token;
+	t_list	*lst_token;
+	t_list	*lst_command;
+	char	*linebuffer;
+	int		*err_status;
 
 	// ignore Ctrl-\ Ctrl-C Ctrl-Z signals
-	ignore_signal_for_shell();
-
-	char* linebuffer;
-
 	linebuffer = NULL;
+	ignore_signal_for_shell();
 	while (true)
 	{
 
@@ -101,21 +101,24 @@ int main(int argc, char **argv, char **env)
 		}
 		if (check_error_input(linebuffer))
 		{
-			lst_token = lexer(linebuffer);
+			//lst_token = lexer(linebuffer);
+			if (lexer(linebuffer, &lst_token))
+				free_and_exit(lst_token, lst_command);
 			//lst_print_token(lst_token);
-					//printf("---------------------------------------------------------\n");
-		ft_expand(lst_token, env);
-		//lst_print_token(lst_token);
-		heredoc(lst_token);
-		if (syntaxe_error(lst_token))
-		{
-		//printf("============PRINT_LST_COMMAND_TEST============\n");
-			t_list *lst_command = parser(lst_token);
-			exec(lst_command, env);
-		}
-		//print_lst_command(lst_command);
-		//lst_print_command(parser(lst_token));
-		// usleep (800);
+			//printf("---------------------------------------------------------\n");
+			if (ft_expand(lst_token, env))
+				free_and_exit(lst_token, lst_command);
+			//lst_print_token(lst_token);
+			heredoc(lst_token);
+			if (syntaxe_error(lst_token))
+			{
+			//printf("============PRINT_LST_COMMAND_TEST============\n");
+				parser(lst_token, &lst_command);
+				exec(lst_command, env);
+			}
+			//print_lst_command(lst_command);
+			//lst_print_command(parser(lst_token));
+			// usleep (800);
 		}
 
 	}
