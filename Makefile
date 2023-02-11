@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2023/02/09 05:17:01 by gle-mini         ###   ########.fr        #
+#    Updated: 2023/02/11 19:29:47 by lmery            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,7 @@ C_EXPAND = expand trim custom_tokenizer merge_strings
 
 C_HEREDOC = heredoc
 
-C_ERROR = syntaxe_error check_error_input exit_error
+C_ERROR = syntaxe_error syntaxe_error_utils check_error_input exit_error
 
 C_PARSER = parser
 

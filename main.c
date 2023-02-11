@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/09 06:51:15 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/11 19:38:35 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,8 +103,7 @@ int main(int argc, char **argv, char **env)
 		{
 			lst_token = lexer(linebuffer);
 			//lst_print_token(lst_token);
-		}
-		//printf("---------------------------------------------------------\n");
+					//printf("---------------------------------------------------------\n");
 		ft_expand(lst_token, env);
 		//lst_print_token(lst_token);
 		heredoc(lst_token);
@@ -117,6 +116,8 @@ int main(int argc, char **argv, char **env)
 		//print_lst_command(lst_command);
 		//lst_print_command(parser(lst_token));
 		// usleep (800);
+		}
+
 	}
 	rl_clear_history();
 	free(linebuffer);

@@ -6,38 +6,33 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/09 05:19:04 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/11 19:45:32 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELLD_H
 # define MINISHELLD_H
 
-#include "libft.h"
+# include "libft.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
 
-#include <readline/readline.h>
-#include <readline/history.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-#include <signal.h>
-#include <stdlib.h>
-#include <stdarg.h>
+# include <errno.h>
+# include <signal.h>
+# include <stdarg.h>
+# include <string.h>
+# include <sys/wait.h>
+# include <pwd.h>
+# include <sys/types.h>
+# include <fcntl.h>
 
-#include <stdlib.h>
-#include <string.h>
-#include <sys/wait.h>
-#include <pwd.h>
-#include <sys/types.h>
-#include <fcntl.h>
-
-
-typedef enum {
+typedef enum s_bool
+{
 	false,
 	true
 } t_bool;
@@ -63,14 +58,13 @@ typedef struct s_lexer {
 	t_token *token;
 	int token_count;
 	int	token_start;
-	//t_bool in_quote;
 	t_bool in_word;
 	int i;
 	t_list *lst_token;
 } t_lexer;
 
 
-/*                   Colors LLD                    */
+/*----------------- Colors LLD ---------------- */
 #define _ORANGE		"\e[38:5:208m"
 #define _ORANGE2	"\e[38:5:202m"
 #define _BLUE_LLD	"\e[38:5:25m"
@@ -110,6 +104,9 @@ void	heredoc(t_list *lst_token);
 /*-------------------- Error ----------------------*/
 
 int	syntaxe_error(t_list *lst_token);
+t_token_type	return_token_type(t_list *lst_token);
+char	*return_token_text(t_list *lst_token);
+t_bool	start_or_finish_pipe(t_list *lst_token);
 int		check_error_input(char *input);
 void	exit_error(char *msg);
 
@@ -139,4 +136,5 @@ void	print_lst_command(t_list *lst_command);
 
 /*------------------Exec-------------------------*/
 void	exec(t_list *lst_command, char **env);
+
 #endif
