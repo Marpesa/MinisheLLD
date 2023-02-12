@@ -36,4 +36,15 @@ void	print_lst_command(t_list *lst_command)
 	}
 }
 
+void	print_lst_token(t_list *head)
+{
+	t_token	*token;
 
+	while (head)
+	{
+		token = head->content;
+		printf("token type: %s\ntoken text: %s\n", \
+		ft_get_token_type(token->type), token->text);
+		head = head->next;
+	}
+}

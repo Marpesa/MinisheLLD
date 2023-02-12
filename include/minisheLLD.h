@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/11 21:58:20 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/12 16:15:46 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,9 +85,8 @@ char 	**ft_get_env(char **env);
 
 char	*ft_get_token_type(enum e_token_type type);
 void	lexer_data_init(t_lexer *data);
-t_list	*lst_add_token(t_list *lst_token, void *content);
+int		lst_add_token(t_list **lst_token, void *content);
 int		is_special(char c);
-void	lst_print_token(t_list *head);
 
 /*-------------------- Expand ---------------------*/ 
 
@@ -134,6 +133,7 @@ void	test_syntaxe_error(char **env);
 /*------------------Debug------------------------*/
 void	print_map(char **map);
 void	print_lst_command(t_list *lst_command);
+void	print_lst_token(t_list *head);
 
 /*------------------Exec-------------------------*/
 void	exec(t_list *lst_command, char **env);

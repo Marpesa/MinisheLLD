@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/11 21:57:09 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/12 16:52:50 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,13 +103,13 @@ int main(int argc, char **argv, char **env)
 		if (check_error_input(linebuffer))
 		{
 			//lst_token = lexer(linebuffer);
-			if (lexer(linebuffer, &lst_token))
+			if (lexer(linebuffer, &lst_token) == -1)
 				free_and_exit(lst_token, lst_command, &linebuffer);
-			//lst_print_token(lst_token);
-			//printf("---------------------------------------------------------\n");
-			if (ft_expand(lst_token, env))
+			print_lst_token(lst_token);
+			printf("---------------------------------------------------------\n");
+			if (ft_expand(lst_token, env) == -1)
 				free_and_exit(lst_token, lst_command, &linebuffer);
-			//lst_print_token(lst_token);
+			print_lst_token(lst_token);
 			heredoc(lst_token);
 			if (syntaxe_error(lst_token))
 			{

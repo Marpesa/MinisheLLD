@@ -43,7 +43,8 @@ static int	add_str_to_map(char *str, char **map, char ***map_result)
 		free_map(map);
 		map = NULL;
 	}
-	//*map_result = new_map;
+	print_map(new_map);
+	*map_result = new_map;
 	return (1);
 }
 
@@ -76,7 +77,8 @@ int	parser(t_list	*lst_token, t_list **lst_result)
 
 	if (lst_add_command(&lst_command, command) == -1)
 		return (-1);
-	while (lst_token)
+	print_lst_token(lst_token);
+	while (lst_token != NULL)
 	{
 		token = lst_token->content;
 		if (token->type == TOKEN_PIPE)
@@ -122,7 +124,7 @@ int	parser(t_list	*lst_token, t_list **lst_result)
 		token_previous = lst_token->content;
 		lst_token = lst_token->next;
 	}
-	print_lst_command(lst_command);
+//	print_lst_command(lst_command);
 	*lst_result = lst_command;
 	return (1);
 }

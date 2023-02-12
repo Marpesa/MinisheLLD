@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 03:38:23 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/13 03:46:02 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/12 16:35:53 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,16 @@ void	lexer_data_init(t_lexer *data)
 	data->lst_token = NULL;
 }
 
-t_list	*lst_add_token(t_list *lst_token, void *content)
+int	lst_add_token(t_list **lst_token, void *content)
 {
 	t_list	*new;
 
 	new = ft_lstnew(content);
 	if (new == NULL)
-		return (NULL);
-	ft_lstadd_back(&lst_token, new);
-	return (lst_token);
+		return (-1);
+	ft_lstadd_back(lst_token, new);
+	//print_lst_token(*lst_token);
+	return (1);
 }
 
 int	is_special(char c)
@@ -68,17 +69,4 @@ int	is_special(char c)
 	if (c == '\\' || c == ';' || c == '{' || c == '}')
 		return (TOKEN_IGNORE);
 	return (0);
-}
-
-void	lst_print_token(t_list *head)
-{
-	t_token	*token;
-
-	while (head)
-	{
-		token = head->content;
-		printf("token type: %s\ntoken text: %s\n", \
-		ft_get_token_type(token->type), token->text);
-		head = head->next;
-	}
 }
