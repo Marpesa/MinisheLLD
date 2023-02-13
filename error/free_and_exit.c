@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 03:29:09 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/11 21:59:03 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/13 20:56:07 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ static void	del_token(void *content)
 	if (token->text)
 		free(token->text);
 	token->text = NULL;
+	free(token);
+	token = NULL;
 }
 
 static void	del_command(void *content)
@@ -46,6 +48,8 @@ static void	del_command(void *content)
 	cmd = content;
 	free_map(cmd->word);
 	free_map(cmd->redir);
+	free(cmd);
+	cmd = NULL;
 }
 
 void	free_and_exit(t_list *lst_token, t_list *lst_command, char **linebuffer)

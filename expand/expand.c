@@ -6,46 +6,11 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/11 23:06:19 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/13 16:30:21 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
-
-/*
-char	*merge_strings(char *str1, char *str2)
-{
-	char	*result;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	result = malloc(ft_strlen_secure(str1) + ft_strlen_secure(str2) + 1);
-	if (result == NULL)
-		return (NULL);
-	if (str1 != NULL)
-	{
-		while (str1[i] != '\0')
-		{
-			result[i] = str1[i];
-			i++;
-		}
-		free(str1);
-	}
-	if (str2 != NULL)
-	{
-		while (str2[j] != '\0')
-		{
-			result[i + j] = str2[j];
-			j++;
-		}
-		//free(str2);
-	}
-	result[i + j] = '\0';
-	return (result);
-}
-*/
 
 static char	*env_var_find(char *start, char *end, char **env)
 {
@@ -78,6 +43,7 @@ static int	replace_env_var_in_new_str(char *start, char *end, char **new_str)
 			ft_strlen_secure(append_str) + (end - start) + 1);
 	free(*new_str);
 	*new_str = append_str;
+	return (1);
 }
 
 static int	expand_token(t_token *token, char **env)
@@ -112,6 +78,7 @@ static int	expand_token(t_token *token, char **env)
 	}
 	free(token->text);
 	token->text = new_str;
+	return (1);
 }
 
 int	ft_expand(t_list *lst_token, char **env)

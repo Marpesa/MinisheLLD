@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/12 16:52:50 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/13 17:12:22 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,7 @@ int main(int argc, char **argv, char **env)
 		if (linebuffer == NULL)
 		{
 			printf(_ORANGE "GOODBYE !\n");
+			free_and_exit(lst_token, lst_command, &linebuffer);
 			//OUBLIE PAS DE GRERER LEXIT GUGU
 			exit(0);
 		}
@@ -109,22 +110,20 @@ int main(int argc, char **argv, char **env)
 			printf("---------------------------------------------------------\n");
 			if (ft_expand(lst_token, env) == -1)
 				free_and_exit(lst_token, lst_command, &linebuffer);
-			print_lst_token(lst_token);
+			//print_lst_token(lst_token);
 			heredoc(lst_token);
-			if (syntaxe_error(lst_token))
-			{
-			//printf("============PRINT_LST_COMMAND_TEST============\n");
-				if (parser(lst_token, &lst_command))
-					free_and_exit(lst_token, lst_command, &linebuffer);
-				exec(lst_command, env);
-			}
+			if (syntaxe_error(lst_token) == -1)
+				free_and_exit(lst_token, lst_command, &linebuffer);
+			if (parser(lst_token, &lst_command) == -1)
+				free_and_exit(lst_token, lst_command, &linebuffer);
+			exec(lst_command, env);
+
 			//print_lst_command(lst_command);
 			//lst_print_command(parser(lst_token));
 			// usleep (800);
 		}
-
+		free(linebuffer);
 	}
 	rl_clear_history();
-	free(linebuffer);
 	return (1);
 }

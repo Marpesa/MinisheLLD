@@ -6,7 +6,7 @@
 /*   By: gle-mini <gle-mini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 04:11:10 by gle-mini          #+#    #+#             */
-/*   Updated: 2021/12/06 04:12:25 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/13 20:56:40 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,6 @@ void	ft_lstdelone(t_list *lst, void (*del)(void*))
 	{
 		(*del)(lst->content);
 		free(lst);
+		lst = NULL;
 	}
 }

@@ -67,6 +67,8 @@ int	parser(t_list	*lst_token, t_list **lst_result)
 	t_token		*token;
 	t_token		*token_previous;
 
+	if (lst_token == NULL)
+		return (1);
 	command = malloc(sizeof(t_command));
 	if (command == NULL)
 		return (-1);
@@ -74,7 +76,6 @@ int	parser(t_list	*lst_token, t_list **lst_result)
 	command->redir = NULL;
 	lst_command = NULL;
 	token_previous = NULL;
-
 	if (lst_add_command(&lst_command, command) == -1)
 		return (-1);
 	print_lst_token(lst_token);
