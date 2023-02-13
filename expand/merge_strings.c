@@ -17,9 +17,9 @@ char	*merge_strings(char *str1, char *str2)
 	char	*result;
 
 	result = malloc(ft_strlen_secure(str1) + ft_strlen_secure(str2) + 1);
-	ft_bzero(result, ft_strlen_secure(str1) + ft_strlen_secure(str2) + 1);
 	if (result == NULL)
 		return (NULL);
+	ft_bzero(result, ft_strlen_secure(str1) + ft_strlen_secure(str2) + 1);
 	if (str1 != NULL)
 		ft_strlcpy_secure(result, str1, ft_strlen_secure(str1) + 1);
 	if (str2 != NULL)

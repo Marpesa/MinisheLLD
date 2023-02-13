@@ -64,12 +64,14 @@ static char	*env_var_find(char *start, char *end, char **env)
 	return (NULL);
 }
 
-static void	replace_env_var_in_new_str(char *start, char *end, char **new_str)
+static int	replace_env_var_in_new_str(char *start, char *end, char **new_str)
 {
 	char	*append_str;
 
 	append_str = NULL;
 	append_str = malloc(ft_strlen_secure(*new_str) + (end - start) + 1);
+	if (append_str == NULL)
+		return (-1);
 	ft_bzero(append_str, ft_strlen_secure(*new_str) + (end - start) + 1);
 	ft_strlcpy_secure(append_str, *new_str, ft_strlen_secure(*new_str) + 1);
 	ft_strlcat(append_str, start, \
@@ -78,7 +80,7 @@ static void	replace_env_var_in_new_str(char *start, char *end, char **new_str)
 	*new_str = append_str;
 }
 
-static void	expand_token(t_token *token, char **env)
+static int	expand_token(t_token *token, char **env)
 {
 	int		result;
 	t_bool	in_d_quote;
@@ -97,9 +99,14 @@ static void	expand_token(t_token *token, char **env)
 			*(start + 1) == '\'' && in_d_quote == false))
 		{
 			new_str = merge_strings(new_str, env_var_find(start + 1, end, env));
+			if (new_str == NULL)
+				return (-1);
 		}
 		else
-			replace_env_var_in_new_str(start, end, &new_str);
+		{
+			if (replace_env_var_in_new_str(start, end, &new_str) == -1)
+				return (-1);
+		}
 		if (result == 0)
 			break ;
 	}
@@ -126,7 +133,8 @@ int	ft_expand(t_list *lst_token, char **env)
 		}
 		if (token->type == TOKEN_WORD)
 		{			
-			expand_token(token, env);
+			if (expand_token(token, env) == -1)
+				return (-1);
 			trim(&token->text);
 		}
 		lst_token = lst_token->next;
