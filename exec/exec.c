@@ -12,7 +12,7 @@
 
 #include "minisheLLD.h"
 
-char	*get_valid_bin(char *path, char **cmd)
+int	get_valid_bin(char *path, char **cmd, char **bin_result)
 {
 	char	*path_split;
 	char	*bin;
@@ -23,21 +23,25 @@ char	*get_valid_bin(char *path, char **cmd)
 		bin = ft_calloc(sizeof(char), (ft_strlen(path_split) + 1 \
 					+ ft_strlen(cmd[0]) + 1));
 		if (bin == NULL)
-			return (bin);
+			return (-1);
 		ft_strncat(bin, path_split, ft_strlen_secure(bin) + ft_strlen_secure(path_split));
 		ft_strncat(bin, "/", ft_strlen_secure(bin) + 1);
 		ft_strncat(bin, cmd[0], ft_strlen_secure(bin) + ft_strlen_secure(cmd[0]));
 		if (access(bin, F_OK) == 0)
-			return (bin);
+		{
+			*bin_result = bin;
+			return (1);
+		}
 		path_split = strtok(NULL, ":");
 		free(bin);
 		bin = NULL;
 	}
-	return (NULL);
+	*bin_result = NULL;
+	return (1);
 }
 
 /*PENSER A GERER LE CAS SI ON NE TROUVE PAS LE BINAIRE*/
-static void	get_absolute_path(char **cmd)
+static int	get_absolute_path(char **cmd)
 {
 	char	*path;
 	char	*bin;
@@ -50,7 +54,10 @@ static void	get_absolute_path(char **cmd)
 		if (path == NULL)
 			path = ft_strdup("/bin:/usr/local/bin:/usr/bin:\
 					/bin:/usr/local/sbin");
-		bin = get_valid_bin(path, cmd);
+		if (get_valid_bin(path, cmd, &bin) == -1)
+			return (-1);
+		if (bin == NULL)
+			printf("command not found\n");
 		free(path);
 		path = NULL;
 		free(cmd[0]);
@@ -59,6 +66,7 @@ static void	get_absolute_path(char **cmd)
 		free(path);
 		path = NULL;
 	}
+	return (1);
 }
 
 void	create_pipe(int	*old_pipe_in, t_list *lst_current)
@@ -85,16 +93,19 @@ void	restore_fd(int	*save_fd)
 	close(save_fd[1]);
 }
 
-void	fork_and_exec(t_command *command, char **env)
+int	fork_and_exec(t_command *command, char **env)
 {
 	pid_t	pid;
 
 	pid = fork();
 	if (pid == 0)
 	{
-		get_absolute_path(command->word);
-		execve(command->word[0], command->word, env);
+		if (get_absolute_path(command->word) == -1)
+			return (-1);
+		if (execve(command->word[0], command->word, env) == -1)
+			return (-1);
 	}
+	return (1);
 }
 
 void	wait_pid(void)
@@ -121,7 +132,8 @@ void	exec(t_list	*lst_command, char **env)
 		save_fd[0] = dup(STDIN_FILENO);
 		save_fd[1] = dup(STDOUT_FILENO);
 		create_pipe(&old_pipe_in, lst_current);
-		fork_and_exec(command, env);
+		if (fork_and_exec(command, env) == -1)
+			return ;
 		lst_current = lst_current->next;
 		restore_fd(save_fd);
 	}	

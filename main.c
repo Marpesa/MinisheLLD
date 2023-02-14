@@ -91,9 +91,6 @@ int main(int argc, char **argv, char **env)
 	{
 
 		linebuffer = rl_gets();
-		//printf("You enter :%s\n", linebuffer);
-
-		// linebuffer is NULL if you press "Ctrl+D"
 		if (linebuffer == NULL)
 		{
 			printf(_ORANGE "GOODBYE !\n");
@@ -103,24 +100,16 @@ int main(int argc, char **argv, char **env)
 		}
 		if (check_error_input(linebuffer))
 		{
-			//lst_token = lexer(linebuffer);
 			if (lexer(linebuffer, &lst_token) == -1)
 				free_and_exit(lst_token, lst_command, &linebuffer);
-			print_lst_token(lst_token);
-			printf("---------------------------------------------------------\n");
 			if (ft_expand(lst_token, env) == -1)
 				free_and_exit(lst_token, lst_command, &linebuffer);
-			//print_lst_token(lst_token);
 			heredoc(lst_token);
 			if (syntaxe_error(lst_token) == -1)
 				free_and_exit(lst_token, lst_command, &linebuffer);
 			if (parser(lst_token, &lst_command) == -1)
 				free_and_exit(lst_token, lst_command, &linebuffer);
 			exec(lst_command, env);
-
-			//print_lst_command(lst_command);
-			//lst_print_command(parser(lst_token));
-			// usleep (800);
 		}
 		free(linebuffer);
 	}
