@@ -18,7 +18,7 @@ t_bool	redirect_utils(t_list *lst_current)
 	return_token_type(lst_current) == TOKEN_HEREDOC) && \
 	!lst_current->next)
 	{
-		printf(_ORANGE2 "MinisheLLD:\tsyntax error near `newline'\n");
+		printf(_ORANGE2 "MinisheLLD:\tsyntax error near `newline'\n" _END);
 		return (true);
 	}
 	if (return_token_type(lst_current) == TOKEN_REDIRECT_APPEND || \
@@ -33,7 +33,7 @@ t_bool	redirect_utils(t_list *lst_current)
 		return_token_type(lst_current->next) != TOKEN_WORD)
 		{
 			printf(_ORANGE2 \
-			"MinisheLLD:\tsyntax error near unexpected token `%s'\n", \
+			"MinisheLLD:\tsyntax error near unexpected token `%s'\n" _END, \
 			return_token_text(lst_current));
 			return (true);
 		}
@@ -56,7 +56,7 @@ t_bool	redirect(t_list *lst_token)
 		return_token_type(lst_current->next) != TOKEN_WORD)
 		{
 			printf(_ORANGE2 \
-			"MinisheLLD:\tsyntax error near unexpected token `%s'\n", \
+			"MinisheLLD:\tsyntax error near unexpected token `%s'\n" _END, \
 			return_token_text(lst_current));
 			return (true);
 		}
@@ -72,7 +72,7 @@ t_bool	new_line(t_list *lst_token)
 	|| return_token_type(ft_lstlast(lst_token)) == TOKEN_REDIRECT_APPEND \
 	|| return_token_type(ft_lstlast(lst_token)) == TOKEN_HEREDOC)
 	{
-		printf(_ORANGE2 "MinisheLLD:\tsyntax error near `newline'\n");
+		printf(_ORANGE2 "MinisheLLD:\tsyntax error near `newline'\n" _END);
 		return (true);
 	}
 	return (false);

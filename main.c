@@ -105,11 +105,12 @@ int main(int argc, char **argv, char **env)
 			if (ft_expand(lst_token, env) == -1)
 				free_and_exit(lst_token, lst_command, &linebuffer);
 			heredoc(lst_token);
-			if (syntaxe_error(lst_token) == -1)
-				free_and_exit(lst_token, lst_command, &linebuffer);
-			if (parser(lst_token, &lst_command) == -1)
-				free_and_exit(lst_token, lst_command, &linebuffer);
-			exec(lst_command, env);
+			if (syntaxe_error(lst_token) != 0)
+			{
+				if (parser(lst_token, &lst_command) == -1)
+					free_and_exit(lst_token, lst_command, &linebuffer);
+				exec(lst_command, env);
+			}
 		}
 		free_all(&lst_token, &lst_command, &linebuffer);
 	}
