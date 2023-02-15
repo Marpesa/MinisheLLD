@@ -20,3 +20,11 @@
 -GURVAN FAIT LES TRACK FD ET LES TRACE CHILDREN
 
 -exec ajouter les commands not found
+
+
+pas le comportement attendu:
+
+cat | cat | ls
+
+
+

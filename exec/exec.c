@@ -6,7 +6,7 @@
 /*   By: gle-mini <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/02/11 22:12:24 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/15 15:48:10 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,18 +57,25 @@ static int	get_absolute_path(char **cmd)
 		if (get_valid_bin(path, cmd, &bin) == -1)
 			return (-1);
 		if (bin == NULL)
+		{
 			printf("command not found\n");
+			if (cmd[0] != NULL)
+			free(path);
+			path = NULL;
+			free(cmd[0]);
+			cmd[0] = NULL;
+			return (1);
+		}
 		free(path);
 		path = NULL;
 		free(cmd[0]);
 		cmd[0] = NULL;
 		cmd[0] = bin;
-		free(path);
-		path = NULL;
 	}
 	return (1);
 }
 
+/*
 void	create_pipe(int	*old_pipe_in, t_list *lst_current)
 {
 	int	new_pipe[2];
@@ -80,83 +87,80 @@ void	create_pipe(int	*old_pipe_in, t_list *lst_current)
 		return ;
 	pipe(new_pipe);
 	dup2(new_pipe[1], STDOUT_FILENO);
-	close(new_pipe[1]);
+	if (new_pipe[1] != STDIN_FILENO || new_pipe[1] != STDOUT_FILENO)
+		close(new_pipe[1]);
 	*old_pipe_in = dup(new_pipe[0]);
-	close(new_pipe[0]);
-}
-
-void	restore_fd(int	*save_fd)
-{
-	dup2(save_fd[0], STDIN_FILENO);
-	close(save_fd[0]);
-	dup2(save_fd[1], STDOUT_FILENO);
-	close(save_fd[1]);
-}
-
-int	fork_and_exec(t_command *command, char **env, int *pid_command)
-{
-	pid_t	pid;
-
-	pid = fork();
-	*pid_command = pid;
-	if (pid == 0)
-	{
-		if (get_absolute_path(command->word) == -1)
-			return (-1);
-		if (execve(command->word[0], command->word, env) == -1)
-			return (-1);
-	}
-	return (1);
-}
-
-
-/*
-void	wait_pid(t_list *lst_command)
-{
-	t_list		*lst_current;
-	t_command	*command;
-	int			stat_loc;
-
-	lst_current = lst_command;
-	while (lst_current != NULL)
-	{
-		command = lst_current->content;
-		waitpid(command->pid, &stat_loc, 0);
-		lst_current = lst_current->next;
-	}
+	if (new_pipe[0] != STDIN_FILENO || new_pipe[0] != STDOUT_FILENO)
+		close(new_pipe[0]);
 }
 */
 
-
-void	wait_pid(void)
+void	ft_pipe(char **cmd, char **env, int *prevpipe)
 {
-	int	stat_loc;
+	int		pipefd[2];
+	pid_t	cpid;
 
-	waitpid(-1, &stat_loc, 0);
+	pipe (pipefd);
+	cpid = fork ();
+	if (cpid == 0)
+	{
+		close (pipefd[0]);
+		dup2 (pipefd[1], STDOUT_FILENO);
+		close (pipefd[1]);
+		dup2 (*prevpipe, STDIN_FILENO);
+		close (*prevpipe);
+		//cmd[len] = NULL;
+		execve (cmd[0], cmd, env);
+	}
+	else
+	{
+		close (pipefd[1]);
+		close (*prevpipe);
+		*prevpipe = pipefd[0];
+	}
+}
+
+void	ft_last(char **cmd, char **env, int prevpipe)
+{
+	pid_t	cpid;
+
+	cpid = fork ();
+	if (cpid == 0)
+	{
+		dup2 (prevpipe, STDIN_FILENO);
+		close (prevpipe);
+		//cmd[len] = NULL;
+		execve (cmd[0], cmd, env);
+	}
+	else
+	{
+		close (prevpipe);
+		while (wait (NULL) != -1)
+			;
+	}
 }
 
 void	exec(t_list	*lst_command, char **env)
 {
 	t_list		*lst_current;
 	t_command	*command;
-	int			old_pipe_in;
-	int			save_fd[2];
+	int		prevpipe;
 
 	lst_current = NULL;
-	old_pipe_in = 0;
 	lst_current = lst_command;
 	while (lst_current != NULL)
 	{
-		if (lst_current->content != NULL)
-			command = lst_current->content;
-		save_fd[0] = dup(STDIN_FILENO);
-		save_fd[1] = dup(STDOUT_FILENO);
-		create_pipe(&old_pipe_in, lst_current);
-		if (fork_and_exec(command, env, &command->pid) == -1)
-			return ;
+		command = lst_current->content;
+		get_absolute_path(command->word);
+		if (lst_current->next == NULL)
+		{
+			ft_last(command->word, env, prevpipe);
+		}
+		else
+			ft_pipe(command->word, env, &prevpipe);
+		//if (fork_and_exec(command, env, &command->pid) == -1)
+			//return ;
+		//restore_fd(save_fd);
 		lst_current = lst_current->next;
-		restore_fd(save_fd);
 	}	
-	//wait_pid(lst_command);
-	wait_pid();
 }
