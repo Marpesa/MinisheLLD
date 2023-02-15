@@ -22,12 +22,9 @@
 -exec ajouter les commands not found
 
 
-pas le comportement attendu:
+a verifier:
 
-
-segfautl quand:
-
-cat |
+steel reachable avec la commande ls
 
 
 

@@ -128,7 +128,7 @@ void	ft_last(char **cmd, char **env, int prevpipe)
 {
 	pid_t	cpid;
 
-	cpid = fork ();
+	cpid = fork();
 	if (cpid == 0)
 	{
 		dup2 (prevpipe, STDIN_FILENO);
@@ -138,7 +138,8 @@ void	ft_last(char **cmd, char **env, int prevpipe)
 	}
 	else
 	{
-		close (prevpipe);
+		if (prevpipe != STDOUT_FILENO)
+			close (prevpipe);
 		while (wait (NULL) != -1)
 			;
 	}
@@ -154,6 +155,7 @@ void	exec(t_list	*lst_command, char **env)
 	lst_current = NULL;
 	lst_current = lst_command;
 	error_status = 0;
+	prevpipe = dup(STDIN_FILENO);
 	while (lst_current != NULL)
 	{
 		command = lst_current->content;
