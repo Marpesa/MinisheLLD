@@ -93,7 +93,7 @@ int main(int argc, char **argv, char **env)
 		linebuffer = rl_gets();
 		if (linebuffer == NULL)
 		{
-			printf(_ORANGE "GOODBYE !\n");
+			printf(_ORANGE "GOODBYE !\n" _END);
 			free_and_exit(lst_token, lst_command, &linebuffer);
 			//OUBLIE PAS DE GRERER LEXIT GUGU
 			exit(0);

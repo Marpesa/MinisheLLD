@@ -93,11 +93,12 @@ void	restore_fd(int	*save_fd)
 	close(save_fd[1]);
 }
 
-int	fork_and_exec(t_command *command, char **env)
+int	fork_and_exec(t_command *command, char **env, int *pid_command)
 {
 	pid_t	pid;
 
 	pid = fork();
+	*pid_command = pid;
 	if (pid == 0)
 	{
 		if (get_absolute_path(command->word) == -1)
@@ -107,6 +108,25 @@ int	fork_and_exec(t_command *command, char **env)
 	}
 	return (1);
 }
+
+
+/*
+void	wait_pid(t_list *lst_command)
+{
+	t_list		*lst_current;
+	t_command	*command;
+	int			stat_loc;
+
+	lst_current = lst_command;
+	while (lst_current != NULL)
+	{
+		command = lst_current->content;
+		waitpid(command->pid, &stat_loc, 0);
+		lst_current = lst_current->next;
+	}
+}
+*/
+
 
 void	wait_pid(void)
 {
@@ -132,10 +152,11 @@ void	exec(t_list	*lst_command, char **env)
 		save_fd[0] = dup(STDIN_FILENO);
 		save_fd[1] = dup(STDOUT_FILENO);
 		create_pipe(&old_pipe_in, lst_current);
-		if (fork_and_exec(command, env) == -1)
+		if (fork_and_exec(command, env, &command->pid) == -1)
 			return ;
 		lst_current = lst_current->next;
 		restore_fd(save_fd);
 	}	
+	//wait_pid(lst_command);
 	wait_pid();
 }

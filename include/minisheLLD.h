@@ -115,6 +115,7 @@ void			free_and_exit(t_list *lst_token, t_list *lst_command, char **linebuffer);
 typedef struct s_command {
 	char	**word;
 	char	**redir;
+	pid_t	pid;
 } t_command;
 	
 int		parser(t_list *lst_token, t_list **lst_command);
