@@ -109,6 +109,7 @@ t_bool			start_or_finish_pipe(t_list *lst_token);
 int				check_error_input(char *input);
 void			exit_error(char *msg);
 void			free_and_exit(t_list *lst_token, t_list *lst_command, char **linebuffer);
+void			free_all(t_list **lst_token, t_list **lst_command, char **linebuffer);
 
 /*-------------------- Parser ---------------------*/ 
 

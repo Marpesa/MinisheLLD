@@ -41,7 +41,7 @@ int	get_valid_bin(char *path, char **cmd, char **bin_result)
 }
 
 /*PENSER A GERER LE CAS SI ON NE TROUVE PAS LE BINAIRE*/
-static int	get_absolute_path(char **cmd)
+static void	get_absolute_path(char **cmd, int *error_status)
 {
 	char	*path;
 	char	*bin;
@@ -55,16 +55,21 @@ static int	get_absolute_path(char **cmd)
 			path = ft_strdup("/bin:/usr/local/bin:/usr/bin:\
 					/bin:/usr/local/sbin");
 		if (get_valid_bin(path, cmd, &bin) == -1)
-			return (-1);
+		{
+			*error_status = -1;
+			return ;
+		}
 		if (bin == NULL)
 		{
-			printf("command not found\n");
+			//printf("command not found\n");
+			//perror("command not found\n");
 			if (cmd[0] != NULL)
 			free(path);
 			path = NULL;
 			free(cmd[0]);
 			cmd[0] = NULL;
-			return (1);
+			*error_status = 2;
+			return ;
 		}
 		free(path);
 		path = NULL;
@@ -72,7 +77,6 @@ static int	get_absolute_path(char **cmd)
 		cmd[0] = NULL;
 		cmd[0] = bin;
 	}
-	return (1);
 }
 
 /*
@@ -98,7 +102,7 @@ void	create_pipe(int	*old_pipe_in, t_list *lst_current)
 void	ft_pipe(char **cmd, char **env, int *prevpipe)
 {
 	int		pipefd[2];
-	pid_t	cpid;
+	int	cpid;
 
 	pipe (pipefd);
 	cpid = fork ();
@@ -144,14 +148,21 @@ void	exec(t_list	*lst_command, char **env)
 {
 	t_list		*lst_current;
 	t_command	*command;
-	int		prevpipe;
+	int			prevpipe;
+	int			error_status;
 
 	lst_current = NULL;
 	lst_current = lst_command;
+	error_status = 0;
 	while (lst_current != NULL)
 	{
 		command = lst_current->content;
-		get_absolute_path(command->word);
+		get_absolute_path(command->word, &error_status);
+		if (error_status == 2)
+		{
+			printf("command %s not found\n", *command->word);
+			return ;
+		}
 		if (lst_current->next == NULL)
 		{
 			ft_last(command->word, env, prevpipe);

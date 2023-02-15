@@ -52,6 +52,15 @@ static void	del_command(void *content)
 	cmd = NULL;
 }
 
+void	free_all(t_list **lst_token, t_list **lst_command, char **linebuffer)
+{
+	ft_lstclear(lst_token, del_token);
+	ft_lstclear(lst_command, del_command);
+	if (*linebuffer != NULL)
+		free(*linebuffer);
+	*linebuffer = NULL;
+}
+
 void	free_and_exit(t_list *lst_token, t_list *lst_command, char **linebuffer)
 {
 	ft_lstclear(&lst_token, del_token);
@@ -59,4 +68,5 @@ void	free_and_exit(t_list *lst_token, t_list *lst_command, char **linebuffer)
 	if (*linebuffer != NULL)
 		free(*linebuffer);
 	*linebuffer = NULL;
+	exit(0);
 }

@@ -24,7 +24,10 @@
 
 pas le comportement attendu:
 
-cat | cat | ls
+
+segfautl quand:
+
+cat |
 
 
 

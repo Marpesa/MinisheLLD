@@ -111,7 +111,7 @@ int main(int argc, char **argv, char **env)
 				free_and_exit(lst_token, lst_command, &linebuffer);
 			exec(lst_command, env);
 		}
-		free(linebuffer);
+		free_all(&lst_token, &lst_command, &linebuffer);
 	}
 	rl_clear_history();
 	return (1);
