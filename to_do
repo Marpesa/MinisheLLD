@@ -1,5 +1,4 @@
 
--garbage collector
 
 -heredoc (gestion lim si "lim" 'lim' ou lim) et verifier si on imbriquer plusieurs heredoc et gerer le sigint, echo hola <<<< bjr)
 
@@ -9,17 +8,11 @@
 
 -faire le env secret
 
--valgrind fd
-
 -norm
-
--Gerer dans get_absolute_path le cas ou on ne trouve pas de binaire
 
 -les builts in (ne pas fork pour les cd)
 
--GURVAN FAIT LES TRACK FD ET LES TRACE CHILDREN
-
--exec ajouter les commands not found
+-Choisir l'affichage du message quand la commande n'existe pas. Actuellement: command (null) not found
 
 
 a verifier:
