@@ -116,7 +116,6 @@ void			free_all(t_list **lst_token, t_list **lst_command, char **linebuffer);
 typedef struct s_command {
 	char	**word;
 	char	**redir;
-	pid_t	pid;
 } t_command;
 	
 int		parser(t_list *lst_token, t_list **lst_command);
@@ -139,5 +138,10 @@ void	print_lst_token(t_list *head);
 
 /*------------------Exec-------------------------*/
 void	exec(t_list *lst_command, char **env);
+
+/*------------------Builtin-------------------------*/
+t_bool	is_builtin(char *value);
+void	execute_builtin(char **cmd, int fd);
+int		builtin_echo(char **command, int fd);
 
 #endif

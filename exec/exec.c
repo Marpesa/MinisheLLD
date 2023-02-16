@@ -114,7 +114,12 @@ void	ft_pipe(char **cmd, char **env, int *prevpipe)
 		dup2 (*prevpipe, STDIN_FILENO);
 		close (*prevpipe);
 		//cmd[len] = NULL;
-		execve (cmd[0], cmd, env);
+		if (is_builtin(*cmd) == true)
+		{
+			execute_builtin(cmd, pipefd[1]);
+		}
+		else
+			execve (cmd[0], cmd, env);
 	}
 	else
 	{
@@ -134,7 +139,12 @@ void	ft_last(char **cmd, char **env, int prevpipe)
 		dup2 (prevpipe, STDIN_FILENO);
 		close (prevpipe);
 		//cmd[len] = NULL;
-		execve (cmd[0], cmd, env);
+		if (is_builtin(*cmd) == true)
+		{
+			execute_builtin(cmd, STDOUT_FILENO);
+		}
+		else
+			execve (cmd[0], cmd, env);
 	}
 	else
 	{

@@ -60,7 +60,7 @@ C_DEBUG = debug
 
 C_UNIT_TEST = unit_test unit_test_parser unit_test_syntaxe_error
 
-C_EXEC = exec
+C_EXEC = exec builtin builtin_echo
 
 
 				
