@@ -73,6 +73,49 @@ char	*rl_gets ()
 }
 
 
+char **save_env(char **env)
+{
+    char **envp;
+    int i;
+	int	envc;
+
+	i = 0;
+	envc = 0;
+	envp = NULL;
+    // Count the number of environment variables
+    while (env[i]) {
+        envc++;
+		i++;
+    }
+
+    // Allocate space for the array of pointers to environment variables
+    envp = (char **)malloc((envc + 1) * sizeof(char *));
+    if (!envp) {
+        return NULL;
+    }
+
+    // Copy the environment variables to the array
+    for (i = 0; env[i]; i++) {
+        size_t len = ft_strlen(env[i]) + 1;
+        envp[i] = (char *)malloc(len);
+        if (!envp[i]) {
+            // Free memory and return NULL on error
+            while (--i >= 0) {
+                free(envp[i]);
+            }
+            free(envp);
+            return NULL;
+        }
+        ft_strncpy(envp[i], env[i], len);
+        envp[i][len-1] = '\0';  // Ensure null-termination
+    }
+
+    envp[envc] = NULL;
+
+    return envp;
+}
+
+
 
 int main(int argc, char **argv, char **env)
 {
@@ -81,12 +124,15 @@ int main(int argc, char **argv, char **env)
 	t_list	*lst_token;
 	t_list	*lst_command;
 	char	*linebuffer;
+	char 	**secret_env;
 
 	// ignore Ctrl-\ Ctrl-C Ctrl-Z signals
 	linebuffer = NULL;
 	lst_token = NULL;
 	lst_command = NULL;
 	ignore_signal_for_shell();
+	secret_env = save_env(env);
+	print_map(secret_env);
 	while (true)
 	{
 
@@ -102,14 +148,14 @@ int main(int argc, char **argv, char **env)
 		{
 			if (lexer(linebuffer, &lst_token) == -1)
 				free_and_exit(lst_token, lst_command, &linebuffer);
-			if (ft_expand(lst_token, env) == -1)
+			if (ft_expand(lst_token, secret_env) == -1)
 				free_and_exit(lst_token, lst_command, &linebuffer);
 			heredoc(lst_token);
 			if (syntaxe_error(lst_token) != 0)
 			{
 				if (parser(lst_token, &lst_command) == -1)
 					free_and_exit(lst_token, lst_command, &linebuffer);
-				exec(lst_command, env);
+				exec(lst_command, &secret_env);
 			}
 		}
 		free_all(&lst_token, &lst_command, &linebuffer);

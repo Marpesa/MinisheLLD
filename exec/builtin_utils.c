@@ -4,7 +4,7 @@ t_bool	is_builtin(char *value)
 {
 	if (!value)
 		return (false);
-	if (!(ft_strncmp(value, "echo\0", ft_strlen("echo\0")))) 
+	if (!(ft_strncmp(value, "echo\0", ft_strlen("echo\0")) || ft_strncmp(value, "cd\0", ft_strlen("cd\0")))) 
 		return (true);
 		//|| !(ft_strcmp(value, "cd\0")))
 	/*
@@ -18,13 +18,14 @@ t_bool	is_builtin(char *value)
 	return (false);
 }
 
-void	execute_builtin(char **cmd, int fd)
+void	execute_builtin(char **cmd, char ***env, int fd)
 {
 	if (!(ft_strncmp(cmd[0], "echo\0", ft_strlen("echo\0"))))
 		builtin_echo(cmd, fd);
+	else if (!(ft_strncmp(cmd[0], "cd\0", ft_strlen("cd\0"))))
+		builtin_cd(cmd, env);
+
 	/*	
-	else if (!(ft_strcmp(cmd[0], "cd\0")))
-		builtin_cd(cmd[1]);
 	else if (!(ft_strcmp(cmd[0], "pwd")))
 		builtin_pwd();
 	else if (!(ft_strcmp(cmd[0], "export")))
@@ -38,3 +39,27 @@ void	execute_builtin(char **cmd, int fd)
 	*/
 }
 
+char	*get_env(char *var, char ***envp)
+{
+	size_t	size;
+	int		line;
+	char	*ret;
+
+	line = -1;
+	while ((*envp)[++line])
+	{
+		size = 0;
+		while ((*envp)[line][size] && (*envp)[line][size] != '=')
+			size++;
+		if (size != ft_strlen(var))
+			continue ;
+		if (ft_strncmp((*envp)[line], var, size) == 0)
+		{
+			ret = ft_strdup(&(*envp)[line][size + 1], LOOP);
+			if (!ret)
+				print_message("minishell: Allocation error\n", RED, 1);
+			return (ret);
+		}
+	}
+	return ("");
+}

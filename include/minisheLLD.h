@@ -137,11 +137,14 @@ void	print_lst_command(t_list *lst_command);
 void	print_lst_token(t_list *head);
 
 /*------------------Exec-------------------------*/
-void	exec(t_list *lst_command, char **env);
+void	exec(t_list *lst_command, char ***env);
 
 /*------------------Builtin-------------------------*/
 t_bool	is_builtin(char *value);
-void	execute_builtin(char **cmd, int fd);
+void	execute_builtin(char **cmd, char ***env, int fd);
 int		builtin_echo(char **command, int fd);
+int		builtin_cd(char **command, char ***env);
+char	*get_env(char *var, char ***envp);
+
 
 #endif

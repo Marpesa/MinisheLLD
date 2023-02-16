@@ -40,7 +40,7 @@ int	get_valid_bin(char *path, char **cmd, char **bin_result)
 	return (1);
 }
 
-/*PENSER A GERER LE CAS SI ON NE TROUVE PAS LE BINAIRE*/
+/*CHANGER LE GETENV POUR LE SECRET ENV*/
 static void	get_absolute_path(char **cmd, int *error_status)
 {
 	char	*path;
@@ -99,7 +99,7 @@ void	create_pipe(int	*old_pipe_in, t_list *lst_current)
 }
 */
 
-void	ft_pipe(char **cmd, char **env, int *prevpipe)
+void	ft_pipe(char **cmd, char ***env, int *prevpipe)
 {
 	int		pipefd[2];
 	int	cpid;
@@ -116,10 +116,10 @@ void	ft_pipe(char **cmd, char **env, int *prevpipe)
 		//cmd[len] = NULL;
 		if (is_builtin(*cmd) == true)
 		{
-			execute_builtin(cmd, pipefd[1]);
+			execute_builtin(cmd, env, pipefd[1]);
 		}
 		else
-			execve (cmd[0], cmd, env);
+			execve (cmd[0], cmd, *env);
 	}
 	else
 	{
@@ -129,7 +129,7 @@ void	ft_pipe(char **cmd, char **env, int *prevpipe)
 	}
 }
 
-void	ft_last(char **cmd, char **env, int prevpipe)
+void	ft_last(char **cmd, char ***env, int prevpipe)
 {
 	pid_t	cpid;
 
@@ -141,10 +141,10 @@ void	ft_last(char **cmd, char **env, int prevpipe)
 		//cmd[len] = NULL;
 		if (is_builtin(*cmd) == true)
 		{
-			execute_builtin(cmd, STDOUT_FILENO);
+			execute_builtin(cmd, env, STDOUT_FILENO);
 		}
 		else
-			execve (cmd[0], cmd, env);
+			execve (cmd[0], cmd, *env);
 	}
 	else
 	{
@@ -155,7 +155,7 @@ void	ft_last(char **cmd, char **env, int prevpipe)
 	}
 }
 
-void	exec(t_list	*lst_command, char **env)
+void	exec(t_list	*lst_command, char ***env)
 {
 	t_list		*lst_current;
 	t_command	*command;

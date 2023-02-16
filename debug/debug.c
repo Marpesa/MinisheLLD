@@ -9,7 +9,7 @@ void	print_map(char **map)
 		return ;
 	while (i < ft_maplen_secure(map))
 	{
-		printf("%s ", map[i]);
+		printf("%s\n", map[i]);
 		i++;
 	}
 	printf("\n");
