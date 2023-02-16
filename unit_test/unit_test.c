@@ -25,7 +25,7 @@ t_list *create_lst_token(int size, ...)
 	while (i < size)
 	{
 		char *str = va_arg(args, char *);
-		lst_test = lst_add_token(lst_test, ft_tokencpy(str, va_arg(args, t_token_type)));
+		lst_add_token(&lst_test, ft_tokencpy(str, va_arg(args, t_token_type)));
 		i++;
 	}
 	va_end(args);
@@ -91,12 +91,12 @@ void	test(t_list *lst_expected_lexer, t_list *lst_expected_expand, char *test_co
 	t_list *lst_test;
 	printf("Command tested: %s\n", test_command);	
 	printf("-------------LEXER---------------\n");
-	lst_test = lexer(test_command);
+	lexer(test_command, &lst_test);
 	if (lst_compare(lst_expected_lexer, lst_test))
 		printf(_BOLD _BLUE_LLD "OK\n" _END);
 	else
 	{
-		lst_print_token(lst_test);
+		print_lst_token(lst_test);
 		printf(_BOLD _ORANGE "KO\n" _END);
 	}
 	ft_expand(lst_test, env);
@@ -105,7 +105,7 @@ void	test(t_list *lst_expected_lexer, t_list *lst_expected_expand, char *test_co
 		printf(_BOLD _BLUE_LLD "OK\n" _END);
 	else
 	{
-		lst_print_token(lst_test);
+		print_lst_token(lst_test);
 		printf(_BOLD _ORANGE "KO\n" _END);
 	}
 	ft_lstclear(&lst_expected_lexer, free_token);

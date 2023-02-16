@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/16 19:07:12 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/29 17:41:37 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/17 00:01:51 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ while (i < size)
 		char **redir = va_arg(args, char **);	
 		command->redir = ft_mapdup(redir);
 	//	print_map(command->redir);
-		lst_command= lst_add_token(lst_command, command);
+		lst_add_token(&lst_command, command);
 		i++;
 	}
 	va_end(args);

@@ -6,7 +6,7 @@ t_bool syntaxe_error_compare(char *str, int value_expected, char **env)
 	int	value_tested;
 
 	printf("Command tested: %s\n", str);
-	lst_token = lexer(str);
+	lexer(str, &lst_token);
 	ft_expand(lst_token, env);
 	value_tested = syntaxe_error(lst_token);
 	if (value_expected == value_tested)
