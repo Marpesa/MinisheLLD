@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 04:12:43 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/02/12 16:47:01 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/16 21:30:58 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ int	lexer(char *input, t_list **lst_token)
 				i++;
 		}
 		if (input[i] == '<' && input[i + 1] == '<')
-			if (token_heredoc(input, &i, &data))
+			if (token_heredoc(input, &i, &data) == -1)
 				return (-1);
 		if (input[i] == '>' && input[i + 1] == '>')
 			if (token_redirect_append(input, &i, &data) == -1)

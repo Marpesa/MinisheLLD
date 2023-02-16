@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 17:51:49 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/13 04:14:15 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/16 21:50:52 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ static void	heredoc_quit(int signum, siginfo_t *si, void *context)
 	*readline_exit = !(*readline_exit);
 	//printf("number = %d\n", *readline_exit);
 	//printf("number = %d\n", *readline_exit);
-	printf("SIIIIIIIIIIIIGGGGGGGGGGGINNNNNNNNNTTTTTT\n");
+	//printf("SIIIIIIIIIIIIGGGGGGGGGGGINNNNNNNNNTTTTTT\n");
 }
 
 void	heredoc_signal(int *readline_exit)
@@ -75,6 +75,7 @@ void	heredoc_prompt(char *eof)
 	char	*input;
 	int		readline_exit;
 
+	(void) eof;
 	readline_exit = 1;
 	input = NULL;
 	heredoc_signal(&readline_exit);
@@ -82,6 +83,7 @@ void	heredoc_prompt(char *eof)
 	while (true)
 	{
 		input = readline("> ");
+		
 		if (input == NULL)
 		{
 			//Entre dedans quand il y a un ctrl + D
@@ -89,6 +91,7 @@ void	heredoc_prompt(char *eof)
 			//close(fd);
 			break ;
 		}
+		
 		if (ft_strncmp(input, eof, ft_strlen(eof)))
 		{
 		}
@@ -100,6 +103,7 @@ void	heredoc_prompt(char *eof)
 			free(input);
 			break ;
 		}
+	
 		/*
 		if (readline_exit == 1)
 		{
@@ -107,6 +111,7 @@ void	heredoc_prompt(char *eof)
 			break;
 		}
 		*/
+		
 	}
 	ignore_signal_for_shell();
 }

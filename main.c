@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/16 19:48:14 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/16 21:31:24 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,6 @@ int main(int argc, char **argv, char **env)
 	secret_env = save_env(env);
 	while (true)
 	{
-
 		linebuffer = rl_gets();
 		if (linebuffer == NULL)
 		{
@@ -145,6 +144,7 @@ int main(int argc, char **argv, char **env)
 		{
 			if (lexer(linebuffer, &lst_token) == -1)
 				free_and_exit(lst_token, lst_command, &linebuffer, secret_env);
+			
 			if (ft_expand(lst_token, secret_env) == -1)
 				free_and_exit(lst_token, lst_command, &linebuffer, secret_env);
 			heredoc(lst_token);
