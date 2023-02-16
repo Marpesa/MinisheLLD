@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/13 17:12:22 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/16 18:23:56 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ int main(int argc, char **argv, char **env)
 	lst_command = NULL;
 	ignore_signal_for_shell();
 	secret_env = save_env(env);
-	print_map(secret_env);
+//	print_map(secret_env);
 	while (true)
 	{
 
