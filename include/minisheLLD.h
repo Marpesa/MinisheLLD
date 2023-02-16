@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/12 16:15:46 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/16 18:49:08 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,7 +108,7 @@ char			*return_token_text(t_list *lst_token);
 t_bool			start_or_finish_pipe(t_list *lst_token);
 int				check_error_input(char *input);
 void			exit_error(char *msg);
-void			free_and_exit(t_list *lst_token, t_list *lst_command, char **linebuffer);
+void			free_and_exit(t_list *lst_token, t_list *lst_command, char **linebuffer, char **env);
 void			free_all(t_list **lst_token, t_list **lst_command, char **linebuffer);
 
 /*-------------------- Parser ---------------------*/ 

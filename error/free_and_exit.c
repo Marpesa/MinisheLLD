@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 03:29:09 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/13 20:56:07 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/16 18:49:26 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,10 +61,11 @@ void	free_all(t_list **lst_token, t_list **lst_command, char **linebuffer)
 	*linebuffer = NULL;
 }
 
-void	free_and_exit(t_list *lst_token, t_list *lst_command, char **linebuffer)
+void	free_and_exit(t_list *lst_token, t_list *lst_command, char **linebuffer, char **env)
 {
 	ft_lstclear(&lst_token, del_token);
 	ft_lstclear(&lst_command, del_command);
+	free_map(env);
 	if (*linebuffer != NULL)
 		free(*linebuffer);
 	*linebuffer = NULL;

@@ -6,10 +6,9 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/16 18:23:56 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/16 18:52:29 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "minisheLLD.h"
 
@@ -104,7 +103,7 @@ char **save_env(char **env)
                 free(envp[i]);
             }
             free(envp);
-            return NULL;
+            return (NULL);
         }
         ft_strncpy(envp[i], env[i], len);
         envp[i][len-1] = '\0';  // Ensure null-termination
@@ -140,21 +139,21 @@ int main(int argc, char **argv, char **env)
 		if (linebuffer == NULL)
 		{
 			printf(_ORANGE "GOODBYE !\n" _END);
-			free_and_exit(lst_token, lst_command, &linebuffer);
+			free_and_exit(lst_token, lst_command, &linebuffer, env);
 			//OUBLIE PAS DE GRERER LEXIT GUGU
 			exit(0);
 		}
 		if (check_error_input(linebuffer))
 		{
 			if (lexer(linebuffer, &lst_token) == -1)
-				free_and_exit(lst_token, lst_command, &linebuffer);
+				free_and_exit(lst_token, lst_command, &linebuffer, env);
 			if (ft_expand(lst_token, secret_env) == -1)
-				free_and_exit(lst_token, lst_command, &linebuffer);
+				free_and_exit(lst_token, lst_command, &linebuffer, env);
 			heredoc(lst_token);
 			if (syntaxe_error(lst_token) != 0)
 			{
 				if (parser(lst_token, &lst_command) == -1)
-					free_and_exit(lst_token, lst_command, &linebuffer);
+					free_and_exit(lst_token, lst_command, &linebuffer, env);
 				exec(lst_command, &secret_env);
 			}
 		}

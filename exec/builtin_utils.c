@@ -43,14 +43,14 @@ void	execute_builtin(char **cmd, char ***env, int fd)
 char	*get_env(char *var, char ***envp)
 {
 	size_t	size;
-	int		line;
 	char	*ret;
+	int		line;
 
-	line = -1;
-	while ((*envp)[++line])
+	line = 0;
+	while ((*envp)[line] != NULL)
 	{
 		size = 0;
-		while ((*envp)[line][size] && (*envp)[line][size] != '=')
+		while ((*envp)[line][size] != '\0' && (*envp)[line][size] != '=')
 			size++;
 		if (size != ft_strlen(var))
 			continue ;
@@ -62,6 +62,7 @@ char	*get_env(char *var, char ***envp)
 				ft_putstr_fd("malloc error\n", 2);
 			return (ret);
 		}
+		line++;
 	}
-	return ("");
+	return (NULL);
 }
