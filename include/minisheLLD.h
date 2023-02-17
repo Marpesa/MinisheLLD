@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/16 18:49:08 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/17 05:20:35 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # include <pwd.h>
 # include <sys/types.h>
 # include <fcntl.h>
+# include <limits.h>
 
 typedef enum s_bool
 {
@@ -63,6 +64,13 @@ typedef struct s_lexer {
 	t_list *lst_token;
 } t_lexer;
 
+typedef struct s_exec {
+	t_list *lst_token;
+	t_list *lst_command;
+	char 	**bufferline;
+	char	**env;
+} t_exec;
+
 
 /*----------------- Colors LLD ---------------- */
 #define _ORANGE		"\e[38:5:208m"
@@ -75,7 +83,8 @@ typedef struct s_lexer {
 
 /*---------------- Main fonctions -----------------*/
 
-void ignore_signal_for_shell();
+void	ft_new_line();
+void 	ignore_signal_for_shell();
 
 
 /*--------------------- Lexer ---------------------*/ 
@@ -110,6 +119,8 @@ int				check_error_input(char *input);
 void			exit_error(char *msg);
 void			free_and_exit(t_list *lst_token, t_list *lst_command, char **linebuffer, char **env);
 void			free_all(t_list **lst_token, t_list **lst_command, char **linebuffer);
+void			ft_free_map(char **map);
+
 
 /*-------------------- Parser ---------------------*/ 
 
@@ -120,6 +131,7 @@ typedef struct s_command {
 	
 int		parser(t_list *lst_token, t_list **lst_command);
 void	lst_print_command(t_list *cmd);
+void	free_map(char **map);
 
 
 // Test
@@ -137,7 +149,7 @@ void	print_lst_command(t_list *lst_command);
 void	print_lst_token(t_list *head);
 
 /*------------------Exec-------------------------*/
-void	exec(t_list *lst_command, char ***env);
+void	exec(t_list *lst_command, t_list *lst_token, char **linebuffer, char ***env);
 
 /*------------------Builtin-------------------------*/
 t_bool	is_builtin(char *value);
@@ -145,6 +157,9 @@ void	execute_builtin(char **cmd, char ***env, int fd);
 int		builtin_echo(char **command, int fd);
 int		builtin_cd(char **command, char ***env);
 char	*get_env(char *var, char ***envp);
+int		builtin_cd(char **cmd, char ***env);
+void	builtin_pwd();
+void	builtin_exit();
 
 
 #endif

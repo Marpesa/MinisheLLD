@@ -6,17 +6,17 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/16 21:31:24 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/17 05:22:59 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
 
-static void	new_line(int sig, siginfo_t *info, void *context)
+void	ft_new_line()
 {
-	(void)(sig);
-	(void)(info);
-	(void)(context);
+	// (void)(sig);
+	// (void)(info);
+	// (void)(context);
 	write(STDERR_FILENO, "\n", 1);
     rl_replace_line("", 0);
     rl_on_new_line();
@@ -31,7 +31,7 @@ void ignore_signal_for_shell()
 	ft_memset(&lazy_action, 0, sizeof(lazy_action));
 	ft_memset(&new_sigint, 0, sizeof(new_sigint));
 	lazy_action.sa_handler = SIG_IGN;
-	new_sigint.sa_sigaction = new_line;
+	new_sigint.sa_sigaction = ft_new_line;
 
 	// ignore "Ctrl+Z"
 	sigaction(SIGTSTP, &lazy_action, NULL);
@@ -114,6 +114,18 @@ char **save_env(char **env)
     return envp;
 }
 
+void 	fill_exec_struct(t_exec *exec_data, t_list *lst_token, t_list *lst_command, char **linebuffer, char **secret_env)
+{
+	exec_data = malloc(sizeof(t_exec));
+	exec_data->bufferline = linebuffer;
+	exec_data->env = secret_env;
+	exec_data->lst_command = lst_command;
+	exec_data->lst_token = lst_token;
+	printf("test%s\n", *exec_data->bufferline);
+
+}
+
+
 
 
 int main(int argc, char **argv, char **env)
@@ -130,6 +142,8 @@ int main(int argc, char **argv, char **env)
 	lst_token = NULL;
 	lst_command = NULL;
 	secret_env = NULL;
+	t_exec *exec_data;
+	exec_data = NULL;
 	ignore_signal_for_shell();
 	secret_env = save_env(env);
 	while (true)
@@ -152,7 +166,9 @@ int main(int argc, char **argv, char **env)
 			{
 				if (parser(lst_token, &lst_command) == -1)
 					free_and_exit(lst_token, lst_command, &linebuffer, secret_env);
-				exec(lst_command, &secret_env);
+				fill_exec_struct(exec_data, lst_token, lst_command, &linebuffer, secret_env);
+				printf("test%s\n", *exec_data->bufferline);
+				exec(lst_command, lst_token, &linebuffer, &secret_env);
 			}
 		}
 		free_all(&lst_token, &lst_command, &linebuffer);

@@ -19,6 +19,7 @@ int	builtin_echo(char **command, int fd)
 	int	nflag;
 
 	nflag = 0;
+	command++;
 	while (*command && is_nflag(*command))
 	{
 		nflag = 1;
@@ -37,5 +38,6 @@ int	builtin_echo(char **command, int fd)
 		ft_putendl_fd("", fd);
 	//if (exit)
 		//free_and_exit(0);
+		exit (0);
 	return (0);
 }

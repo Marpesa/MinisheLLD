@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 00:04:24 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/02/16 21:26:19 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/16 23:55:57 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,15 @@ t_bool	redirect_utils(t_list *lst_current)
 		return_token_type(lst_current->next) == TOKEN_REDIRECT_IN)
 			if (return_token_type(lst_current->next) != TOKEN_HEREDOC)
 				return (false);
-		if (return_token_type(lst_current->next) == TOKEN_REDIRECT_IN || \
+		if ((return_token_type(lst_current->next) == TOKEN_REDIRECT_IN || \
 		return_token_type(lst_current->next) == TOKEN_REDIRECT_OUT || \
-		return_token_type(lst_current->next) != TOKEN_WORD)
+		return_token_type(lst_current->next) != TOKEN_WORD) && \
+		return_token_type(lst_current->next) != TOKEN_LIM)
 		{
 			printf(_ORANGE2 \
 			"MinisheLLD:\tsyntax error near unexpected token `%s'\n" _END, \
 			return_token_text(lst_current));
+			printf("TESTP\n");
 			return (true);
 		}
 	}

@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 17:51:49 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/02/16 21:50:52 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/17 00:03:50 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,78 +41,82 @@ static int	create_temporary_file(void)
 	return (fd);
 }
 
-static void	heredoc_quit(int signum, siginfo_t *si, void *context)
+static void	new_line()
 {
-	int	*readline_exit;
-
-	(void)signum;
-	(void)si;
-	(void)context;
-	readline_exit = si->si_ptr;
-	*readline_exit = !(*readline_exit);
-	//printf("number = %d\n", *readline_exit);
-	//printf("number = %d\n", *readline_exit);
-	//printf("SIIIIIIIIIIIIGGGGGGGGGGGINNNNNNNNNTTTTTT\n");
+	// write(STDERR_FILENO, "\n", 1);
+    // rl_replace_line("", 0);
+    // rl_on_new_line();
+    // rl_redisplay();
+	printf("^C\n");
+	exit (0) ;
 }
+// 	int	*readline_exit;
 
-void	heredoc_signal(int *readline_exit)
-{
-	struct sigaction	action_heredoc_quit;
-	union sigval		value;
+// 	(void)signum;
+// 	(void)si;
+// 	(void)context;
+// 	readline_exit = si->si_ptr;
+// 	//*readline_exit = !(*readline_exit);
+// 	//printf("number = %d\n", *readline_exit);
+// 	//printf("number = %d\n", *readline_exit);
+// 	//printf("SIIIIIIIIIIIIGGGGGGGGGGGINNNNNNNNNTTTTTT\n");
+// }
 
-	ft_memset(&action_heredoc_quit, 0, sizeof(heredoc_quit));
-	action_heredoc_quit.sa_sigaction = heredoc_quit;
-	sigemptyset(&action_heredoc_quit.sa_mask);
-	action_heredoc_quit.sa_flags = SA_SIGINFO;
-	value.sival_ptr = readline_exit;
-	//sigaction(SIGINT, &action_heredoc_quit, &value);
-	sigaction(SIGINT, &action_heredoc_quit, NULL);
-	sigqueue(getpid(), SIGINT, value);
-}
+// void	heredoc_signal()
+// {
+// 	struct sigaction	heredoc_quit;
+// 	// union sigval		value;
+// 	// struct sigaction new_sigint;
+// 	// ft_memset(&new_sigint, 0, sizeof(new_sigint));
+// 	// new_sigint.sa_sigaction = exit_heredoc;
+
+// 	// ft_memset(&action_heredoc_quit, 0, sizeof(heredoc_quit));
+// 	// action_heredoc_quit.sa_sigaction = heredoc_quit;
+// 	// sigemptyset(&action_heredoc_quit.sa_mask);
+// 	// action_heredoc_quit.sa_flags = SA_SIGINFO;
+// 	// value.sival_ptr = readline_exit;
+// 	// //sigaction(SIGINT, &action_heredoc_quit, &value);
+// 	sigaction(SIGINT, &heredoc_quit, NULL);
+// 	// sigqueue(getpid(), SIGINT, value);
+// }
 
 void	heredoc_prompt(char *eof)
 {
 	char	*input;
-	int		readline_exit;
+	int		pipefd[2];
+	int	cpid;
 
-	(void) eof;
-	readline_exit = 1;
+	pipe (pipefd);
+	cpid = fork ();
+	struct sigaction	heredoc_quit;
 	input = NULL;
-	heredoc_signal(&readline_exit);
-	write(1, "test\n", 5);
-	while (true)
+	heredoc_quit.sa_sigaction = new_line;
+	sigaction(SIGINT, &heredoc_quit, NULL);
+	if (cpid == 0)
 	{
-		input = readline("> ");
-		
-		if (input == NULL)
+		while (true)
 		{
-			//Entre dedans quand il y a un ctrl + D
-			printf("OUBLIE PAS DE GERER LERREUR GUGU\n");
-			//close(fd);
-			break ;
-		}
-		
-		if (ft_strncmp(input, eof, ft_strlen(eof)))
-		{
-		}
-		else
-		{
-			//close(fd);
-			//readline_exit = true;
-			printf("exit normal\n");
-			free(input);
-			break ;
-		}
-	
-		/*
-		if (readline_exit == 1)
-		{
-			printf("quit by sigint\n");
-			break;
-		}
-		*/
-		
+			input = readline("> ");
+			// if (input == NULL)
+			// {
+			// 	printf ("tessst\n");
+			// 	exit (0);
+			// }
+			if (ft_strncmp(input, eof, ft_strlen(eof)))
+			{
+			}
+			else
+			{
+				printf("exit normal\n");
+				free(input);
+				exit (0);
+			}	
+		}	
 	}
+	if (input)
+		free(input);
+	close (pipefd[0]);
+	close (pipefd[1]);
 	ignore_signal_for_shell();
 }
 
@@ -120,7 +124,7 @@ void	heredoc_open(char *eof)
 {
 	int	fd;
 
-	printf("eof: %s\n", eof);
+	// printf("eof: %s\n", eof);
 	fd = create_temporary_file();
 	heredoc_prompt(eof);
 	close(fd);
