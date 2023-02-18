@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/17 05:22:59 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/18 18:33:56 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,20 +114,6 @@ char **save_env(char **env)
     return envp;
 }
 
-void 	fill_exec_struct(t_exec *exec_data, t_list *lst_token, t_list *lst_command, char **linebuffer, char **secret_env)
-{
-	exec_data = malloc(sizeof(t_exec));
-	exec_data->bufferline = linebuffer;
-	exec_data->env = secret_env;
-	exec_data->lst_command = lst_command;
-	exec_data->lst_token = lst_token;
-	printf("test%s\n", *exec_data->bufferline);
-
-}
-
-
-
-
 int main(int argc, char **argv, char **env)
 {
 	(void)argc;
@@ -142,8 +128,6 @@ int main(int argc, char **argv, char **env)
 	lst_token = NULL;
 	lst_command = NULL;
 	secret_env = NULL;
-	t_exec *exec_data;
-	exec_data = NULL;
 	ignore_signal_for_shell();
 	secret_env = save_env(env);
 	while (true)
@@ -166,9 +150,11 @@ int main(int argc, char **argv, char **env)
 			{
 				if (parser(lst_token, &lst_command) == -1)
 					free_and_exit(lst_token, lst_command, &linebuffer, secret_env);
-				fill_exec_struct(exec_data, lst_token, lst_command, &linebuffer, secret_env);
-				printf("test%s\n", *exec_data->bufferline);
-				exec(lst_command, lst_token, &linebuffer, &secret_env);
+				ft_lstclear(&lst_token, del_token);
+				if (linebuffer != NULL)
+					free(linebuffer);
+				linebuffer = NULL;
+				exec(lst_command, &secret_env);
 			}
 		}
 		free_all(&lst_token, &lst_command, &linebuffer);

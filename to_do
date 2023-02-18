@@ -6,8 +6,6 @@
 
 -debug
 
--faire le env secret
-
 -norm
 
 -les builts in (ne pas fork pour les cd)
@@ -20,4 +18,4 @@ a verifier:
 steel reachable avec la commande ls
 
 
-
+valgrind --suppressions=supp_file --leak-check=full --show-leak-kinds=all ./minishell

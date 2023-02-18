@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/17 05:20:35 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/18 18:43:42 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,8 @@ void			exit_error(char *msg);
 void			free_and_exit(t_list *lst_token, t_list *lst_command, char **linebuffer, char **env);
 void			free_all(t_list **lst_token, t_list **lst_command, char **linebuffer);
 void			ft_free_map(char **map);
+void			del_command(void *content);
+void			del_token(void *content);
 
 
 /*-------------------- Parser ---------------------*/ 
@@ -149,17 +151,16 @@ void	print_lst_command(t_list *lst_command);
 void	print_lst_token(t_list *head);
 
 /*------------------Exec-------------------------*/
-void	exec(t_list *lst_command, t_list *lst_token, char **linebuffer, char ***env);
+void	exec(t_list *lst_command, char ***env);
 
 /*------------------Builtin-------------------------*/
 t_bool	is_builtin(char *value);
-void	execute_builtin(char **cmd, char ***env, int fd);
-int		builtin_echo(char **command, int fd);
-int		builtin_cd(char **command, char ***env);
+void	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command);
+int		builtin_echo(char **command, int fd, char ***env, t_list *lst_command);
 char	*get_env(char *var, char ***envp);
-int		builtin_cd(char **cmd, char ***env);
-void	builtin_pwd();
-void	builtin_exit();
+void		builtin_cd(char **cmd, char ***env, t_list *lst_command);
+void	builtin_pwd(char ***env, t_list *lst_command);
+void	builtin_exit(char ***env, t_list *lst_command);
 
 
 #endif

@@ -14,7 +14,7 @@ static int	is_nflag(char *arg)
 	return (0);
 }
 
-int	builtin_echo(char **command, int fd)
+int	builtin_echo(char **command, int fd, char ***env, t_list *lst_command)
 {
 	int	nflag;
 
@@ -38,6 +38,8 @@ int	builtin_echo(char **command, int fd)
 		ft_putendl_fd("", fd);
 	//if (exit)
 		//free_and_exit(0);
-		exit (0);
+	ft_free_map(*env);
+	ft_lstclear(&lst_command, del_command);
+	exit (0);
 	return (0);
 }

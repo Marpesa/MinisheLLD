@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:28 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/17 04:55:38 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/18 18:50:13 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,17 @@ t_bool	is_builtin(char *value)
 	return (false);
 }
 
-void	execute_builtin(char **cmd, char ***env, int fd)
+void	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command)
 {
 	(void) env;
 	if (!(ft_strncmp(cmd[0], "echo\0", ft_strlen("echo\0"))))
-		builtin_echo(cmd, fd);
+		builtin_echo(cmd, fd, env, lst_command);
 	else if (!(ft_strncmp(cmd[0], "cd\0", ft_strlen("cd\0"))))
-		builtin_cd(cmd, env);
+		builtin_cd(cmd, env, lst_command);
 	else if (!(ft_strncmp(cmd[0], "pwd\0", ft_strlen("pwd\0"))))
-		builtin_pwd();
+		builtin_pwd(env, lst_command);
+	else if (!(ft_strncmp(cmd[0], "exit\0", ft_strlen("exit\0"))))
+		builtin_exit(env, lst_command);
 	// ft_free_map(cmd);
 	// exit (0);
 
@@ -58,8 +60,6 @@ void	execute_builtin(char **cmd, char ***env, int fd)
 	// 	builtin_unset(cmd);
 	//else if (!(ft_strcmp(cmd[0], "env")))
 		//builtin_print_environment(g_minishell.env, STDOUT_FILENO);
-	else if (!(ft_strncmp(cmd[0], "exit", ft_strlen("exit\0"))))
-		builtin_exit();
 }
 
 char	*get_env(char *var, char ***envp)

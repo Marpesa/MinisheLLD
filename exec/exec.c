@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/02/17 05:06:38 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/18 18:38:44 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,27 +79,7 @@ static void	get_absolute_path(char **cmd, int *error_status)
 	}
 }
 
-/*
-void	create_pipe(int	*old_pipe_in, t_list *lst_current)
-{
-	int	new_pipe[2];
-
-	dup2(*old_pipe_in, STDIN_FILENO);
-	if (*old_pipe_in != STDIN_FILENO)
-		close(*old_pipe_in);
-	if (ft_lstsize(lst_current) <= 1)
-		return ;
-	pipe(new_pipe);
-	dup2(new_pipe[1], STDOUT_FILENO);
-	if (new_pipe[1] != STDIN_FILENO || new_pipe[1] != STDOUT_FILENO)
-		close(new_pipe[1]);
-	*old_pipe_in = dup(new_pipe[0]);
-	if (new_pipe[0] != STDIN_FILENO || new_pipe[0] != STDOUT_FILENO)
-		close(new_pipe[0]);
-}
-*/
-
-int	ft_pipe(char **cmd, char ***env, int *prevpipe)
+int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command)
 {
 	int		pipefd[2];
 	int	cpid;
@@ -115,14 +95,14 @@ int	ft_pipe(char **cmd, char ***env, int *prevpipe)
 		close (pipefd[1]);
 		dup2 (*prevpipe, STDIN_FILENO);
 		close (*prevpipe);
-		//cmd[len] = NULL;
 		if (is_builtin(*cmd) == true)
 		{
-			res = 2;
-			execute_builtin(cmd, env, pipefd[1]);
+			ft_putendl_fd("TESSSSSSSST\n", 2);
+			execute_builtin(cmd, env, pipefd[1], lst_command);
 		}
 		else
 			execve (cmd[0], cmd, *env);
+		exit(0);
 	}
 	else
 	{
@@ -130,30 +110,30 @@ int	ft_pipe(char **cmd, char ***env, int *prevpipe)
 		close (*prevpipe);
 		*prevpipe = pipefd[0];
 	}
+	if (is_builtin(*cmd) == true)
+		res = 4;
 	return (res);
 }
 
-int	ft_last(char **cmd, char ***env, int prevpipe, int *error)
+int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command)
 {
 	pid_t	cpid;
-	// int		res;
+	int		error;
 
-	*error = 1;
+	error = 1;
 	cpid = fork();
 	if (cpid == 0)
 	{
 		dup2 (prevpipe, STDIN_FILENO);
 		close (prevpipe);
-		//cmd[len] = NULL;
-		if (is_builtin(*cmd) == true)
-		{
-			*error = 2;
-			execute_builtin(cmd, env, STDOUT_FILENO);
-		}
+		if (is_builtin(*cmd) == true)		{
+			// ft_putendl_fd("TESSSSSSSST\n", 2);
+			execute_builtin(cmd, env, STDOUT_FILENO, lst_command);}
 		else
-		{
 			execve (cmd[0], cmd, *env);
-		}
+		// ft_putendl_fd("TESSSSSSSST\n", 2);
+		// ft_free_map(*env);
+		// printf("TESTOOOO\n");
 	}
 	else
 	{
@@ -162,10 +142,12 @@ int	ft_last(char **cmd, char ***env, int prevpipe, int *error)
 		while (wait (NULL) != -1)
 			;
 	}
-	return (*error);
+	if (is_builtin(*cmd) == true)
+		error = 3;
+	return (error);
 }
 
-void	exec(t_list	*lst_command, t_list *lst_token, char **linebuffer, char ***env)
+void	exec(t_list	*lst_command, char ***env)
 {
 	t_list		*lst_current;
 	t_command	*command;
@@ -181,39 +163,30 @@ void	exec(t_list	*lst_command, t_list *lst_token, char **linebuffer, char ***env
 		command = lst_current->content;
 		if (ft_strncmp(*command->word, "echo", 5) && ft_strncmp(*command->word, "cd", 3) \
 		&& ft_strncmp(*command->word, "pwd", 4) && ft_strncmp(*command->word, "exit", 4))
-		{
-			// printf ("TEST\n");
 			get_absolute_path(command->word, &error_status);
-		}
 		if (error_status == 2)
 		{
 			printf("command %s not found\n", *command->word);
 			return ;
 		}
-		int result;
 		if (lst_current->next == NULL)
 		{
-			if ((result = ft_last(command->word, env, prevpipe, &error_status)) == 2)
+			if ((ft_last(command->word, env, prevpipe, lst_command)) == 3)
 			{
-				printf("test0\n");
-				free_and_exit(lst_token, lst_command, linebuffer, *env);
+				// printf("test0\n");
+				// ft_lstclear(&lst_command, del_command);
+				// ft_free_map(*env);
 				// exit (0);
 			}
-
-				printf("result:%d\n", result);
 		}
 		else
-			if ((result = ft_pipe(command->word, env, &prevpipe)) == 2)
+			if ((ft_pipe(command->word, env, &prevpipe, lst_command)) == 4)
 			{
 				printf("test1\n");
-				free_and_exit(lst_token, lst_command, linebuffer, *env);
+				// ft_lstclear(&lst_command, del_command);
+				// ft_free_map(*env);
 				// exit (0);
 			}
-		printf("result2:%d\n", result);
-
-		//if (fork_and_exec(command, env, &command->pid) == -1)
-			//return ;
-		//restore_fd(save_fd);
 		lst_current = lst_current->next;
 	}	
 }

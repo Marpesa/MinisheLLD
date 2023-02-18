@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 03:29:09 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/17 02:15:00 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/18 18:33:13 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	ft_free_map(char **map)
 	map = NULL;
 }
 
-static void	del_token(void *content)
+void	del_token(void *content)
 {
 	t_token *token;
 
@@ -41,7 +41,7 @@ static void	del_token(void *content)
 	token = NULL;
 }
 
-static void	del_command(void *content)
+void	del_command(void *content)
 {
 	t_command	*cmd;
 
@@ -54,8 +54,10 @@ static void	del_command(void *content)
 
 void	free_all(t_list **lst_token, t_list **lst_command, char **linebuffer)
 {
-	ft_lstclear(lst_token, del_token);
-	ft_lstclear(lst_command, del_command);
+	if(lst_token)
+		ft_lstclear(lst_token, del_token);
+	if(lst_command != NULL)
+		ft_lstclear(lst_command, del_command);
 	if (*linebuffer != NULL)
 		free(*linebuffer);
 	*linebuffer = NULL;

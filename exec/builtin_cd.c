@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:18 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/17 02:48:28 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/18 18:54:21 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ char	*ft_root_one(char *back)
 	}
 	return (res);
 }
-int	builtin_cd(char **cmd, char ***env)
+void	builtin_cd(char **cmd, char ***env, t_list *lst_command)
 {
 	(void)env;
 	int		path;
@@ -71,7 +71,7 @@ int	builtin_cd(char **cmd, char ***env)
 	if(ft_maplen_secure(cmd) > 2)
 	{
 		printf(_ORANGE "MinisheLLD : cd : Too many arguments\n" _END);
-		return (0);
+		return ;
 	}
 	else if(ft_maplen_secure(cmd) == 1 || cmd[1][0] == '~')
 	{	path = chdir(getenv("HOME"));
@@ -82,6 +82,8 @@ int	builtin_cd(char **cmd, char ***env)
 		str = ft_strdup(getenv("PWD"));
 		str = ft_root_one(str);
 		path = chdir(str);
+		free(str);
+		str = NULL;
 	}
 	else if (ft_strncmp(cmd[1], ".", len) == 0)
         path = chdir(getenv("PWD"));
@@ -108,5 +110,9 @@ int	builtin_cd(char **cmd, char ***env)
         setenv("OLDPWD",getenv("PWD"),1);//update $OLDPWD to the value of $PWD
         setenv("PWD",cwd,1);//update $PWD to the current directory 
     }
-	return (1);
+	// free(str);
+	// str = NULL;
+	// ft_free_map(*env);
+	// ft_lstclear(&lst_command, del_command);
+	// exit (0);
 }
