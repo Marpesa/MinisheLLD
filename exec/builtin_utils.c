@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:28 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/18 18:50:13 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/21 11:43:36 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@ t_bool	is_builtin(char *value)
 	len = ft_strlen_secure(value);
 	// printf("Cmd = %s\n", value);
 	// printf("diff = %d\n", ft_strncmp(value, "echo", 5));
-	if ((ft_strncmp(value, "echo", len) == 0) || \
-	(ft_strncmp(value, "cd", len) == 0)) 
+	if ((ft_strncmp(value, "echo", len) == 0)) 
 	{
 		// printf("TROTEOTEOR\n");
 		return (true);
@@ -42,8 +41,8 @@ void	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command)
 	(void) env;
 	if (!(ft_strncmp(cmd[0], "echo\0", ft_strlen("echo\0"))))
 		builtin_echo(cmd, fd, env, lst_command);
-	else if (!(ft_strncmp(cmd[0], "cd\0", ft_strlen("cd\0"))))
-		builtin_cd(cmd, env, lst_command);
+	// else if (!(ft_strncmp(cmd[0], "cd\0", ft_strlen("cd\0"))))
+	// 	builtin_cd(cmd, env, lst_command);
 	else if (!(ft_strncmp(cmd[0], "pwd\0", ft_strlen("pwd\0"))))
 		builtin_pwd(env, lst_command);
 	else if (!(ft_strncmp(cmd[0], "exit\0", ft_strlen("exit\0"))))

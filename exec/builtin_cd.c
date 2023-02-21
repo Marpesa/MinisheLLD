@@ -6,11 +6,27 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:18 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/18 18:54:21 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/21 12:35:33 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
+
+int	is_cd(char **cmd)
+{
+	int	len;
+
+	// printf("cd _cmd = %s\n", cmd[0]);
+	if (!cmd)
+		return (false);
+	len = ft_strlen_secure(cmd[0]);
+	if ((ft_strncmp(cmd[0], "cd", len) == 0)) 
+	{
+		// printf("test_is_cd_end\n");
+		return (1);
+	}
+	return (0);
+}
 
 char	*ft_strldup_secure(char *dst, const char *src, size_t dstsize)
 {
@@ -50,24 +66,27 @@ char	*ft_root_one(char *back)
 		return (NULL);
 	else 
 	{
-		res = malloc(sizeof(char) * i);
-		res = ft_strldup_secure(res, back, i);
+		res = malloc(sizeof(char) * (i + 1));
+		res = ft_strldup_secure(res, back, i + 1);
 	}
 	return (res);
 }
 void	builtin_cd(char **cmd, char ***env, t_list *lst_command)
 {
 	(void)env;
+	(void)lst_command;
 	int		path;
 	char	*str;
+	char	*str2;
 	int		len;
 
-	printf("builtin CD\n");
+	// printf("builtin CD\n");
 	len = 0;
 	if (cmd[1])
 		len = ft_strlen_secure(cmd[1]);
 	str = NULL;
-	path = -1;
+	str2 = NULL;
+	path = 2;
 	if(ft_maplen_secure(cmd) > 2)
 	{
 		printf(_ORANGE "MinisheLLD : cd : Too many arguments\n" _END);
@@ -80,28 +99,44 @@ void	builtin_cd(char **cmd, char ***env, t_list *lst_command)
 	else if(ft_strncmp(cmd[1], "-", len) == 0 || ft_strncmp(cmd[1], "..", len) == 0)
 	{
 		str = ft_strdup(getenv("PWD"));
-		str = ft_root_one(str);
-		path = chdir(str);
+		// printf("dir1 = %s\n", str);
+		str2 = ft_root_one(str);
 		free(str);
-		str = NULL;
+		// printf("dir = %s\n", str);
+		path = chdir(str2);
+		// printf("PATH = %d\n", path);
+		free(str2);
+		str2 = NULL;
 	}
 	else if (ft_strncmp(cmd[1], ".", len) == 0)
         path = chdir(getenv("PWD"));
     else if(cmd[1][0] != '/')
     {
 		str = ft_strdup(getenv("PWD"));
-        strcat(str,"/");
-        strcat(str,cmd[1]);
+        str2 = ft_strjoin(str,"/");
+		free(str);
+        str =ft_strjoin(str2,cmd[1]);
+		free(str2);
+		// printf("cmd = %s\n", cmd[1]);
 		if (cmd[1][len - 1] != '/')
-			strcat(str,"/");
-		printf("path = %s\n", str);
-        path = chdir(str);
-		chdir(str);
+		{
+			str2 = ft_strjoin(str,"/");
+			free(str);
+			path = chdir(str2);
+			free(str2);
+		}
+		else
+		{
+      		path = chdir(str);
+			free(str);
+		}
+		// str = NULL;
+		// chdir(str);
     }
 	else
 		path = chdir(cmd[1]);
-	printf ("path = % i\n", path);
-	if (path == -1)
+	// printf ("path = % i\n", path);
+	if (path == 2)
 		printf(_ORANGE "MinisheLLD : cd : %s : No such file or directory\n"_END, cmd[1]);
     else//update the $OLDPWD and $PWD environment variables on success of chdir() system call
     {

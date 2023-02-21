@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/02/18 18:38:44 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/21 12:25:44 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,11 +169,25 @@ void	exec(t_list	*lst_command, char ***env)
 			printf("command %s not found\n", *command->word);
 			return ;
 		}
+		if (is_cd(command->word))
+		{
+			builtin_cd(command->word, env, lst_command);
+			if (lst_current->next)
+				lst_current = lst_current->next;
+			else
+			{
+				break;
+				// ft_lstclear(&lst_command, del_command);
+				// ft_free_map(*env);
+				// exit(0);
+			}
+
+		}
 		if (lst_current->next == NULL)
 		{
 			if ((ft_last(command->word, env, prevpipe, lst_command)) == 3)
 			{
-				// printf("test0\n");
+				printf("test0\n");
 				// ft_lstclear(&lst_command, del_command);
 				// ft_free_map(*env);
 				// exit (0);

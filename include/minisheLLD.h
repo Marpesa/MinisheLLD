@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/18 18:43:42 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/21 12:25:28 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,8 @@ t_bool	is_builtin(char *value);
 void	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command);
 int		builtin_echo(char **command, int fd, char ***env, t_list *lst_command);
 char	*get_env(char *var, char ***envp);
-void		builtin_cd(char **cmd, char ***env, t_list *lst_command);
+int		is_cd(char **cmd);
+void	builtin_cd(char **cmd, char ***env, t_list *lst_command);
 void	builtin_pwd(char ***env, t_list *lst_command);
 void	builtin_exit(char ***env, t_list *lst_command);
 
