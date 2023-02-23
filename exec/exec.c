@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/02/21 12:25:44 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/23 17:33:43 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,7 +187,7 @@ void	exec(t_list	*lst_command, char ***env)
 		{
 			if ((ft_last(command->word, env, prevpipe, lst_command)) == 3)
 			{
-				printf("test0\n");
+				// printf("test0\n");
 				// ft_lstclear(&lst_command, del_command);
 				// ft_free_map(*env);
 				// exit (0);
@@ -196,11 +196,19 @@ void	exec(t_list	*lst_command, char ***env)
 		else
 			if ((ft_pipe(command->word, env, &prevpipe, lst_command)) == 4)
 			{
-				printf("test1\n");
+				// printf("test1\n");
 				// ft_lstclear(&lst_command, del_command);
 				// ft_free_map(*env);
-				// exit (0);
+				if (is_exit(command->word))
+					break;
 			}
+		if (is_exit(command->word))
+		{
+			if(lst_command != NULL)
+				ft_lstclear(&lst_command, del_command);
+			ft_free_map(*env);
+			exit (0);
+		}
 		lst_current = lst_current->next;
 	}	
 }
