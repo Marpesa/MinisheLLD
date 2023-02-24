@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/21 12:19:00 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/24 19:06:40 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ int main(int argc, char **argv, char **env)
 	linebuffer = NULL;
 	lst_token = NULL;
 	lst_command = NULL;
-	secret_env = NULL;
+	// secret_env = NULL;
 	ignore_signal_for_shell();
 	secret_env = save_env(env);
 	while (true)

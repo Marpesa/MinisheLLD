@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 17:35:44 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/24 17:48:16 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/24 19:03:55 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,28 +14,38 @@
 
 void	builtin_env(char **cmd, int fd, char ***env, t_list *lst_command)
 {
-	int i;
+	char	**str_env;
+	int 	i;
 
+	(void)fd;
+	str_env = (*env);
 	i = 0;
 	if (!*env)
 	{
 		printf(_ORANGE "MinisheLLD : Environnement corrupted\n" _END);
-		return ;
+		ft_free_map(*env);
+		ft_free_map(str_env);
+		ft_lstclear(&lst_command, del_command);
+		exit (0);
 	}
 	if(ft_maplen_secure(cmd) != 1)
 	{
 		printf(_ORANGE "MinisheLLD : env : Options not available\n" _END);
-		return ;
+		ft_free_map(*env);
+		ft_free_map(str_env);
+		ft_lstclear(&lst_command, del_command);
+		exit (0);
 	}
 	else 
 	{
-		while (*env[i])
+		while (str_env[i])
 		{
-			ft_putstr_fd(*env[i], fd);
+			printf("%s\n", str_env[i]);
 			i++;
 		}
 	}
 	ft_free_map(*env);
+	ft_free_map(str_env);
 	ft_lstclear(&lst_command, del_command);
 	exit (0);
 }

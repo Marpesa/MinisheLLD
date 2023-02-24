@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/02/23 17:33:43 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/24 18:42:11 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,18 +122,15 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command)
 
 	error = 1;
 	cpid = fork();
+	// printf("test\n");
 	if (cpid == 0)
 	{
 		dup2 (prevpipe, STDIN_FILENO);
 		close (prevpipe);
-		if (is_builtin(*cmd) == true)		{
-			// ft_putendl_fd("TESSSSSSSST\n", 2);
-			execute_builtin(cmd, env, STDOUT_FILENO, lst_command);}
+		if (is_builtin(*cmd) == true)		
+			execute_builtin(cmd, env, STDOUT_FILENO, lst_command);
 		else
 			execve (cmd[0], cmd, *env);
-		// ft_putendl_fd("TESSSSSSSST\n", 2);
-		// ft_free_map(*env);
-		// printf("TESTOOOO\n");
 	}
 	else
 	{
@@ -142,6 +139,8 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command)
 		while (wait (NULL) != -1)
 			;
 	}
+	// printf("test0\n");
+
 	if (is_builtin(*cmd) == true)
 		error = 3;
 	return (error);
@@ -158,11 +157,14 @@ void	exec(t_list	*lst_command, char ***env)
 	lst_current = lst_command;
 	error_status = 0;
 	prevpipe = dup(STDIN_FILENO);
+
 	while (lst_current != NULL)
 	{
 		command = lst_current->content;
 		if (ft_strncmp(*command->word, "echo", 5) && ft_strncmp(*command->word, "cd", 3) \
-		&& ft_strncmp(*command->word, "pwd", 4) && ft_strncmp(*command->word, "exit", 4))
+		&& ft_strncmp(*command->word, "pwd", 4) && ft_strncmp(*command->word, "exit", 4) \
+		&& ft_strncmp(*command->word, "export", 7) && ft_strncmp(*command->word, "unset", 6) \
+		&& ft_strncmp(*command->word, "env", 4))
 			get_absolute_path(command->word, &error_status);
 		if (error_status == 2)
 		{

@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:28 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/24 17:43:45 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/24 19:12:08 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,11 @@ t_bool	is_builtin(char *value)
 	len = ft_strlen_secure(value);
 	if ((ft_strncmp(value, "echo", len) == 0)) 
 		return (true);
-	if (!(ft_strncmp(value, "pwd", len)) /*|| !(ft_strncmp(value, "export", len))*/)
+	if (!(ft_strncmp(value, "pwd", len)) || !(ft_strncmp(value, "export", len)))
+	{
+		printf("Export cmd \n");
 		return (true);
+	}
 	if (/*!(ft_strncmp(value, "unset", len)) || */!(ft_strncmp(value, "env", len)))
 		return (true);
 	if (!(ft_strncmp(value, "exit", len)))
@@ -40,9 +43,11 @@ void	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command)
 		builtin_pwd(env, lst_command);
 	else if (!(ft_strncmp(cmd[0], "exit\0", ft_strlen("exit\0"))))
 		builtin_exit(env, lst_command);
-
-	// else if (!(ft_strcmp(cmd[0], "export")))
-	// 	builtin_export(cmd);
+	else if (!(ft_strncmp(cmd[0], "export\0", ft_strlen("export\0"))))
+	{
+		printf("TEEEEEST\n");
+		*env = builtin_export(cmd, env, lst_command);
+	}
 	// else if (!(ft_strcmp(cmd[0], "unset")))
 	// 	builtin_unset(cmd);
 	else if (!(ft_strncmp(cmd[0], "env\0", ft_strlen("env\0"))))
