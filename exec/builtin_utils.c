@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:28 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/23 17:26:23 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/24 17:43:45 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,8 @@ t_bool	is_builtin(char *value)
 	if (!value)
 		return (false);
 	len = ft_strlen_secure(value);
-	// printf("Cmd = %s\n", value);
-	// printf("diff = %d\n", ft_strncmp(value, "echo", 5));
 	if ((ft_strncmp(value, "echo", len) == 0)) 
-	{
-		// printf("TROTEOTEOR\n");
 		return (true);
-	}
 	if (!(ft_strncmp(value, "pwd", len)) /*|| !(ft_strncmp(value, "export", len))*/)
 		return (true);
 	if (/*!(ft_strncmp(value, "unset", len)) || */!(ft_strncmp(value, "env", len)))
@@ -50,8 +45,8 @@ void	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command)
 	// 	builtin_export(cmd);
 	// else if (!(ft_strcmp(cmd[0], "unset")))
 	// 	builtin_unset(cmd);
-	//else if (!(ft_strcmp(cmd[0], "env")))
-		//builtin_print_environment(g_minishell.env, STDOUT_FILENO);
+	else if (!(ft_strncmp(cmd[0], "env\0", ft_strlen("env\0"))))
+		builtin_env(cmd, fd, env, lst_command);;
 }
 
 char	*get_env(char *var, char ***envp)

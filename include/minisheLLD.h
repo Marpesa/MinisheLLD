@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/23 17:27:32 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/24 17:42:33 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,6 +163,7 @@ void	builtin_cd(char **cmd, char ***env, t_list *lst_command);
 void	builtin_pwd(char ***env, t_list *lst_command);
 int		is_exit(char **cmd);
 void	builtin_exit(char ***env, t_list *lst_command);
+void	builtin_env(char **cmd, int fd, char ***env, t_list *lst_command);
 
 
 #endif
