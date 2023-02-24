@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 17:35:44 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/24 19:03:55 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/24 22:55:11 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,12 @@ void	builtin_env(char **cmd, int fd, char ***env, t_list *lst_command)
 	}
 	else 
 	{
-		while (str_env[i])
+		while (str_env && str_env[i])
 		{
 			printf("%s\n", str_env[i]);
 			i++;
 		}
 	}
-	ft_free_map(*env);
 	ft_free_map(str_env);
 	ft_lstclear(&lst_command, del_command);
 	exit (0);

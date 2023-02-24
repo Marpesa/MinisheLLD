@@ -8,7 +8,11 @@
 
 -norm
 
--les builts in (ne pas fork pour les cd)
+-les builts in ( ajouter un parser d'occurence pour gerer le malloc sur le unset)
+
+-gerer le . et le / seuls
+
+-gerer les valeurs de retours et les sorties de malloc partout
 
 -Choisir l'affichage du message quand la commande n'existe pas. Actuellement: command (null) not found
 
