@@ -10,7 +10,7 @@
 
 -les builts in ( ajouter un parser d'occurence pour gerer le malloc sur le unset)
 
--gerer le . et le / seuls
+-gerer le . et le / seuls, et "" et '' seuls (commandes vides)
 
 -gerer les valeurs de retours et les sorties de malloc partout
 

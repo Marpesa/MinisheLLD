@@ -6,17 +6,19 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 21:42:16 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/25 20:18:03 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/26 00:15:29 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
 
-static int	until_equal_sign(char *str, char *env)
+int	until_equal_sign(char *str, char *env)
 {
 	int	i;
 
 	i = 0;
+	// printf("str = %s\n", str);
+	// printf("env = %s\n", env);
 	while (env[i] != '=' && env[i])
 		i++;
 	if (ft_strncmp(str, env, i) == 0 && i == (int)ft_strlen_secure(str))
@@ -56,6 +58,9 @@ int	ft_is_there(char *str, char **cmd, int index)
 	int		i;
 
 	i = 0;
+	// printf("index = %d\n", index);
+	// printf("str = %s\n", str);
+	// printf("env[%d] = %s\n", i, cmd[i]);
 	while (cmd[i] && i < index)
 	{
 		if (ft_strncmp(cmd[i], str, ft_strlen_secure(cmd[i])) == 0)
