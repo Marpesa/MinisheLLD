@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/16 18:49:08 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/24 19:18:53 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 # include <pwd.h>
 # include <sys/types.h>
 # include <fcntl.h>
+
+extern int	g_status;
 
 typedef enum s_bool
 {

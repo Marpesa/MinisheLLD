@@ -6,11 +6,14 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/16 21:31:24 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/24 19:20:27 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
+
+int	g_status = 0;
+
 
 static void	new_line(int sig, siginfo_t *info, void *context)
 {
@@ -118,6 +121,7 @@ char **save_env(char **env)
 
 int main(int argc, char **argv, char **env)
 {
+	g_status = 0;
 	(void)argc;
 	(void)argv;
 	t_list	*lst_token;

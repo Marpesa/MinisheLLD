@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 17:51:49 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/02/16 21:50:52 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/25 14:06:04 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,22 +40,25 @@ static int	create_temporary_file(void)
 		printf("fd error IL FAUT AJOUTER UN EXIT\n");
 	return (fd);
 }
-
+/*
 static void	heredoc_quit(int signum, siginfo_t *si, void *context)
 {
-	int	*readline_exit;
-
 	(void)signum;
 	(void)si;
 	(void)context;
-	readline_exit = si->si_ptr;
-	*readline_exit = !(*readline_exit);
+	if (g_status == 1)
+		kill(getpid(), SIGTERM);
+//		exit (EXIT_SUCCESS);
+	g_status = 1;
 	//printf("number = %d\n", *readline_exit);
 	//printf("number = %d\n", *readline_exit);
 	//printf("SIIIIIIIIIIIIGGGGGGGGGGGINNNNNNNNNTTTTTT\n");
 }
+*/
 
-void	heredoc_signal(int *readline_exit)
+
+/*
+void	heredoc_signal()
 {
 	struct sigaction	action_heredoc_quit;
 	union sigval		value;
@@ -64,65 +67,119 @@ void	heredoc_signal(int *readline_exit)
 	action_heredoc_quit.sa_sigaction = heredoc_quit;
 	sigemptyset(&action_heredoc_quit.sa_mask);
 	action_heredoc_quit.sa_flags = SA_SIGINFO;
-	value.sival_ptr = readline_exit;
 	//sigaction(SIGINT, &action_heredoc_quit, &value);
 	sigaction(SIGINT, &action_heredoc_quit, NULL);
 	sigqueue(getpid(), SIGINT, value);
+	
+
+
+	struct sigaction sa_default;
+	sa_default.sa_handler = SIG_DFL;
+	sigemptyset(&sa_default.sa_mask);
+	sa_default.sa_flags = 0;
+	sigaction(SIGINT, &sa_default, NULL);
+}
+*/
+
+int	check_sigint_heredoc()
+{
+	if (g_status == 128 + SIGINT)
+		exit(0);
+	return (1);
+}
+void sigint_handler() {
+    // Perform any necessary cleanup and exit the process
+    exit(0);
 }
 
-void	heredoc_prompt(char *eof)
+void	heredoc_prompt(char *lim)
 {
 	char	*input;
-	int		readline_exit;
-
-	(void) eof;
-	readline_exit = 1;
+	int		pid;
+	(void) lim;
 	input = NULL;
-	heredoc_signal(&readline_exit);
-	write(1, "test\n", 5);
-	while (true)
+	g_status = 0;
+	pid = fork();
+	if (pid == 0)
 	{
-		input = readline("> ");
-		
-		if (input == NULL)
+		struct sigaction sa;
+        sa.sa_handler = sigint_handler;
+        sigemptyset(&sa.sa_mask);
+        sa.sa_flags = 0;
+		sigaction(SIGINT, &sa, NULL);
+
+
+		while (true)
 		{
-			//Entre dedans quand il y a un ctrl + D
-			printf("OUBLIE PAS DE GERER LERREUR GUGU\n");
-			//close(fd);
-			break ;
+			if (check_sigint_heredoc() == 0)
+			{
+				printf("quit by sigint\n");
+				break;
+			}
+			input = readline("> ");
+			
+			if (input == NULL)
+			{
+				if (check_sigint_heredoc() == 0)
+				{
+					printf("quit by sigint\n");
+					break;
+				}
+				//Entre dedans quand il y a un ctrl + D
+				printf("OUBLIE PAS DE GERER LERREUR GUGU\n");
+				//close(fd);
+				break ;
+			}
+			
+			if ((ft_strncmp(input, lim, ft_strlen(lim)) == 0))
+			{
+				if (check_sigint_heredoc() == 0)
+				{
+					printf("quit by sigint\n");
+					break;
+				}
+				//close(fd);
+				//readline_exit = true;
+				printf("exit normal\n");
+				free(input);
+				input = NULL;
+				break ;
+			}
+			if (g_status == 128 + SIGINT)
+			{
+
+				printf("quit by sigint\n");
+				break;
+			}
+			
 		}
-		
-		if (ft_strncmp(input, eof, ft_strlen(eof)))
-		{
-		}
-		else
-		{
-			//close(fd);
-			//readline_exit = true;
-			printf("exit normal\n");
-			free(input);
-			break ;
-		}
-	
+	}
+	else
+	{
+		int status;
+
+		 waitpid(pid, &status, 0);
+		 //kill(pid, SIGTERM);
+
+        // check if the child process terminated successfully
 		/*
-		if (readline_exit == 1)
-		{
-			printf("quit by sigint\n");
-			break;
-		}
+        if (WIFEXITED(status)) {
+            printf("Child process with PID %d terminated with status %d\n", pid, WEXITSTATUS(status));
+        } else {
+            printf("Child process with PID %d terminated abnormally\n", pid);
+        }
 		*/
-		
 	}
 	ignore_signal_for_shell();
 }
 
-void	heredoc_open(char *eof)
+void	heredoc_open(char *lim)
 {
 	int	fd;
 
-	printf("eof: %s\n", eof);
+	printf("eof: %s\n", lim);
 	fd = create_temporary_file();
-	heredoc_prompt(eof);
+	heredoc_prompt(lim);
 	close(fd);
 }
 

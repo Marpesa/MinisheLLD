@@ -20,4 +20,6 @@ a verifier:
 steel reachable avec la commande ls
 
 
+-ajouter exit quand sigint dans le processus enfant
 
+-command exit
