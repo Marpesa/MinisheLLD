@@ -1,43 +1,46 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_utils.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/17 00:18:28 by lmery             #+#    #+#             */
+/*   Updated: 2023/02/26 19:48:41 by lmery            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minisheLLD.h"
 
 t_bool	is_builtin(char *value)
 {
+	int	len;
+
 	if (!value)
 		return (false);
-	if (!(ft_strncmp(value, "echo\0", ft_strlen("echo\0")) || ft_strncmp(value, "cd\0", ft_strlen("cd\0")))) 
+	len = ft_strlen_secure(value);
+	if ((ft_strncmp(value, "echo", len) == 0))
 		return (true);
-		//|| !(ft_strcmp(value, "cd\0")))
-	/*
-	if (!(ft_strcmp(value, "pwd")) || !(ft_strcmp(value, "export")))
+	if (!(ft_strncmp(value, "pwd", len)))
 		return (true);
-	if (!(ft_strcmp(value, "unset")) || !(ft_strcmp(value, "env")))
+	if (!(ft_strncmp(value, "env", len)))
 		return (true);
-	if (!(ft_strcmp(value, "exit")))
+	if (!(ft_strncmp(value, "exit", len)))
 		return (true);
-		*/
 	return (false);
 }
 
-void	execute_builtin(char **cmd, char ***env, int fd)
+void	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command)
 {
 	(void) env;
 	if (!(ft_strncmp(cmd[0], "echo\0", ft_strlen("echo\0"))))
-		builtin_echo(cmd, fd);
-	//else if (!(ft_strncmp(cmd[0], "cd\0", ft_strlen("cd\0"))))
-	//	builtin_cd(cmd, env);
-
-	/*	
-	else if (!(ft_strcmp(cmd[0], "pwd")))
-		builtin_pwd();
-	else if (!(ft_strcmp(cmd[0], "export")))
-		builtin_export(cmd);
-	else if (!(ft_strcmp(cmd[0], "unset")))
-		builtin_unset(cmd);
-	//else if (!(ft_strcmp(cmd[0], "env")))
-		//builtin_print_environment(g_minishell.env, STDOUT_FILENO);
-	else if (!(ft_strcmp(cmd[0], "exit")))
-		builtin_exit(cmd);
-	*/
+		builtin_echo(cmd, fd, env, lst_command);
+	else if (!(ft_strncmp(cmd[0], "pwd\0", ft_strlen("pwd\0"))))
+		builtin_pwd(env, lst_command);
+	else if (!(ft_strncmp(cmd[0], "exit\0", ft_strlen("exit\0"))))
+		builtin_exit(env, lst_command);
+	else if (!(ft_strncmp(cmd[0], "env\0", ft_strlen("env\0"))))
+		builtin_env(cmd, fd, env, lst_command);
 }
 
 char	*get_env(char *var, char ***envp)
@@ -57,7 +60,6 @@ char	*get_env(char *var, char ***envp)
 		if (ft_strncmp((*envp)[line], var, size) == 0)
 		{
 			ret = ft_strdup(&(*envp)[line][size + 1]);
-			//changer la gestion 
 			if (!ret)
 				ft_putstr_fd("malloc error\n", 2);
 			return (ret);

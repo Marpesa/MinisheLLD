@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 17:51:49 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/02/25 14:06:04 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/27 00:01:31 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,6 +170,10 @@ void	heredoc_prompt(char *lim)
         }
 		*/
 	}
+	if (input)
+		free(input);
+	//close (pipefd[0]);
+	//close (pipefd[1]);
 	ignore_signal_for_shell();
 }
 

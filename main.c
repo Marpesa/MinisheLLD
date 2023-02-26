@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/24 19:20:27 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/27 00:03:45 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,18 @@
 int	g_status = 0;
 
 
-static void	new_line(int sig, siginfo_t *info, void *context)
+void	ft_new_line()
 {
-	(void)(sig);
-	(void)(info);
-	(void)(context);
+	// (void)(sig);
+	// (void)(info);
+	// (void)(context);
 	write(STDERR_FILENO, "\n", 1);
     rl_replace_line("", 0);
     rl_on_new_line();
     rl_redisplay();
 }
+
+
 
 void ignore_signal_for_shell()
 {
@@ -34,7 +36,7 @@ void ignore_signal_for_shell()
 	ft_memset(&lazy_action, 0, sizeof(lazy_action));
 	ft_memset(&new_sigint, 0, sizeof(new_sigint));
 	lazy_action.sa_handler = SIG_IGN;
-	new_sigint.sa_sigaction = new_line;
+	new_sigint.sa_sigaction = ft_new_line;
 
 	// ignore "Ctrl+Z"
 	sigaction(SIGTSTP, &lazy_action, NULL);
@@ -117,8 +119,6 @@ char **save_env(char **env)
     return envp;
 }
 
-
-
 int main(int argc, char **argv, char **env)
 {
 	g_status = 0;
@@ -133,7 +133,7 @@ int main(int argc, char **argv, char **env)
 	linebuffer = NULL;
 	lst_token = NULL;
 	lst_command = NULL;
-	secret_env = NULL;
+	// secret_env = NULL;
 	ignore_signal_for_shell();
 	secret_env = save_env(env);
 	while (true)
@@ -156,9 +156,14 @@ int main(int argc, char **argv, char **env)
 			{
 				if (parser(lst_token, &lst_command) == -1)
 					free_and_exit(lst_token, lst_command, &linebuffer, secret_env);
+				ft_lstclear(&lst_token, del_token);
+				if (linebuffer != NULL)
+					free(linebuffer);
+				linebuffer = NULL;
 				exec(lst_command, &secret_env);
 			}
 		}
+		// printf("TESSST\n");
 		free_all(&lst_token, &lst_command, &linebuffer);
 	}
 	rl_clear_history();

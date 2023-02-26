@@ -6,20 +6,19 @@
 
 -debug
 
--faire le env secret
-
 -norm
 
--les builts in (ne pas fork pour les cd)
+-gerer le . et le / seuls, et "" et '' seuls (commandes vides) >> ajouter dans les syntax error
+
+-gerer les valeurs de retours et les sorties de malloc partout
 
 -Choisir l'affichage du message quand la commande n'existe pas. Actuellement: command (null) not found
 
+-isatty pour subminishell (exit | ./minishell)
 
 a verifier:
 
 steel reachable avec la commande ls
 
 
--ajouter exit quand sigint dans le processus enfant
-
--command exit
+valgrind --suppressions=supp_file --leak-check=full --show-leak-kinds=all ./minishell

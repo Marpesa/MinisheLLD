@@ -6,13 +6,13 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 03:29:09 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/16 19:47:21 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/18 18:33:13 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
 
-static void	free_map(char **map)
+void	ft_free_map(char **map)
 {
 	int	i;
 
@@ -29,7 +29,7 @@ static void	free_map(char **map)
 	map = NULL;
 }
 
-static void	del_token(void *content)
+void	del_token(void *content)
 {
 	t_token *token;
 
@@ -41,21 +41,23 @@ static void	del_token(void *content)
 	token = NULL;
 }
 
-static void	del_command(void *content)
+void	del_command(void *content)
 {
 	t_command	*cmd;
 
 	cmd = content;
-	free_map(cmd->word);
-	free_map(cmd->redir);
+	ft_free_map(cmd->word);
+	ft_free_map(cmd->redir);
 	free(cmd);
 	cmd = NULL;
 }
 
 void	free_all(t_list **lst_token, t_list **lst_command, char **linebuffer)
 {
-	ft_lstclear(lst_token, del_token);
-	ft_lstclear(lst_command, del_command);
+	if(lst_token)
+		ft_lstclear(lst_token, del_token);
+	if(lst_command != NULL)
+		ft_lstclear(lst_command, del_command);
 	if (*linebuffer != NULL)
 		free(*linebuffer);
 	*linebuffer = NULL;
@@ -65,7 +67,7 @@ void	free_and_exit(t_list *lst_token, t_list *lst_command, char **linebuffer, ch
 {
 	ft_lstclear(&lst_token, del_token);
 	ft_lstclear(&lst_command, del_command);
-	free_map(env);
+	ft_free_map(env);
 	if (*linebuffer != NULL)
 		free(*linebuffer);
 	*linebuffer = NULL;

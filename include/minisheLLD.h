@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/24 19:18:53 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/27 00:00:40 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@
 # include <pwd.h>
 # include <sys/types.h>
 # include <fcntl.h>
+# include <limits.h>
 
 extern int	g_status;
 
@@ -65,6 +66,13 @@ typedef struct s_lexer {
 	t_list *lst_token;
 } t_lexer;
 
+typedef struct s_exec {
+	t_list *lst_token;
+	t_list *lst_command;
+	char 	**bufferline;
+	char	**env;
+} t_exec;
+
 
 /*----------------- Colors LLD ---------------- */
 #define _ORANGE		"\e[38:5:208m"
@@ -77,7 +85,8 @@ typedef struct s_lexer {
 
 /*---------------- Main fonctions -----------------*/
 
-void ignore_signal_for_shell();
+void	ft_new_line();
+void 	ignore_signal_for_shell();
 
 
 /*--------------------- Lexer ---------------------*/ 
@@ -112,10 +121,12 @@ int				check_error_input(char *input);
 void			exit_error(char *msg);
 void			free_and_exit(t_list *lst_token, t_list *lst_command, char **linebuffer, char **env);
 void			free_all(t_list **lst_token, t_list **lst_command, char **linebuffer);
+void			ft_free_map(char **map);
+void			del_command(void *content);
+void			del_token(void *content);
+
 
 /*-------------------- Parser ---------------------*/ 
-
-
 
 typedef struct s_command {
 	char	**word;
@@ -124,6 +135,7 @@ typedef struct s_command {
 	
 int		parser(t_list *lst_token, t_list **lst_command);
 void	lst_print_command(t_list *cmd);
+void	free_map(char **map);
 
 
 // Test
@@ -145,10 +157,31 @@ void	exec(t_list *lst_command, char ***env);
 
 /*------------------Builtin-------------------------*/
 t_bool	is_builtin(char *value);
-void	execute_builtin(char **cmd, char ***env, int fd);
-int		builtin_echo(char **command, int fd);
-int		builtin_cd(char **command, char ***env);
+void	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command);
+int		builtin_echo(char **command, int fd, char ***env, t_list *lst_command);
 char	*get_env(char *var, char ***envp);
+int		is_cd(char **cmd);
+void	builtin_cd(char **cmd);
+char	*ft_strldup_secure(char *dst, const char *src, size_t dstsize);
+void	double_point(char **str, char **str2, int *path);
+char	*ft_root_one(char *back);
+void	builtin_pwd(char ***env, t_list *lst_command);
+int		is_exit(char **cmd);
+void	builtin_exit(char ***env, t_list *lst_command);
+void	builtin_env(char **cmd, int fd, char ***env, t_list *lst_command);
+int		is_export(char **cmd);
+void	builtin_export(char **cmd, char ***env);
+char	*until_equal(char *cmd);
+int		index_in_env(char *cmd, char **env);
+int		is_unset(char **cmd);
+void	builtin_unset(char **cmd, char ***env);
+int		is_in_env(char *cmd, char **env);
+int		ft_is_there(char *str, char **cmd, int index);
+int		check_occur(char **cmd, char **str_env, int *occur);
+int		until_equal_sign(char *str, char *env);
+
+
+
 
 
 #endif
