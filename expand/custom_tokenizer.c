@@ -6,7 +6,7 @@
 /*   By: gle-mini <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 03:45:21 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/13 04:08:37 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/26 19:33:04 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,9 @@ static int	return_token(char *str, int *i, char **end, t_bool *in_d_quote)
 		*end = &str[*i];
 		return (1);
 	}
-	if (str[*i] == ' ')
+	if (str[*i] == ' ' || str[*i] == '+' || 
+			str[*i] == '/' || str[*i] == '-' || 
+			str[*i] == '%')
 	{
 		*end = &str[*i];
 		return (1);
@@ -59,7 +61,7 @@ int	custom_tokenizer(char *str, char **start, char **end, t_bool *in_d_quote)
 	*start = str;
 	if (str[i] == '\"' && *in_d_quote == false)
 		*in_d_quote = !*in_d_quote;
-	if (str[i] == '$' || str[i] == ' ' || str[i] == '\"')
+	if (str[i] == '$' || str[i] == ' ' || str[i] == '\"' || str[i] == '+')
 		i++;
 	skip_s_quote(str, &i, in_d_quote);
 	while (str[i] != '\0')
