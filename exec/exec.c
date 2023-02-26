@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/02/24 22:32:55 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/26 17:15:23 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,7 @@ void	exec(t_list	*lst_command, char ***env)
 		}
 		if (is_cd(command->word))
 		{
-			builtin_cd(command->word, env, lst_command);
+			builtin_cd(command->word);
 			if (lst_current->next)
 				lst_current = lst_current->next;
 			else
