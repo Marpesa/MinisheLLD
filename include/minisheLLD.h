@@ -123,9 +123,8 @@ typedef enum e_cmd_type {
 } t_cmd_type;
 
 typedef struct s_command {
-	t_cmd_type	type;
-	char		*text;
-	int			inedx_cmd;
+	char	**word;
+	char	**redir;
 } t_command;
 	
 t_list	*parser(t_list *lst_token);
