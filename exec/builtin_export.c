@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 17:52:19 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/26 19:42:56 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/26 22:38:51 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,95 +43,68 @@ int	valid_export(char *cmd)
 	return (0);
 }
 
-static char	*until_equal(char *cmd)
+int	allready_in_env(char ***cmd, char ***env, int *j, int i)
 {
-	int	i;
-	int	len;
+	char	*key;
 
-	len = 0;
-	i = 0;
-	while (cmd[i])
+	key = NULL;
+	key = until_equal((*cmd)[*j]);
+	if (is_in_env(key, *env))
 	{
-		if (cmd[i] == '=')
-		{
-			len = i;
-			break ;
-		}
-		i++;
+		i = index_in_env(key, *env);
+		free((*env)[i]);
+		(*env)[i] = ft_strdup((*cmd)[*j]);
+		i = 0;
+		(*j)++;
+		free(key);
+		return (1);
 	}
-	if (len != 0)
-		return (ft_substr(cmd, 0, len));
-	return (NULL);
+	free(key);
+	return (0);
 }
 
-int	index_in_env(char *cmd, char **env)
+int	end_export(char ***new_env, char ***str_env, char ***env, char *cmd)
 {
 	int	i;
 
 	i = 0;
-	while (env[i])
+	*str_env = *env;
+	*new_env = malloc(sizeof(char *) * (ft_maplen_secure(*str_env) + 2));
+	ft_bzero(*new_env, (sizeof(char *) * (ft_maplen_secure(*str_env) + 2)));
+	if (!*new_env)
+		return (i);
+	while (i < (int)(ft_maplen_secure(*str_env)))
 	{
-		if (ft_strncmp(cmd, env[i], ft_strlen_secure(env[i])) == 0 || \
-		until_equal_sign(cmd, env[i]) == 1)
-			return (i);
+		(*new_env)[i] = ft_strdup((*str_env)[i]);
 		i++;
 	}
-	return (-1);
+	(*new_env)[i] = ft_strdup(cmd);
+	(*new_env)[i + 1] = NULL;
+	free_map(*env);
+	*env = *new_env;
+	return (i);
 }
 
 void	builtin_export(char **cmd, char ***env)
 {
 	char	**new_env;
 	char	**str_env;
-	char	*key;
 	int		i;
 	int		j;
 
 	i = 0;
 	j = 1;
-	key = NULL;
 	while (cmd[j])
 	{
-		if (!valid_export(cmd[j]))
+		if (!valid_export(cmd[j]) || (cmd[j] && cmd[j][0] == '\0'))
 		{
-			printf(_ORANGE2 "MinisheLLD : export : unvalid format \
-			'%s'\n"_END, cmd[j]);
+			printf(_ORANGE2 "MinisheLLD : export : unvalid entry\n"_END);
 			j++;
 			continue ;
 		}
-		if (cmd[j] && cmd[j][0] == '\0')
-		{
-			printf(_ORANGE2 "MinisheLLD : export : empty value\n" _END);
-			j++;
+		if (allready_in_env(&cmd, env, &j, i) == 1)
 			continue ;
-		}
-		key = until_equal(cmd[j]);
-		if (is_in_env(key, *env))
-		{
-			i = index_in_env(key, *env);
-			free((*env)[i]);
-			(*env)[i] = ft_strdup(cmd[j]);
-			i = 0;
-			j++;
-			free(key);
-			continue ;
-		}
-		free(key);
-		i = 0;
-		str_env = *env;
-		new_env = malloc(sizeof(char *) * (ft_maplen_secure(str_env) + 2));
-		ft_bzero(new_env, (sizeof(char *) * (ft_maplen_secure(str_env) + 2)));
-		if (!new_env)
-			return ;
-		while (i < (int)(ft_maplen_secure(str_env)))
-		{
-			new_env[i] = ft_strdup(str_env[i]);
-			i++;
-		}
-		new_env[i] = ft_strdup(cmd[j]);
-		new_env[i + 1] = NULL;
-		free_map(*env);
-		*env = new_env;
+		i = end_export(&new_env, &str_env, env, cmd[j]);
 		j++;
 	}
 }

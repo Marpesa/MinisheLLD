@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/26 19:19:43 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/26 22:33:00 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -169,10 +169,13 @@ void	builtin_exit(char ***env, t_list *lst_command);
 void	builtin_env(char **cmd, int fd, char ***env, t_list *lst_command);
 int		is_export(char **cmd);
 void	builtin_export(char **cmd, char ***env);
+char	*until_equal(char *cmd);
+int		index_in_env(char *cmd, char **env);
 int		is_unset(char **cmd);
 void	builtin_unset(char **cmd, char ***env);
 int		is_in_env(char *cmd, char **env);
 int		ft_is_there(char *str, char **cmd, int index);
+int		check_occur(char **cmd, char **str_env, int *occur);
 int		until_equal_sign(char *str, char *env);
 
 

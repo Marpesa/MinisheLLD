@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 19:04:29 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/26 19:20:38 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/26 22:39:31 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,40 @@ int	is_cd(char **cmd)
 	if ((ft_strncmp(cmd[0], "cd", len) == 0))
 		return (1);
 	return (0);
+}
+
+char	*until_equal(char *cmd)
+{
+	int	i;
+	int	len;
+
+	len = 0;
+	i = 0;
+	while (cmd[i])
+	{
+		if (cmd[i] == '=')
+		{
+			len = i;
+			break ;
+		}
+		i++;
+	}
+	if (len != 0)
+		return (ft_substr(cmd, 0, len));
+	return (NULL);
+}
+
+int	index_in_env(char *cmd, char **env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i])
+	{
+		if (ft_strncmp(cmd, env[i], ft_strlen_secure(env[i])) == 0 || \
+		until_equal_sign(cmd, env[i]) == 1)
+			return (i);
+		i++;
+	}
+	return (-1);
 }
