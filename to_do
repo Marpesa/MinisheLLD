@@ -16,6 +16,7 @@
 
 -Choisir l'affichage du message quand la commande n'existe pas. Actuellement: command (null) not found
 
+-isatty pour subminishell (exit | ./minishell)
 
 a verifier:
 
