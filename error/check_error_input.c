@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 17:24:59 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/25 20:43:56 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/26 23:21:47 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,6 @@ static int	closed_quotes(char *input, int *i)
 	{
 		if (input[*i] == quote)
 		{
-			// *i += 1;
 			res = 1;
 			break ;
 		}
@@ -54,6 +53,20 @@ static int	check_closed_quotes(char *input)
 	return (res);
 }
 
+static int	point_and_slash(char *input)
+{
+	int	i;
+
+	i = 0;
+	if (ft_strlen_secure(input) < 3)
+		return (0);
+	while (input[i] && (input[i] == '.' || input[i] == '/'))
+		i++;
+	if  (input[i] == '\0')
+		return (0);
+	return (1);
+}
+
 int	check_error_input(char *input)
 {
 	int	i;
@@ -63,6 +76,10 @@ int	check_error_input(char *input)
 	res = 1;
 	check = 1;
 	i = 0;
+	if (input[0] == '.' || input[0] == '/')
+		res = point_and_slash(input);
+	if (res == 0)
+		return (res);
 	while (input[i])
 	{
 		if (input[i] == '(' || input[i] == ')' || input[i] == ';' \
@@ -75,7 +92,6 @@ int	check_error_input(char *input)
 		i++;
 	}
 	check = check_closed_quotes(input);
-	// if (check != 0)
 		res = check;
 	return (res);
 }
