@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_echo.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/02/26 19:22:03 by lmery             #+#    #+#             */
+/*   Updated: 2023/02/26 19:22:52 by lmery            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minisheLLD.h"
 
 static int	is_nflag(char *arg)
@@ -36,8 +48,6 @@ int	builtin_echo(char **command, int fd, char ***env, t_list *lst_command)
 		ft_putstr_fd(*command, fd);
 	if (!nflag)
 		ft_putendl_fd("", fd);
-	//if (exit)
-		//free_and_exit(0);
 	ft_free_map(*env);
 	ft_lstclear(&lst_command, del_command);
 	exit (0);

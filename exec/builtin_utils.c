@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:28 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/24 21:08:28 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/26 19:48:41 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,14 @@ t_bool	is_builtin(char *value)
 	if (!value)
 		return (false);
 	len = ft_strlen_secure(value);
-	if ((ft_strncmp(value, "echo", len) == 0)) 
+	if ((ft_strncmp(value, "echo", len) == 0))
 		return (true);
 	if (!(ft_strncmp(value, "pwd", len)))
 		return (true);
-	if (/*!(ft_strncmp(value, "unset", len)) || */!(ft_strncmp(value, "env", len)))
+	if (!(ft_strncmp(value, "env", len)))
 		return (true);
 	if (!(ft_strncmp(value, "exit", len)))
 		return (true);
-	// exit (0);
 	return (false);
 }
 
@@ -40,10 +39,8 @@ void	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command)
 		builtin_pwd(env, lst_command);
 	else if (!(ft_strncmp(cmd[0], "exit\0", ft_strlen("exit\0"))))
 		builtin_exit(env, lst_command);
-	// else if (!(ft_strcmp(cmd[0], "unset")))
-	// 	builtin_unset(cmd);
 	else if (!(ft_strncmp(cmd[0], "env\0", ft_strlen("env\0"))))
-		builtin_env(cmd, fd, env, lst_command);;
+		builtin_env(cmd, fd, env, lst_command);
 }
 
 char	*get_env(char *var, char ***envp)
@@ -63,7 +60,6 @@ char	*get_env(char *var, char ***envp)
 		if (ft_strncmp((*envp)[line], var, size) == 0)
 		{
 			ret = ft_strdup(&(*envp)[line][size + 1]);
-			//changer la gestion 
 			if (!ret)
 				ft_putstr_fd("malloc error\n", 2);
 			return (ret);
