@@ -6,27 +6,37 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 00:04:24 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/13 03:52:44 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/16 21:26:19 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
 
-static t_token_type	return_token_type(t_list *lst_token)
+t_bool	redirect_utils(t_list *lst_current)
 {
-	t_token	*token;
-
-	token = lst_token->content;
-	return (token->type);
-}
-
-t_bool	start_or_finish_pipe(t_list *lst_token)
-{
-	if (return_token_type(lst_token) == TOKEN_PIPE \
-	&& return_token_type(ft_lstlast(lst_token)) == TOKEN_PIPE)
+	if ((return_token_type(lst_current) == TOKEN_REDIRECT_APPEND || \
+	return_token_type(lst_current) == TOKEN_HEREDOC) && \
+	!lst_current->next)
 	{
-		printf("MinisheLLD:\tsyntax error near unexpected token `|'\n");
+		printf(_ORANGE2 "MinisheLLD:\tsyntax error near `newline'\n" _END);
 		return (true);
+	}
+	if (return_token_type(lst_current) == TOKEN_REDIRECT_APPEND || \
+	return_token_type(lst_current) == TOKEN_HEREDOC)
+	{
+		if (return_token_type(lst_current) == TOKEN_HEREDOC && \
+		return_token_type(lst_current->next) == TOKEN_REDIRECT_IN)
+			if (return_token_type(lst_current->next) != TOKEN_HEREDOC)
+				return (false);
+		if (return_token_type(lst_current->next) == TOKEN_REDIRECT_IN || \
+		return_token_type(lst_current->next) == TOKEN_REDIRECT_OUT || \
+		return_token_type(lst_current->next) != TOKEN_WORD)
+		{
+			printf(_ORANGE2 \
+			"MinisheLLD:\tsyntax error near unexpected token `%s'\n" _END, \
+			return_token_text(lst_current));
+			return (true);
+		}
 	}
 	return (false);
 }
@@ -38,32 +48,43 @@ t_bool	redirect(t_list *lst_token)
 	lst_current = lst_token;
 	while (lst_current)
 	{
-		if (return_token_type(lst_current) == TOKEN_REDIRECT_IN || \
-			return_token_type(lst_current) == TOKEN_REDIRECT_OUT || \
-			return_token_type(lst_current) == TOKEN_REDIRECT_APPEND)
+		if (redirect_utils(lst_current) == true)
+			return (true);
+		if ((return_token_type(lst_current) == TOKEN_REDIRECT_IN || \
+		return_token_type(lst_current) == TOKEN_REDIRECT_OUT) \
+		&& lst_current->next && \
+		return_token_type(lst_current->next) != TOKEN_WORD)
 		{
-			if (lst_current->next == NULL || \
-			return_token_type(lst_current->next) != TOKEN_WORD)
-			{
-				printf("MinisheLLD:\tsyntax error near unexpected token\n");
-				return (true);
-			}
+			printf(_ORANGE2 \
+			"MinisheLLD:\tsyntax error near unexpected token `%s'\n" _END, \
+			return_token_text(lst_current));
+			return (true);
 		}
 		lst_current = lst_current->next;
 	}
 	return (false);
 }
 
-void	syntaxe_error(t_list *lst_token)
+t_bool	new_line(t_list *lst_token)
 {
-	if (lst_token == NULL)
-		return ;
-	if (start_or_finish_pipe(lst_token))
+	if (return_token_type(ft_lstlast(lst_token)) == TOKEN_REDIRECT_IN \
+	|| return_token_type(ft_lstlast(lst_token)) == TOKEN_REDIRECT_OUT \
+	|| return_token_type(ft_lstlast(lst_token)) == TOKEN_REDIRECT_APPEND \
+	|| return_token_type(ft_lstlast(lst_token)) == TOKEN_HEREDOC)
 	{
-		return ;
+		printf(_ORANGE2 "MinisheLLD:\tsyntax error near `newline'\n" _END);
+		return (true);
 	}
-	if (redirect(lst_token))
-	{
-		return ;
-	}
+	return (false);
+}
+
+int	syntaxe_error(t_list *lst_token)
+{
+	if (!lst_token)
+		return (1);
+	if (redirect(lst_token) || start_or_finish_pipe(lst_token))
+		return (0);
+	if (lst_token == NULL || new_line(lst_token))
+		return (0);
+	return (1);
 }

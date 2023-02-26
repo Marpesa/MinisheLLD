@@ -6,38 +6,35 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/20 16:24:16 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/24 19:18:53 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELLD_H
 # define MINISHELLD_H
 
-#include "libft.h"
+# include "libft.h"
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
 
-#include <readline/readline.h>
-#include <readline/history.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-#include <signal.h>
-#include <stdlib.h>
-#include <stdarg.h>
+# include <errno.h>
+# include <signal.h>
+# include <stdarg.h>
+# include <string.h>
+# include <sys/wait.h>
+# include <pwd.h>
+# include <sys/types.h>
+# include <fcntl.h>
 
-#include <stdlib.h>
-#include <string.h>
-#include <sys/wait.h>
-#include <pwd.h>
-#include <sys/types.h>
-#include <fcntl.h>
+extern int	g_status;
 
-
-typedef enum {
+typedef enum s_bool
+{
 	false,
 	true
 } t_bool;
@@ -63,14 +60,13 @@ typedef struct s_lexer {
 	t_token *token;
 	int token_count;
 	int	token_start;
-	//t_bool in_quote;
 	t_bool in_word;
 	int i;
 	t_list *lst_token;
 } t_lexer;
 
 
-/*                   Colors LLD                    */
+/*----------------- Colors LLD ---------------- */
 #define _ORANGE		"\e[38:5:208m"
 #define _ORANGE2	"\e[38:5:202m"
 #define _BLUE_LLD	"\e[38:5:25m"
@@ -86,22 +82,21 @@ void ignore_signal_for_shell();
 
 /*--------------------- Lexer ---------------------*/ 
 
-t_list	*lexer(char *input);
+int		lexer(char *input, t_list **lst_token);
 char 	**ft_get_env(char **env);
 
 char	*ft_get_token_type(enum e_token_type type);
 void	lexer_data_init(t_lexer *data);
-t_list	*lst_add_token(t_list *lst_token, void *content);
+int		lst_add_token(t_list **lst_token, void *content);
 int		is_special(char c);
-void	lst_print_token(t_list *head);
 
 /*-------------------- Expand ---------------------*/ 
 
-void 	ft_expand(t_list *lst_token, char **env);
+int	ft_expand(t_list *lst_token, char **env);
 int		is_special(char c);
 void	trim(char **str);
-int	custom_tokenizer(char *str, char **start, char **end, t_bool *in_d_quote);
-char *merge_strings(char *str1, char *str2);
+int		custom_tokenizer(char *str, char **start, char **end, t_bool *in_d_quote);
+char 	*merge_strings(char *str1, char *str2);
 
 /*-------------------- Heredoc --------------------*/
 
@@ -109,32 +104,51 @@ void	heredoc(t_list *lst_token);
 
 /*-------------------- Error ----------------------*/
 
-void	syntaxe_error(t_list *lst_token);
-int		check_error_input(char *input);
-void	exit_error(char *msg);
+int				syntaxe_error(t_list *lst_token);
+t_token_type	return_token_type(t_list *lst_token);
+char			*return_token_text(t_list *lst_token);
+t_bool			start_or_finish_pipe(t_list *lst_token);
+int				check_error_input(char *input);
+void			exit_error(char *msg);
+void			free_and_exit(t_list *lst_token, t_list *lst_command, char **linebuffer, char **env);
+void			free_all(t_list **lst_token, t_list **lst_command, char **linebuffer);
 
 /*-------------------- Parser ---------------------*/ 
 
-typedef enum e_cmd_type {
-	CMD_WORD,				// word command 
-	CMD_REDIR,				// redir < or >, and associated word
-	CMD_PIPE,				//
-	CMD_EOF,
-} t_cmd_type;
+
 
 typedef struct s_command {
 	char	**word;
 	char	**redir;
 } t_command;
 	
-t_list	*parser(t_list *lst_token);
+int		parser(t_list *lst_token, t_list **lst_command);
 void	lst_print_command(t_list *cmd);
 
 
 // Test
 void	print_command(t_command *command);
+void	print_lst_command_test(t_list *lst_command);
 char	**create_map(int size, ...);
 t_list	*create_lst_command_test(int size, ...);
+void	print_lst_command_test(t_list *lst_command);
+t_bool	lst_command_compare(t_list *lst_command1, t_list *lst_command2);
+void	test_syntaxe_error(char **env);
+
+/*------------------Debug------------------------*/
+void	print_map(char **map);
+void	print_lst_command(t_list *lst_command);
+void	print_lst_token(t_list *head);
+
+/*------------------Exec-------------------------*/
+void	exec(t_list *lst_command, char ***env);
+
+/*------------------Builtin-------------------------*/
+t_bool	is_builtin(char *value);
+void	execute_builtin(char **cmd, char ***env, int fd);
+int		builtin_echo(char **command, int fd);
+int		builtin_cd(char **command, char ***env);
+char	*get_env(char *var, char ***envp);
 
 
 #endif

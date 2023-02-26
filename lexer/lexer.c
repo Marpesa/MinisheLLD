@@ -6,62 +6,74 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 04:12:43 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/13 03:47:53 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/16 21:30:58 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
 
-static void	super_token(char *input, int *i, t_lexer *data)
+static int	super_token(char *input, int *i, t_lexer *data)
 {
 	t_token	*token;
 
 	data->in_word = false;
 	token = NULL;
 	token = malloc(sizeof(t_token) * 1);
+	if (token == NULL)
+		return (-1);
 	token->text = malloc(sizeof(char) * 2);
+	if (token->text == NULL)
+		return (-1);
 	ft_strlcpy(token->text, &input[*i], 2);
 	token->type = is_special(input[*i]);
 	data->token_count++;
-	data->lst_token = lst_add_token(data->lst_token, token);
-	if (data->lst_token == NULL)
-		exit_error("Malloc failed while making special token");
+	if (lst_add_token(&data->lst_token, token) == -1)
+		return (-1);
 	*i += 1;
+	return (1);
 }
 
-static void	token_heredoc(char *input, int *i, t_lexer *data)
+static int	token_heredoc(char *input, int *i, t_lexer *data)
 {
 	t_token	*token;
 
 	data->in_word = false;
 	token = malloc(sizeof(t_token) * 1);
+	if (token == NULL)
+		return (-1);
 	token->text = malloc(sizeof(char) * 3);
+	if (token->text == NULL)
+		return (-1);
 	ft_strlcpy(token->text, &input[*i], 3);
 	token->type = TOKEN_HEREDOC;
 	data->token_count++;
-	data->lst_token = lst_add_token(data->lst_token, token);
-	if (data->lst_token == NULL)
-		exit_error("Malloc failed while making heredoc token");
+	if (lst_add_token(&data->lst_token, token) == -1)
+		return (-1);
 	*i += 2;
+	return (1);
 }
 
-static void	token_redirect_append(char *input, int *i, t_lexer *data)
+static int	token_redirect_append(char *input, int *i, t_lexer *data)
 {
 	t_token	*token;
 
 	data->in_word = false;
 	token = malloc(sizeof(t_token) * 1);
+	if (token == NULL)
+		return (-1);
 	token->text = malloc(sizeof(char) * 3);
+	if (token->text == NULL)
+		return (-1);
 	ft_strlcpy(token->text, &input[*i], 3);
 	token->type = TOKEN_REDIRECT_APPEND;
 	data->token_count++;
-	data->lst_token = lst_add_token(data->lst_token, token);
-	if (data->lst_token == NULL)
-		exit_error("Malloc failed while redirect appending");
+	if (lst_add_token(&data->lst_token, token) == -1)
+		return (-1);
 	*i += 2;
+	return (1);
 }
 
-static void	token_word(char *input, int *i, t_lexer *data)
+static int	token_word(char *input, int *i, t_lexer *data)
 {
 	t_token	*token;
 	int		word_len;
@@ -79,16 +91,20 @@ static void	token_word(char *input, int *i, t_lexer *data)
 		j++;
 	word_len = j - *i;
 	token = malloc(sizeof(t_token) * 1);
+	if (token == NULL)
+		return (-1);
 	token->type = TOKEN_WORD;
 	token->text = malloc(sizeof(char) * (word_len + 1));
+	if (token->text == NULL)
+		return (-1);
 	ft_strlcpy(token->text, &input[*i], word_len + 1);
-	data->lst_token = lst_add_token(data->lst_token, token);
-	if (data->lst_token == NULL)
-		exit_error("Malloc failed while tokenizing words");
+	if (lst_add_token(&data->lst_token, token) == -1)
+		return (-1);
 	*i += word_len;
+	return (1);
 }
 
-t_list	*lexer(char *input)
+int	lexer(char *input, t_list **lst_token)
 {
 	t_lexer	data;
 	int		i;
@@ -103,15 +119,22 @@ t_list	*lexer(char *input)
 			while (ft_isspace(input[i]))
 				i++;
 		}
-		else if (input[i] == '<' && input[i + 1] == '<')
-			token_heredoc(input, &i, &data);
-		else if (input[i] == '>' && input[i + 1] == '>')
-			token_redirect_append(input, &i, &data);
-		else if (input[i] != '\0' && !ft_isspace(input[i]) \
+		if (input[i] == '<' && input[i + 1] == '<')
+			if (token_heredoc(input, &i, &data) == -1)
+				return (-1);
+		if (input[i] == '>' && input[i + 1] == '>')
+			if (token_redirect_append(input, &i, &data) == -1)
+				return (-1);
+		if (input[i] != '\0' && !ft_isspace(input[i]) \
 		&& !is_special(input[i]))
-			token_word(input, &i, &data);
-		else if ((is_special(input[i])))
-			super_token(input, &i, &data);
+		{
+			if (token_word(input, &i, &data) == -1)
+				return (-1);
+		}
+		if ((is_special(input[i])))
+			if (super_token(input, &i, &data) == -1)
+				return (-1);
 	}
-	return (data.lst_token);
+	*lst_token = data.lst_token;
+	return (1);
 }

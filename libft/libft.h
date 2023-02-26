@@ -72,6 +72,10 @@ void			ft_putstr_fd_address(char *start, char *end, int fd);
 
 char			**ft_split(char const *s, char c);
 
+size_t			ft_maplen(char **map);
+
+size_t			ft_maplen_secure(char **map);
+
 char			*ft_strchr(const char *s, int c);
 
 char			*ft_strdup(const char *s1);

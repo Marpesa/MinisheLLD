@@ -6,46 +6,11 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/13 18:30:03 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/13 16:30:21 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
-
-/*
-char	*merge_strings(char *str1, char *str2)
-{
-	char	*result;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	result = malloc(ft_strlen_secure(str1) + ft_strlen_secure(str2) + 1);
-	if (result == NULL)
-		return (NULL);
-	if (str1 != NULL)
-	{
-		while (str1[i] != '\0')
-		{
-			result[i] = str1[i];
-			i++;
-		}
-		free(str1);
-	}
-	if (str2 != NULL)
-	{
-		while (str2[j] != '\0')
-		{
-			result[i + j] = str2[j];
-			j++;
-		}
-		//free(str2);
-	}
-	result[i + j] = '\0';
-	return (result);
-}
-*/
 
 static char	*env_var_find(char *start, char *end, char **env)
 {
@@ -64,21 +29,24 @@ static char	*env_var_find(char *start, char *end, char **env)
 	return (NULL);
 }
 
-static void	replace_env_var_in_new_str(char *start, char *end, char **new_str)
+static int	replace_env_var_in_new_str(char *start, char *end, char **new_str)
 {
 	char	*append_str;
 
 	append_str = NULL;
 	append_str = malloc(ft_strlen_secure(*new_str) + (end - start) + 1);
+	if (append_str == NULL)
+		return (-1);
 	ft_bzero(append_str, ft_strlen_secure(*new_str) + (end - start) + 1);
 	ft_strlcpy_secure(append_str, *new_str, ft_strlen_secure(*new_str) + 1);
 	ft_strlcat(append_str, start, \
 			ft_strlen_secure(append_str) + (end - start) + 1);
 	free(*new_str);
 	*new_str = append_str;
+	return (1);
 }
 
-static void	expand_token(t_token *token, char **env)
+static int	expand_token(t_token *token, char **env)
 {
 	int		result;
 	t_bool	in_d_quote;
@@ -97,17 +65,23 @@ static void	expand_token(t_token *token, char **env)
 			*(start + 1) == '\'' && in_d_quote == false))
 		{
 			new_str = merge_strings(new_str, env_var_find(start + 1, end, env));
+			if (new_str == NULL)
+				return (-1);
 		}
 		else
-			replace_env_var_in_new_str(start, end, &new_str);
+		{
+			if (replace_env_var_in_new_str(start, end, &new_str) == -1)
+				return (-1);
+		}
 		if (result == 0)
 			break ;
 	}
 	free(token->text);
 	token->text = new_str;
+	return (1);
 }
 
-void	ft_expand(t_list *lst_token, char **env)
+int	ft_expand(t_list *lst_token, char **env)
 {
 	t_token	*token;
 	t_token	*token_next;
@@ -126,9 +100,11 @@ void	ft_expand(t_list *lst_token, char **env)
 		}
 		if (token->type == TOKEN_WORD)
 		{			
-			expand_token(token, env);
+			if (expand_token(token, env) == -1)
+				return (-1);
 			trim(&token->text);
 		}
 		lst_token = lst_token->next;
 	}
+	return (1);
 }

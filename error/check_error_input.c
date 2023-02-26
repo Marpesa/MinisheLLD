@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 17:24:59 by lmery             #+#    #+#             */
-/*   Updated: 2023/01/13 03:54:05 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/11 19:33:41 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ static int	closed_quotes(char *input, int *i)
 	return (res);
 }
 
-int	check_error_input(char *input)
+static int	check_closed_quotes(char *input)
 {
 	int	i;
 	int	res;
@@ -41,23 +41,37 @@ int	check_error_input(char *input)
 	i = 0;
 	while (input[i])
 	{
+		if (input[i] == '\'' || input[i] == '"')
+			res = closed_quotes(input, &i);
+		if (res == 0)
+			printf(_ORANGE2 "Quote not closed dumbass\n" _END);
+		i++;
+	}
+	return (res);
+}
+
+int	check_error_input(char *input)
+{
+	int	i;
+	int	res;
+	int	check;
+
+	res = 1;
+	check = 1;
+	i = 0;
+	while (input[i])
+	{
 		if (input[i] == '(' || input[i] == ')' || input[i] == ';' \
-		|| input[i] == '{' || input[i] == '}')
+		|| input[i] == '{' || input[i] == '}' || input[i] == '&')
 		{
-			printf(_ORANGE "Unauthorized charcacter in prompt: \
-			'%c'\n"_END, input[i]);
+			printf(_ORANGE2 "Unauthorized charcacter in prompt: '%c'\n"\
+			_END, input[i]);
 			return (0);
 		}
 		i++;
 	}
-	i = 0;
-	while (input[i])
-	{
-		if (input[i] == '\'' || input[i] == '"')
-			res = closed_quotes(input, &i);
-		if (res == 0)
-			printf(_ORANGE "Quote not closed dumbass\n" _END);
-		i++;
-	}
+	check = check_closed_quotes(input);
+	if (check != 0)
+		res = check;
 	return (res);
 }

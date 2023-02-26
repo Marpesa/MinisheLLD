@@ -1,0 +1,25 @@
+
+
+-heredoc (gestion lim si "lim" 'lim' ou lim) et verifier si on imbriquer plusieurs heredoc et gerer le sigint, echo hola <<<< bjr)
+
+-changer le custom tokenizer (+, - et $)
+
+-debug
+
+-faire le env secret
+
+-norm
+
+-les builts in (ne pas fork pour les cd)
+
+-Choisir l'affichage du message quand la commande n'existe pas. Actuellement: command (null) not found
+
+
+a verifier:
+
+steel reachable avec la commande ls
+
+
+-ajouter exit quand sigint dans le processus enfant
+
+-command exit

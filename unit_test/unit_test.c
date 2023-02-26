@@ -25,7 +25,7 @@ t_list *create_lst_token(int size, ...)
 	while (i < size)
 	{
 		char *str = va_arg(args, char *);
-		lst_test = lst_add_token(lst_test, ft_tokencpy(str, va_arg(args, t_token_type)));
+		lst_add_token(&lst_test, ft_tokencpy(str, va_arg(args, t_token_type)));
 		i++;
 	}
 	va_end(args);
@@ -91,12 +91,12 @@ void	test(t_list *lst_expected_lexer, t_list *lst_expected_expand, char *test_co
 	t_list *lst_test;
 	printf("Command tested: %s\n", test_command);	
 	printf("-------------LEXER---------------\n");
-	lst_test = lexer(test_command);
+	lexer(test_command, &lst_test);
 	if (lst_compare(lst_expected_lexer, lst_test))
 		printf(_BOLD _BLUE_LLD "OK\n" _END);
 	else
 	{
-		lst_print_token(lst_test);
+		print_lst_token(lst_test);
 		printf(_BOLD _ORANGE "KO\n" _END);
 	}
 	ft_expand(lst_test, env);
@@ -105,7 +105,7 @@ void	test(t_list *lst_expected_lexer, t_list *lst_expected_expand, char *test_co
 		printf(_BOLD _BLUE_LLD "OK\n" _END);
 	else
 	{
-		lst_print_token(lst_test);
+		print_lst_token(lst_test);
 		printf(_BOLD _ORANGE "KO\n" _END);
 	}
 	ft_lstclear(&lst_expected_lexer, free_token);
@@ -329,18 +329,18 @@ int main(int argc, char **argv, char **env)
 {
 	(void)argc;
 	(void)argv;
-	(void)env;
 
 	test_d_quote(env);
 	test_s_quote(env);
 	test_heredoc(env);
 	test_word(env);
+	test_syntaxe_error(env);
 	/*
 	lexer_test_pipe();
 	//Pense a ajouter un cas pour NULL et pour '\0'
 	printf("-----------------------------EXPAND---------------------\n");
 	expand_test_word(env);
-	expand_test_pipe(env);
+
 	printf("--------------------------------------------------------\n");
 	expand_test_env_var(env);
 	*/
@@ -372,18 +372,30 @@ int main(int argc, char **argv, char **env)
 	gle-mini@e1r2p12:~/MinisheLLD$
 	*/
 
-	t_list		*lst_command;
-	t_command	*command;
+/*
+	t_list		*lst_command_expected;
+	t_list		*lst_command_test;
+	t_bool		result;
 
-	lst_command = NULL;
-	lst_command = create_lst_command_test(2, create_map(2, "echo", "bonjour"), create_map(2, "<" "LOUISE"), create_map(2, "cat", "main.c"), create_map(2, ">", "test"));
+	lst_command_expected = NULL;
+	lst_command_test = NULL;
+	lst_command_expected = create_lst_command_test(2, create_map(2, "echo", "bonjour"), create_map(2, "<", "LOUISE"), create_map(2, "cat", "main.c"), create_map(2, ">", "test"));
+
+	lst_command_test = parser(ft_expand(lexer("echo bonjour < LOUISE | cat main.c > test"), env));
+
+	result = lst_command_compare(lst_command_expected, lst_command_test);
+
+	printf("result %d", result);
+	*/
+
+	/*
 	while (lst_command != NULL)
 	{
 		command = lst_command->content;
 		print_command(command);
 		lst_command = lst_command->next;
 	}
-
+	*/
 
 	return (0);
 }
