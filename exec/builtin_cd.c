@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:18 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/26 19:20:36 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/27 19:51:40 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ static int	adding_slash(char **str, char **str2, char ***cmd, int len)
 	free(*str);
 	*str = ft_strjoin(*str2, (*cmd)[1]);
 	free(*str2);
+	printf("cmd : %s\n", *cmd[1]);
 	if ((*cmd)[1][len - 1] != '/')
 	{
 		*str2 = ft_strjoin(*str, "/");
@@ -77,6 +78,8 @@ static void	init_values_cd(char *cmd, int *len, char **str, char **str2)
 
 void	builtin_cd(char **cmd)
 {
+	printf("TEST\n");
+
 	int		path;
 	char	*str;
 	char	*str2;
@@ -84,6 +87,7 @@ void	builtin_cd(char **cmd)
 
 	init_values_cd(cmd[1], &len, &str, &str2);
 	path = 2;
+
 	if (ft_maplen_secure(cmd) > 2 && printf(_ORANGE "MinisheLLD \
 	: cd : Too many arguments\n" _END))
 		return ;

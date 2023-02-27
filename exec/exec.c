@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/02/26 18:37:18 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/27 20:10:08 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,8 +46,14 @@ static void	get_absolute_path(char **cmd, int *error_status)
 	char	*path;
 	char	*bin;
 
+
 	path = NULL;
 	bin = NULL;
+	if (cmd[0][0] == '\0')
+	{
+		*error_status = -1;
+		return ;
+	}
 	if (cmd[0][0] != '/' && ft_strncmp(cmd[0], "./", 2) != 0)
 	{
 		path = ft_strdup(getenv("PATH"));
@@ -152,6 +158,7 @@ void	exec(t_list	*lst_command, char ***env)
 	error_status = 0;
 	prevpipe = dup(STDIN_FILENO);
 
+
 	while (lst_current != NULL)
 	{
 		command = lst_current->content;
@@ -167,6 +174,7 @@ void	exec(t_list	*lst_command, char ***env)
 		}
 		if (is_cd(command->word))
 		{
+			printf("TEST\n");
 			builtin_cd(command->word);
 			if (lst_current->next)
 				lst_current = lst_current->next;

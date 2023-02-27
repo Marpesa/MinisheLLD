@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/27 00:03:45 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/27 19:55:39 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,8 +136,10 @@ int main(int argc, char **argv, char **env)
 	// secret_env = NULL;
 	ignore_signal_for_shell();
 	secret_env = save_env(env);
+
 	while (true)
 	{
+
 		linebuffer = rl_gets();
 		if (linebuffer == NULL)
 		{
@@ -152,6 +154,9 @@ int main(int argc, char **argv, char **env)
 			if (ft_expand(lst_token, secret_env) == -1)
 				free_and_exit(lst_token, lst_command, &linebuffer, secret_env);
 			heredoc(lst_token);
+			printf("TEST YO\n");
+
+
 			if (syntaxe_error(lst_token) != 0)
 			{
 				if (parser(lst_token, &lst_command) == -1)

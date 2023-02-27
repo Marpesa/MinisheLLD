@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 17:24:59 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/26 23:21:47 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/27 19:30:47 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,30 @@ static int	point_and_slash(char *input)
 	return (1);
 }
 
+int	not_in_quote(char *input, int i)
+{
+	int	j;
+	int	res;
+
+	res = 1;
+	j = 0;
+	while (input[j] && input[j] != '\"')
+		j++;
+	if(input[j] == '\"')
+	{
+		res = 0;
+		j++;
+	}
+	if (res == 0 && j < i)
+		while (input[j])
+		{
+			if (input[j] == '\"' && j > i)
+				return (res);
+			j++;			
+		}
+	return (1);
+}
+
 int	check_error_input(char *input)
 {
 	int	i;
@@ -80,10 +104,12 @@ int	check_error_input(char *input)
 		res = point_and_slash(input);
 	if (res == 0)
 		return (res);
+	
 	while (input[i])
 	{
-		if (input[i] == '(' || input[i] == ')' || input[i] == ';' \
-		|| input[i] == '{' || input[i] == '}' || input[i] == '&')
+		if ((input[i] == '(' || input[i] == ')' || input[i] == ';' \
+		|| input[i] == '{' || input[i] == '}' || input[i] == '&') \
+		&& not_in_quote(input, i) != 0)
 		{
 			printf(_ORANGE2 "Unauthorized charcacter in prompt: '%c'\n"\
 			_END, input[i]);

@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 02:52:44 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/26 19:44:20 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/27 18:33:37 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ void	builtin_pwd(char ***env, t_list *lst_command)
 		ft_lstclear(&lst_command, del_command);
 		exit (0);
 	}
-	printf("str = %s\n", str);
 	getcwd(cwd, sizeof(cwd));
 	printf("%s\n", cwd);
 	free(str);

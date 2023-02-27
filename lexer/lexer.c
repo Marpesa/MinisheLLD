@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 04:12:43 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/02/16 21:30:58 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/27 19:04:21 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,6 +73,21 @@ static int	token_redirect_append(char *input, int *i, t_lexer *data)
 	return (1);
 }
 
+int	ft_word_in_quote(char *input, int i, int len)
+{
+	int	start;
+
+	start = i;
+	if (input[i] == '\"')
+		i++;
+	while (input[i] && input[i] != '\"')
+		i++;
+	if (i - start >= len)
+		len = i - start;
+	return (len);
+	
+}
+
 static int	token_word(char *input, int *i, t_lexer *data)
 {
 	t_token	*token;
@@ -86,10 +101,25 @@ static int	token_word(char *input, int *i, t_lexer *data)
 		data->token_count++;
 	data->in_word = true;
 	data->token_start = *i;
+
+
 	j = *i;
 	while (input[j] != '\0' && !ft_isspace(input[j]) && !is_special(input[j]))
 		j++;
 	word_len = j - *i;
+	
+	if (word_len > 3 && input[*i] == '\"' && input[*i + 1] != '\"')
+		word_len = ft_word_in_quote(input, *i, word_len);
+	//
+	j = *i;
+	while (input[j] != '\0' && input[j] == '\'' && input[j] == '\"')
+		j++;
+	if (j == word_len)
+	{
+		ft_strlcpy(token->text, NULL, 1);
+		return (-1);
+	}
+	//
 	token = malloc(sizeof(t_token) * 1);
 	if (token == NULL)
 		return (-1);
