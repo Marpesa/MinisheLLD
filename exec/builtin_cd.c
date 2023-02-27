@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:18 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/27 19:51:40 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/27 20:43:31 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,8 +78,6 @@ static void	init_values_cd(char *cmd, int *len, char **str, char **str2)
 
 void	builtin_cd(char **cmd)
 {
-	printf("TEST\n");
-
 	int		path;
 	char	*str;
 	char	*str2;
