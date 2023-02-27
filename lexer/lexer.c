@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 04:12:43 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/02/27 20:42:42 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/27 21:07:54 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ int	ft_word_in_quote(char *input, int i, int len)
 	while (input[i] && input[i] != '\"')
 		i++;
 	if (i - start >= len)
-		len = i - start;
+		len = i - start + 1;
 	return (len);
 	
 }
@@ -109,10 +109,15 @@ static int	token_word(char *input, int *i, t_lexer *data)
 		j++;
 	word_len = j - *i;
 	
-	if (word_len > 3 && input[*i] == '\"' && input[*i + 1] != '\"')
+	if (input[*i] == '\"' && input[*i + 1] != '\"')
+	{
+		// printf("OK\n");
 		word_len = ft_word_in_quote(input, *i, word_len);
+	}
+	// printf("wordlen: %d\n", word_len);
+	/*
 	j = *i;
-/*	while (input[j] != '\0' && input[j] == '\'' && input[j] == '\"')
+	while (input[j] != '\0' && input[j] == '\'' && input[j] == '\"')
 		j++;
 	if (j == word_len)
 	{

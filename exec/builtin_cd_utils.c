@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 19:04:29 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/26 22:39:31 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/27 21:08:56 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,18 @@ char	*ft_root_one(char *back)
 int	is_cd(char **cmd)
 {
 	int	len;
-
+	// print_map(cmd);
 	if (!cmd)
 		return (false);
+	
 	len = ft_strlen_secure(cmd[0]);
+	// printf("word%s len =%d\n", cmd[0], len);
+
 	if ((ft_strncmp(cmd[0], "cd", len) == 0))
+	{
+		// printf("Is cd\n");
 		return (1);
+	}
 	return (0);
 }
 
