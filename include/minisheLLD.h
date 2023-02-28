@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/27 00:00:40 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/28 19:04:58 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define MINISHELLD_H
 
 # include "libft.h"
-
 # include <stdio.h>
 # include <stdlib.h>
 # include <unistd.h>
@@ -129,6 +128,8 @@ void			del_token(void *content);
 /*-------------------- Parser ---------------------*/ 
 
 typedef struct s_command {
+	int		fd_in;
+	int		fd_out;
 	char	**word;
 	char	**redir;
 } t_command;
@@ -139,7 +140,7 @@ void	free_map(char **map);
 
 
 // Test
-void	print_command(t_command *command);
+void	print_command(t_command *command, int fd);
 void	print_lst_command_test(t_list *lst_command);
 char	**create_map(int size, ...);
 t_list	*create_lst_command_test(int size, ...);
@@ -148,8 +149,8 @@ t_bool	lst_command_compare(t_list *lst_command1, t_list *lst_command2);
 void	test_syntaxe_error(char **env);
 
 /*------------------Debug------------------------*/
-void	print_map(char **map);
-void	print_lst_command(t_list *lst_command);
+void	print_map(char **map, int fd);
+void	print_lst_command(t_list *lst_command, int fd);
 void	print_lst_token(t_list *head);
 
 /*------------------Exec-------------------------*/

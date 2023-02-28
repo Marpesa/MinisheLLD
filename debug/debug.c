@@ -1,6 +1,6 @@
 #include "minisheLLD.h"
 
-void	print_map(char **map)
+void	print_map(char **map, int fd)
 {
 	size_t		i;
 
@@ -9,30 +9,31 @@ void	print_map(char **map)
 		return ;
 	while (i < ft_maplen_secure(map))
 	{
-		printf("%s\n", map[i]);
+		ft_putstr_fd(map[i], fd);
+		ft_putstr_fd("\n", fd);
 		i++;
 	}
-	printf("\n");
+	ft_putstr_fd("\n", fd);
 }
 
-void	print_command(t_command *command)
+void	print_command(t_command *command, int fd)
 {
-	printf(_BOLD _BLUE_LLD"\n------- WORD --------\n"_END);
-	print_map(command->word);
-	printf(_BOLD _BLUE_LLD"\n------- REDIR -------\n" _END);
-	print_map(command->redir);
+	ft_putstr_fd(_BOLD _BLUE_LLD"\n------- WORD --------\n"_END, fd);
+	print_map(command->word, fd);
+	ft_putstr_fd(_BOLD _BLUE_LLD"\n------- REDIR -------\n" _END, fd);
+	print_map(command->redir, fd);
 }
 
-void	print_lst_command(t_list *lst_command)
+void	print_lst_command(t_list *lst_command, int fd)
 {
 	t_command	*command;
 
 	while (lst_command != NULL)
 	{
 		command = lst_command->content;
-		print_command(command);
+		print_command(command, fd);
 		lst_command = lst_command->next;	
-		printf("__________________\n");
+		ft_putstr_fd("__________________\n", fd);
 	}
 }
 

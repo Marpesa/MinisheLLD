@@ -73,6 +73,8 @@ int	parser(t_list	*lst_token, t_list **lst_result)
 		return (-1);
 	command->word = NULL;
 	command->redir = NULL;
+	command->fd_in = STDIN_FILENO;
+	command->fd_out = STDOUT_FILENO;
 	lst_command = NULL;
 	token_previous = NULL;
 	if (lst_add_command(&lst_command, command) == -1)
@@ -87,6 +89,8 @@ int	parser(t_list	*lst_token, t_list **lst_result)
 				return (-1);
 			command->word = NULL;
 			command->redir = NULL;
+			command->fd_in = STDIN_FILENO;
+			command->fd_out = STDOUT_FILENO;
 			lst_add_command(&lst_command, command);
 		}
 		else if (token->type == TOKEN_REDIRECT_IN || 
