@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/02/27 20:43:50 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/28 16:28:47 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ int	get_valid_bin(char *path, char **cmd, char **bin_result)
 }
 
 /*CHANGER LE GETENV POUR LE SECRET ENV*/
-static void	get_absolute_path(char **cmd, int *error_status)
+static void	get_absolute_path(char **cmd, int *error_status, char **env)
 {
 	char	*path;
 	char	*bin;
@@ -56,10 +56,16 @@ static void	get_absolute_path(char **cmd, int *error_status)
 	}
 	if (cmd[0][0] != '/' && ft_strncmp(cmd[0], "./", 2) != 0)
 	{
-		path = ft_strdup(getenv("PATH"));
-		if (path == NULL)
+		if (is_in_env("PATH", env))
+			path = ft_strdup(getenv("PATH"));
+		else if (path == NULL && env[0] == NULL)
 			path = ft_strdup("/bin:/usr/local/bin:/usr/bin:\
 					/bin:/usr/local/sbin");
+		else 
+		{
+			*error_status = 2;
+			return ;
+		}
 		if (get_valid_bin(path, cmd, &bin) == -1)
 		{
 			*error_status = -1;
@@ -72,8 +78,8 @@ static void	get_absolute_path(char **cmd, int *error_status)
 			if (cmd[0] != NULL)
 			free(path);
 			path = NULL;
-			free(cmd[0]);
-			cmd[0] = NULL;
+			// free(cmd[0]);
+			// cmd[0] = NULL;
 			*error_status = 2;
 			return ;
 		}
@@ -158,7 +164,6 @@ void	exec(t_list	*lst_command, char ***env)
 	error_status = 0;
 	prevpipe = dup(STDIN_FILENO);
 
-
 	while (lst_current != NULL)
 	{
 		command = lst_current->content;
@@ -166,10 +171,12 @@ void	exec(t_list	*lst_command, char ***env)
 		&& ft_strncmp(*command->word, "pwd", 4) && ft_strncmp(*command->word, "exit", 4) \
 		&& ft_strncmp(*command->word, "export", 7) && ft_strncmp(*command->word, "unset", 6) \
 		&& ft_strncmp(*command->word, "env", 4))
-			get_absolute_path(command->word, &error_status);
+			get_absolute_path(command->word, &error_status, *env);
 		if (error_status == 2)
 		{
-			printf("command %s not found\n", *command->word);
+			ft_putstr_fd(_ORANGE2 "MinisheLLD : ", 2);
+			ft_putstr_fd((command->word)[0], 2);
+			ft_putstr_fd(" : no such file or directory\n" _END, 2);
 			return ;
 		}
 		if (is_cd(command->word))
