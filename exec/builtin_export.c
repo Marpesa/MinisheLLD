@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 17:52:19 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/27 22:45:24 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/28 18:43:36 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,8 @@ void	builtin_export(char **cmd, char ***env)
 	{
 		if (!valid_export(cmd[j]) || (cmd[j] && cmd[j][0] == '\0'))
 		{
-			printf(_ORANGE2 "MinisheLLD : export : unvalid entry\n"_END);
+			ft_print_error(_ORANGE2 \
+			"export : unvalid entry\n"_END, NULL, NULL);
 			j++;
 			continue ;
 		}

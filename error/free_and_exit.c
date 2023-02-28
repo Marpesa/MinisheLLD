@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 03:29:09 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/18 18:33:13 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/28 19:38:37 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,6 @@ void	free_and_exit(t_list *lst_token, t_list *lst_command, char **linebuffer, ch
 		free(*linebuffer);
 	*linebuffer = NULL;
 	rl_clear_history();
-	exit(0);
+	printf ("error = %d\n", g_status);
+	exit(g_status);
 }

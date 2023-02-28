@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 20:47:07 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/26 20:47:42 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/28 19:08:53 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	check_occur(char **cmd, char **str_env, int *occur)
 	}
 	if ((*occur) == 0)
 	{
-		printf(_ORANGE2 "No occurence for unset\n" _END);
+		ft_print_error(_ORANGE2 "No occurence for unset\n" _END, NULL, NULL);
 		return (0);
 	}
 	return (*occur);

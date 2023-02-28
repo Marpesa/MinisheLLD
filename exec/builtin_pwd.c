@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 02:52:44 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/27 18:33:37 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/28 19:08:17 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,15 @@ void	builtin_pwd(char ***env, t_list *lst_command)
 	char	*str;
 
 	str = NULL;
-	str = ft_strdup(getenv("PWD"));
-	if (chdir(str) == -1 && printf("ERROR\n"))
+	if ((*env)[0] == NULL)
 	{
+		ft_print_error(_ORANGE2 "Pwd : Error\n" _END, NULL, NULL);
 		free(str);
 		ft_free_map(*env);
 		ft_lstclear(&lst_command, del_command);
 		exit (0);
 	}
+	str = ft_strdup(getenv("PWD"));
 	getcwd(cwd, sizeof(cwd));
 	printf("%s\n", cwd);
 	free(str);

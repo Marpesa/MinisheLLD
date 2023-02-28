@@ -1,14 +1,8 @@
 
 
--heredoc (gestion lim si "lim" 'lim' ou lim) et verifier si on imbriquer plusieurs heredoc et gerer le sigint, echo hola <<<< bjr)
-
--changer le custom tokenizer (+, - et $)
-
 -debug
 
 -norm
-
--gerer le . et le / seuls, et "" et '' seuls (commandes vides) >> ajouter dans les syntax error
 
 -gerer les valeurs de retours et les sorties de malloc partout
 
@@ -16,9 +10,18 @@
 
 -isatty pour subminishell (exit | ./minishell)
 
-a verifier:
+retirer pwd du fork
 
-steel reachable avec la commande ls
 
 
 valgrind --suppressions=supp_file --leak-check=full --show-leak-kinds=all ./minishell
+
+
+KC:
+commande sans option
+$? (apres)
+cat Ctrl+C
+                              ';' entre guillemets
+                               echo "cat lol.c | cat > lol.c"
+echo $USER
+cd kc > expand/heredoc

@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/22 00:04:24 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/02/27 20:43:17 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/02/28 20:01:30 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ t_bool	redirect_utils(t_list *lst_current)
 	return_token_type(lst_current) == TOKEN_HEREDOC) && \
 	!lst_current->next)
 	{
-		printf(_ORANGE2 "MinisheLLD:\tsyntax error near `newline'\n" _END);
+		ft_print_error(_ORANGE2 "syntax error near `newline'\n" _END,\
+		NULL, NULL);
 		return (true);
 	}
 	if (return_token_type(lst_current) == TOKEN_REDIRECT_APPEND || \
@@ -33,9 +34,8 @@ t_bool	redirect_utils(t_list *lst_current)
 		return_token_type(lst_current->next) != TOKEN_WORD) && \
 		return_token_type(lst_current->next) != TOKEN_LIM)
 		{
-			printf(_ORANGE2 \
-			"MinisheLLD:\tsyntax error near unexpected token `%s'\n" _END, \
-			return_token_text(lst_current));
+			ft_print_error(_ORANGE2 "syntax error near unexpected token \'",\
+			return_token_text(lst_current), "\'\n"_END);
 			return (true);
 		}
 	}
@@ -56,9 +56,8 @@ t_bool	redirect(t_list *lst_token)
 		&& lst_current->next && \
 		return_token_type(lst_current->next) != TOKEN_WORD)
 		{
-			printf(_ORANGE2 \
-			"MinisheLLD:\tsyntax error near unexpected token `%s'\n" _END, \
-			return_token_text(lst_current));
+			ft_print_error(_ORANGE2 "syntax error near unexpected token \'",\
+			return_token_text(lst_current), "\'\n"_END);
 			return (true);
 		}
 		lst_current = lst_current->next;
@@ -73,7 +72,8 @@ t_bool	new_line(t_list *lst_token)
 	|| return_token_type(ft_lstlast(lst_token)) == TOKEN_REDIRECT_APPEND \
 	|| return_token_type(ft_lstlast(lst_token)) == TOKEN_HEREDOC)
 	{
-		printf(_ORANGE2 "MinisheLLD:\tsyntax error near `newline'\n" _END);
+		ft_print_error(_ORANGE2 "syntax error near `newline'\n" _END,\
+		NULL, NULL);
 		return (true);
 	}
 	return (false);

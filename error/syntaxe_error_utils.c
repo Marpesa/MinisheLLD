@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:21:26 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/11 19:34:50 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/28 20:00:33 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ t_bool	start_or_finish_pipe(t_list *lst_token)
 	if (return_token_type(lst_token) == TOKEN_PIPE \
 	|| return_token_type(ft_lstlast(lst_token)) == TOKEN_PIPE)
 	{
-		printf(_ORANGE2 "MinisheLLD:\tsyntax error near unexpected token `|'\n");
+		ft_print_error(_ORANGE2 "syntax error near unexpected token `|'",\
+		NULL, "\n");
 		return (true);
 	}
 	while (lst_current)
@@ -45,11 +46,24 @@ t_bool	start_or_finish_pipe(t_list *lst_token)
 		&& lst_current->next && \
 		return_token_type(lst_current->next) == TOKEN_PIPE)
 		{
-			printf(_ORANGE2 \
-			"MinisheLLD:\tsyntax error near unexpected token `|'\n");
+			ft_print_error(_ORANGE2 "syntax error near unexpected token `|'",\
+			NULL, "\n");
 			return (true);
 		}
 		lst_current = lst_current->next;
 	}
 	return (false);
+}
+int	ft_print_error(char *msg, char *data, char *end)
+{
+	if (msg )
+	{
+		ft_putstr_fd(_ORANGE2 "   MinisheLLD : " _END, 2);
+		ft_putstr_fd(msg, 2);
+	}
+	if (data)
+		ft_putstr_fd(data, 2);
+	if (end)
+		ft_putstr_fd(end, 2);
+	return (0);
 }

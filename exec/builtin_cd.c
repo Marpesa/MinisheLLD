@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:18 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/27 21:31:11 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/28 20:01:43 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,8 +85,8 @@ void	builtin_cd(char **cmd)
 	init_values_cd(cmd[1], &len, &str, &str2);
 	path = 2;
 
-	if (ft_maplen_secure(cmd) > 2 && printf(_ORANGE2 \
-	"MinisheLLD	: cd : Too many arguments\n" _END))
+	if (ft_maplen_secure(cmd) > 2 && ft_print_error(_ORANGE2 \
+	"cd : Too many arguments\n" _END, NULL, NULL))
 		return ;
 	else if (ft_maplen_secure(cmd) == 1 || cmd[1][0] == '~')
 		path = chdir(getenv("HOME"));
@@ -99,8 +99,8 @@ void	builtin_cd(char **cmd)
 	else
 		path = chdir(cmd[1]);
 	if (path == -1)
-		printf(_ORANGE2 "MinisheLLD : cd : %s : \
-		No such file or directory\n"_END, cmd[1]);
+		ft_print_error(_ORANGE2 "cd : \'", cmd[1], \
+		"\' No such file or directory\n"_END);
 	else
 		end_builtin();
 }

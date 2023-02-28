@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/28 16:30:30 by lmery            ###   ########.fr       */
+/*   Updated: 2023/02/28 21:28:10 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,6 +127,7 @@ int main(int argc, char **argv, char **env)
 	char	*linebuffer;
 	char 	**secret_env;
 
+	rl_outstream = stderr;
 	// ignore Ctrl-\ Ctrl-C Ctrl-Z signals
 	linebuffer = NULL;
 	lst_token = NULL;
@@ -137,14 +138,14 @@ int main(int argc, char **argv, char **env)
 	rl_outstream = stderr;
 	while (true)
 	{
-
 		linebuffer = rl_gets();
 		if (linebuffer == NULL)
 		{
-			printf(_ORANGE "GOODBYE !\n" _END);
+			ft_putstr_fd(_ORANGE "GOODBYE !\n" _END, 2);
 			free_and_exit(lst_token, lst_command, &linebuffer, secret_env);
 		}
-		if (check_error_input(linebuffer))
+		g_status = check_error_input(linebuffer);
+		if (g_status == 0)
 		{
 			if (lexer(linebuffer, &lst_token) == -1)
 				free_and_exit(lst_token, lst_command, &linebuffer, secret_env);
