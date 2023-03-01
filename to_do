@@ -12,6 +12,7 @@
 
 retirer pwd du fork
 
+-ambigous redirect
 
 
 valgrind --suppressions=supp_file --leak-check=full --show-leak-kinds=all ./minishell
