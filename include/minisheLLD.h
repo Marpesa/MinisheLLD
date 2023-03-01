@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/28 21:22:08 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/01 17:19:14 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ typedef struct s_exec {
 #define _WHITE		"\e[37m"
 #define _END		"\e[0m"
 #define _BOLD		"\e[1m"
+# define HEREDOC_FILE	"/tmp/.miniheLLD_heredoc"
 
 
 /*---------------- Main fonctions -----------------*/
