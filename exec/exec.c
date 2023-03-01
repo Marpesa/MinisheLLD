@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/02/28 21:21:23 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/01 13:35:51 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,10 @@ void	redirection(t_command *command)
 		if (ft_strncmp(redirection[i], "<\0", 2) == 0)
 		{
 			//ft_putstr_fd("< OK\n", 2);
-			new_in = open(redirection[i + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			new_in = open(redirection[i + 1], O_RDONLY, 0644);
 			command->fd_in = new_in;
 			//dup2(new_in, fd_in);
-			i += 3;
+			i += 2;
 		}
 		else if (ft_strncmp(redirection[i], ">\0", 2) == 0)
 		{
