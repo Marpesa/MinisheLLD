@@ -95,7 +95,8 @@ int	parser(t_list	*lst_token, t_list **lst_result)
 		}
 		else if (token->type == TOKEN_REDIRECT_IN || 
 				 token->type == TOKEN_REDIRECT_OUT || 
-				 token->type == TOKEN_REDIRECT_APPEND) 
+				 token->type == TOKEN_REDIRECT_APPEND ||
+				 token->type == TOKEN_HEREDOC) 
 		{
 			//printf("%s\n", token->text);
 			if (add_str_to_map(token->text, command->redir, &command->redir) == -1)

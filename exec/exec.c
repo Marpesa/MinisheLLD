@@ -6,7 +6,11 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/03/04 23:13:43 by lmery            ###   ########.fr       */
+=======
+/*   Updated: 2023/03/04 22:23:59 by gle-mini         ###   ########.fr       */
+>>>>>>> 183bdd9b0543e758790edc5f5242ba07885f1ade
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +107,6 @@ void	redirection(t_command *command)
 	//print_map(redirection, 2);
 	while (redirection != NULL && redirection[i] != NULL)
 	{
-		//ft_putstr_fd("test\n", 2);
 		if (ft_strncmp(redirection[i], "<\0", 2) == 0)
 		{
 			//ft_putstr_fd("< OK\n", 2);
@@ -130,18 +133,20 @@ void	redirection(t_command *command)
 		}
 		else if (ft_strncmp(redirection[i], "<<\0", 3) == 0)
 		{
+			ft_putstr_fd("<<\n", 2);
 			new_in = open(HEREDOC_FILE, O_RDONLY, 0644);
 			ft_putnbr_fd(new_in, 2);
 			ft_putstr_fd("\n", 2);
 			if (new_in == -1)
 				perror("open heredoc");
 			command->fd_in = new_in;
-			i += 2;
+			i += 1;
 		}
 	}
 }
 
-int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command)
+
+int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command, t_list *lst_command_head)
 {
 	int		pipefd[2];
 	int	cpid;
@@ -166,23 +171,27 @@ int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command)
 		dup2(command->fd_in, STDIN_FILENO);
 		close(*prevpipe);
 		if (is_builtin(*cmd) == true)
-			execute_builtin(cmd, env, command->fd_out, lst_command);
+			execute_builtin(cmd, env, command->fd_out, lst_command_head);
 		else
+		{
 			execve(cmd[0], cmd, *env);
+		}
 		exit(0);
 	}
 	else
 	{
+		ignore_sigint();
 		close(pipefd[1]);
 		close(*prevpipe);
 		*prevpipe = pipefd[0];
 	}
+	ignore_signal_for_shell();
 	if (is_builtin(*cmd) == true)
 		res = 4;
 	return (res);
 }
 
-int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command)
+int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command, t_list *lst_command_head)
 {
 	pid_t	cpid;
 	int		error;
@@ -203,12 +212,13 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command)
 		close (prevpipe);
 		//ft_putnbr_fd(command->fd_out, 2);
 		if (is_builtin(*cmd) == true)		
-			execute_builtin(cmd, env, command->fd_out, lst_command);
+			execute_builtin(cmd, env, command->fd_out, lst_command_head);
 		else
 			execve (cmd[0], cmd, *env);
 	}
 	else
 	{
+		ignore_sigint();
 		if (prevpipe != STDOUT_FILENO)
 			close (prevpipe);
 		while (waitpid(-1, &status, 0) != -1)
@@ -218,6 +228,7 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command)
 			g_status = WEXITSTATUS(status);
 		}
 	}
+	ignore_signal_for_shell();
 	if (is_builtin(*cmd) == true)
 		error = 3;
 	return (error);
@@ -257,18 +268,16 @@ int	exec(t_list	*lst_command, char ***env)
 		}
 		if (lst_current->next == NULL)
 		{
-			if ((ft_last(command->word, env, prevpipe, lst_current)) == 3)
+			if ((ft_last(command->word, env, prevpipe, lst_current, lst_command)) == 3)
 			{
-				// printf("test0\n");
 				// ft_lstclear(&lst_command, del_command);
 				// ft_free_map(*env);
 				// exit (0);
 			}
 		}
 		else
-			if ((ft_pipe(command->word, env, &prevpipe, lst_current)) == 4)
+			if ((ft_pipe(command->word, env, &prevpipe, lst_current, lst_command)) == 4)
 			{
-				// printf("test1\n");
 				// ft_lstclear(&lst_command, del_command);
 				// ft_free_map(*env);
 				// if (is_exit(command->word))

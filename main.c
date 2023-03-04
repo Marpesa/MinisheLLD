@@ -6,7 +6,11 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/03/05 00:06:11 by lmery            ###   ########.fr       */
+=======
+/*   Updated: 2023/03/04 22:03:03 by gle-mini         ###   ########.fr       */
+>>>>>>> 183bdd9b0543e758790edc5f5242ba07885f1ade
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +57,17 @@ void ignore_signal_for_shell()
 	
 	// new action "Ctrl+C"
 	sigaction(SIGINT, &new_sigint, NULL);
+}
+
+void ignore_sigint()
+{
+	struct sigaction lazy_action;
+	ft_memset(&lazy_action, 0, sizeof(lazy_action));
+	lazy_action.sa_handler = SIG_IGN;
+	
+	// new action "Ctrl+C"
+	sigaction(SIGINT, &lazy_action, NULL);
+
 }
 
 /* A static variable for holding the line. */
