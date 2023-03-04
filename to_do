@@ -26,3 +26,6 @@ cat Ctrl+C
                                echo "cat lol.c | cat > lol.c"
 echo $USER
 cd kc > expand/heredoc
+
+
+still reachable dans l'enfant : cat test2 | echo hello >> test2

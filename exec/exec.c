@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/04 21:21:11 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/04 21:44:40 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,7 +141,7 @@ void	redirection(t_command *command)
 	}
 }
 
-int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command)
+int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command, t_list *lst_command_head)
 {
 	int		pipefd[2];
 	int	cpid;
@@ -166,7 +166,7 @@ int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command)
 		dup2(command->fd_in, STDIN_FILENO);
 		close(*prevpipe);
 		if (is_builtin(*cmd) == true)
-			execute_builtin(cmd, env, command->fd_out, lst_command);
+			execute_builtin(cmd, env, command->fd_out, lst_command_head);
 		else
 			execve(cmd[0], cmd, *env);
 		exit(0);
@@ -182,7 +182,7 @@ int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command)
 	return (res);
 }
 
-int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command)
+int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command, t_list *lst_command_head)
 {
 	pid_t	cpid;
 	int		error;
@@ -202,12 +202,9 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command)
 		close (prevpipe);
 		//ft_putnbr_fd(command->fd_out, 2);
 		if (is_builtin(*cmd) == true)		
-			execute_builtin(cmd, env, command->fd_out, lst_command);
+			execute_builtin(cmd, env, command->fd_out, lst_command_head);
 		else
-		{
 			execve (cmd[0], cmd, *env);
-	ft_putstr_fd("test\n", 2);
-		}
 	}
 	else
 	{
@@ -274,7 +271,7 @@ void	exec(t_list	*lst_command, char ***env)
 		}
 		if (lst_current->next == NULL)
 		{
-			if ((ft_last(command->word, env, prevpipe, lst_current)) == 3)
+			if ((ft_last(command->word, env, prevpipe, lst_current, lst_command)) == 3)
 			{
 				// ft_lstclear(&lst_command, del_command);
 				// ft_free_map(*env);
@@ -282,7 +279,7 @@ void	exec(t_list	*lst_command, char ***env)
 			}
 		}
 		else
-			if ((ft_pipe(command->word, env, &prevpipe, lst_current)) == 4)
+			if ((ft_pipe(command->word, env, &prevpipe, lst_current, lst_command)) == 4)
 			{
 				// ft_lstclear(&lst_command, del_command);
 				// ft_free_map(*env);
