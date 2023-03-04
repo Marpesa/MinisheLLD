@@ -6,11 +6,12 @@
 
 -gerer les valeurs de retours et les sorties de malloc partout
 
--Choisir l'affichage du message quand la commande n'existe pas. Actuellement: command (null) not found
+-Makefile ne remake pas avec changements dans le .h
+
+-syntaxe error entre quotes
 
 -isatty pour subminishell (exit | ./minishell)
 
-retirer pwd du fork
 
 
 
@@ -21,7 +22,13 @@ KC:
 commande sans option
 $? (apres)
 cat Ctrl+C
-                              ';' entre guillemets
-                               echo "cat lol.c | cat > lol.c"
-echo $USER
-cd kc > expand/heredoc
+
+
+0 : succès
+1 : erreur générique
+2 : erreur de syntaxe dans la ligne de commande
+126 : la commande appelée ne peut être exécutée
+127 : la commande appelée n'a pas été trouvée
+128 : erreur de script (par exemple, une erreur de variable d'environnement)
+130 : le script a été interrompu par l'utilisateur (par exemple, via Ctrl+C)
+255 : statut de sortie maximal (la valeur maximale autorisée est 255)

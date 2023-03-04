@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/02/28 21:21:23 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/04 18:31:28 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,7 +208,7 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command)
 	return (error);
 }
 
-void	exec(t_list	*lst_command, char ***env)
+int	exec(t_list	*lst_command, char ***env)
 {
 	t_list		*lst_current;
 	t_command	*command;
@@ -223,37 +223,18 @@ void	exec(t_list	*lst_command, char ***env)
 	while (lst_current != NULL)
 	{
 		command = lst_current->content;
-		if (ft_strncmp(*command->word, "echo", 5) && ft_strncmp(*command->word, "cd", 3) \
-		&& ft_strncmp(*command->word, "pwd", 4) && ft_strncmp(*command->word, "exit", 4) \
-		&& ft_strncmp(*command->word, "export", 7) && ft_strncmp(*command->word, "unset", 6) \
-		&& ft_strncmp(*command->word, "env", 4))
+		if (!is_builtin(*command->word))
 			get_absolute_path(command->word, &error_status, *env);
 		if (error_status == 2)
 		{
 			ft_putstr_fd(_ORANGE2 "MinisheLLD : ", 2);
 			ft_putstr_fd((command->word)[0], 2);
 			ft_putstr_fd(" : no such file or directory\n" _END, 2);
-			return ;
+			return (127);
 		}
-		if (is_cd(command->word))
+		g_status = builtin_outpipe(command, env, lst_command);
+		if (g_status >= 0)
 		{
-			builtin_cd(command->word);
-			if (lst_current->next)
-				lst_current = lst_current->next;
-			else
-				break;
-		}
-		if (is_export(command->word))
-		{
-			builtin_export(command->word, env);
-			if (lst_current->next)
-				lst_current = lst_current->next;
-			else
-				break;
-		}
-		if (is_unset(command->word))
-		{
-			builtin_unset(command->word, env);
 			if (lst_current->next)
 				lst_current = lst_current->next;
 			else
@@ -287,4 +268,7 @@ void	exec(t_list	*lst_command, char ***env)
 		}
 		lst_current = lst_current->next;
 	}	
+	if (g_status == -1)
+		g_status = 0;
+	return (g_status);
 }

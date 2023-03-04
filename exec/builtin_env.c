@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 17:35:44 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/28 20:01:54 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/04 18:20:28 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ void	builtin_env(char **cmd, int fd, char ***env, t_list *lst_command)
 	(void)fd;
 	str_env = (*env);
 	i = 0;
+	g_status = 126;
 	if (!*env)
 		error_env(env, str_env, lst_command, \
 		"Environnement corrupted");
@@ -41,9 +42,10 @@ void	builtin_env(char **cmd, int fd, char ***env, t_list *lst_command)
 		{
 			printf("%s\n", str_env[i]);
 			i++;
+			g_status = 0;
 		}
 	}
 	ft_free_map(str_env);
 	ft_lstclear(&lst_command, del_command);
-	exit (0);
+	exit (g_status);
 }
