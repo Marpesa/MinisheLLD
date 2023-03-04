@@ -13,6 +13,7 @@
 -isatty pour subminishell (exit | ./minishell)
 
 
+-ambigous redirect
 
 
 valgrind --suppressions=supp_file --leak-check=full --show-leak-kinds=all ./minishell
@@ -32,3 +33,4 @@ cat Ctrl+C
 128 : erreur de script (par exemple, une erreur de variable d'environnement)
 130 : le script a été interrompu par l'utilisateur (par exemple, via Ctrl+C)
 255 : statut de sortie maximal (la valeur maximale autorisée est 255)
+            

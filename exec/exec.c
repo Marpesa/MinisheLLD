@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/04 18:31:28 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/04 20:54:31 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,10 +107,10 @@ void	redirection(t_command *command)
 		if (ft_strncmp(redirection[i], "<\0", 2) == 0)
 		{
 			//ft_putstr_fd("< OK\n", 2);
-			new_in = open(redirection[i + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			new_in = open(redirection[i + 1], O_RDONLY, 0644);
 			command->fd_in = new_in;
 			//dup2(new_in, fd_in);
-			i += 3;
+			i += 2;
 		}
 		else if (ft_strncmp(redirection[i], ">\0", 2) == 0)
 		{
@@ -119,7 +119,7 @@ void	redirection(t_command *command)
 			command->fd_out = new_out;
 			//dup2(new_out, fd_out);
 			i += 2;
-         }
+        }
 		else if (ft_strncmp(redirection[i], ">>\0", 3) == 0)
 		{
 			//ft_putstr_fd(">> OK\n", 2);
@@ -127,7 +127,17 @@ void	redirection(t_command *command)
 			command->fd_out = new_out;
 			//dup2(new_out, fd_out);
 			i += 2;
-         }
+		}
+		else if (ft_strncmp(redirection[i], "<<\0", 3) == 0)
+		{
+			new_in = open(HEREDOC_FILE, O_RDONLY, 0644);
+			ft_putnbr_fd(new_in, 2);
+			ft_putstr_fd("\n", 2);
+			if (new_in == -1)
+				perror("open heredoc");
+			command->fd_in = new_in;
+			i += 2;
+		}
 	}
 }
 
@@ -191,6 +201,7 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command)
 		dup2(command->fd_in, STDIN_FILENO);
 		close (prevpipe);
 		//ft_putnbr_fd(command->fd_out, 2);
+		ft_putstr_fd("TEST\n", 2);
 		if (is_builtin(*cmd) == true)		
 			execute_builtin(cmd, env, command->fd_out, lst_command);
 		else
