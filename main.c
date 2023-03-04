@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/04 19:20:24 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/05 00:06:11 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,15 +15,22 @@
 int	g_status = 0;
 
 
+// void set_status_to_130()
+// {
+// 	g_status = 130;
+// }
+
 void	ft_new_line()
 {
 	// (void)(sig);
 	// (void)(info);
 	// (void)(context);
+	// printf("gstat = %d\n", g_status);
 	write(STDERR_FILENO, "\n", 1);
     rl_replace_line("", 0);
     rl_on_new_line();
     rl_redisplay();
+	// set_status_to_130();
 }
 
 
@@ -76,45 +83,61 @@ char	*rl_gets ()
 	return (line_read);
 }
 
-
-char **save_env(char **env)
+char	*gstat_in_env(char *env)
 {
-    char **envp;
-    int i;
-	int	envc;
+	char	*str;
+	char	*gstat;
+	
+	gstat = ft_itoa(g_status);
+	str = ft_strjoin("?=", gstat);
+	env = ft_strdup(str);
+	free(str);
+	free(gstat);
+	return (env);
+}
+
+char	**save_env(char **env)
+{
+	char	**envp;
+	int		i;
+	int		envc;
 
 	i = 0;
 	envc = 0;
 	envp = NULL;
-    // Count the number of environment variables
-    while (env[i]) {
-        envc++;
+	while (env[i]) 
+	{
+		envc++;
 		i++;
-    }
+	}
 
-    // Allocate space for the array of pointers to environment variables
-    envp = (char **)malloc((envc + 1) * sizeof(char *));
-    if (!envp) {
-        return NULL;
-    }
-
-    // Copy the environment variables to the array
-    for (i = 0; env[i]; i++) {
-        size_t len = ft_strlen(env[i]) + 1;
-        envp[i] = (char *)malloc(len);
-        if (!envp[i]) {
-            // Free memory and return NULL on error
-            while (--i >= 0) {
-                free(envp[i]);
-            }
-            free(envp);
-            return (NULL);
-        }
-        ft_strncpy(envp[i], env[i], len);
-        envp[i][len-1] = '\0';  // Ensure null-termination
-    }
-    envp[envc] = NULL;
-    return envp;
+	envp = (char **)malloc((envc + 2) * sizeof(char *));
+	if (!envp)
+		return NULL;
+	envp[0] = gstat_in_env(envp[0]);
+	if (env[0] == NULL)
+	{
+		envp[1] = NULL;
+		return (envp);
+	}
+	i = 1;
+	while(env[i]) 
+	{
+		size_t len = ft_strlen(env[i]) + 1;
+		envp[i] = (char *)malloc(len);
+		if (!envp[i]) 
+		{
+			while (--i >= 0) 
+				free(envp[i]);
+			free(envp);
+			return (NULL);
+		}
+		ft_strncpy(envp[i], env[i], len);
+		envp[i][len-1] = '\0';
+		i++;
+	}
+	envp[envc] = NULL;
+	return envp;
 }
 
 int main(int argc, char **argv, char **env)
@@ -135,9 +158,12 @@ int main(int argc, char **argv, char **env)
 	// secret_env = NULL;
 	ignore_signal_for_shell();
 	secret_env = save_env(env);
+	// printf("gstat = %d\n", g_status);
 	rl_outstream = stderr;
 	while (true)
 	{
+		free(secret_env[0]);
+		secret_env[0] = gstat_in_env(secret_env[0]);
 		linebuffer = rl_gets();
 		if (linebuffer == NULL)
 		{
@@ -167,6 +193,7 @@ int main(int argc, char **argv, char **env)
 					free(linebuffer);
 				linebuffer = NULL;
 				g_status = exec(lst_command, &secret_env);
+				// printf("err = %d\n", g_status);
 			}
 		}
 		free_all(&lst_token, &lst_command, &linebuffer);

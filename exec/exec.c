@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/04 20:54:31 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/04 23:13:43 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -187,6 +187,7 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command)
 	pid_t	cpid;
 	int		error;
 	t_command	*command;
+	int		status;
 	error = 1;
 	//print_command(lst_command->content, 2);
 	command = lst_command->content;
@@ -201,7 +202,6 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command)
 		dup2(command->fd_in, STDIN_FILENO);
 		close (prevpipe);
 		//ft_putnbr_fd(command->fd_out, 2);
-		ft_putstr_fd("TEST\n", 2);
 		if (is_builtin(*cmd) == true)		
 			execute_builtin(cmd, env, command->fd_out, lst_command);
 		else
@@ -211,8 +211,12 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command)
 	{
 		if (prevpipe != STDOUT_FILENO)
 			close (prevpipe);
-		while (wait (NULL) != -1)
+		while (waitpid(-1, &status, 0) != -1)
 			;
+		if (WIFEXITED(status))
+		{
+			g_status = WEXITSTATUS(status);
+		}
 	}
 	if (is_builtin(*cmd) == true)
 		error = 3;
@@ -267,10 +271,10 @@ int	exec(t_list	*lst_command, char ***env)
 				// printf("test1\n");
 				// ft_lstclear(&lst_command, del_command);
 				// ft_free_map(*env);
-				if (is_exit(command->word))
-					break;
+				// if (is_exit(command->word))
+				// 	break;
 			}
-		if (is_exit(command->word))
+		if (is_exit(command->word) && !lst_current->next)
 		{
 			if(lst_command != NULL)
 				ft_lstclear(&lst_command, del_command);

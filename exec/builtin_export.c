@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 17:52:19 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/04 18:55:15 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/04 21:46:48 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ void	builtin_export(char **cmd, char ***env)
 		{
 			ft_print_error(_ORANGE2 \
 			"export : unvalid entry\n"_END, NULL, NULL);
+			g_status = 1;
 			j++;
 			continue ;
 		}

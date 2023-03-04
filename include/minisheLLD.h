@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/04 20:54:44 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/05 00:06:32 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,6 +87,7 @@ typedef struct s_exec {
 
 void	ft_new_line();
 void 	ignore_signal_for_shell();
+char	*gstat_in_env();
 
 
 /*--------------------- Lexer ---------------------*/ 
@@ -167,7 +168,7 @@ void	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command);
 int		builtin_echo(char **command, int fd, char ***env, t_list *lst_command);
 char	*get_env(char *var, char ***envp);
 int		is_cd(char **cmd);
-void	builtin_cd(char **cmd);
+int		builtin_cd(char **cmd);
 char	*ft_strldup_secure(char *dst, const char *src, size_t dstsize);
 void	double_point(char **str, char **str2, int *path);
 char	*ft_root_one(char *back);
@@ -175,7 +176,7 @@ void	builtin_pwd(char **cmd, char ***env, t_list *lst_command);
 int		is_pwd(char **cmd);
 int		is_exit(char **cmd);
 void	builtin_exit(char ***env, t_list *lst_command);
-void	builtin_env(char **cmd, int fd, char ***env, t_list *lst_command);
+int		builtin_env(char **cmd, int fd, char ***env, t_list *lst_command);
 int		is_export(char **cmd);
 void	builtin_export(char **cmd, char ***env);
 char	*until_equal(char *cmd);

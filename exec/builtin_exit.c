@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 04:20:53 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/28 18:50:06 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/04 23:06:49 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,9 @@ int	is_exit(char **cmd)
 
 void	builtin_exit(char ***env, t_list *lst_command)
 {
-	ft_putstr_fd(_ORANGE2 "exit\n" _END, 2);
+	ft_putstr_fd(_ORANGE2 "exit\n" _END, 1);
 	ft_free_map(*env);
 	ft_lstclear(&lst_command, del_command);
+	g_status = 0;
 	exit(0);
 }
