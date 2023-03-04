@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/04 20:54:44 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/04 22:11:24 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ typedef struct s_exec {
 
 void	ft_new_line();
 void 	ignore_signal_for_shell();
-
+void	ignore_sigint();
 
 /*--------------------- Lexer ---------------------*/ 
 

@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/04 20:54:31 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/04 22:23:59 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,6 +141,7 @@ void	redirection(t_command *command)
 	}
 }
 
+
 int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command, t_list *lst_command_head)
 {
 	int		pipefd[2];
@@ -168,15 +169,19 @@ int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command, t_list 
 		if (is_builtin(*cmd) == true)
 			execute_builtin(cmd, env, command->fd_out, lst_command_head);
 		else
+		{
 			execve(cmd[0], cmd, *env);
+		}
 		exit(0);
 	}
 	else
 	{
+		ignore_sigint();
 		close(pipefd[1]);
 		close(*prevpipe);
 		*prevpipe = pipefd[0];
 	}
+	ignore_signal_for_shell();
 	if (is_builtin(*cmd) == true)
 		res = 4;
 	return (res);
@@ -208,11 +213,13 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command, t_list *
 	}
 	else
 	{
+		ignore_sigint();
 		if (prevpipe != STDOUT_FILENO)
 			close (prevpipe);
 		while (wait (NULL) != -1)
 			;
 	}
+	ignore_signal_for_shell();
 	if (is_builtin(*cmd) == true)
 		error = 3;
 	return (error);
