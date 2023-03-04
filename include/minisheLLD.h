@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/01 17:19:14 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/04 20:54:44 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -156,10 +156,13 @@ void	print_lst_command(t_list *lst_command, int fd);
 void	print_lst_token(t_list *head);
 
 /*------------------Exec-------------------------*/
-void	exec(t_list *lst_command, char ***env);
+int		exec(t_list *lst_command, char ***env);
+int		is_g_stat(char *cmd);
+void	get_g_status(void);
 
 /*------------------Builtin-------------------------*/
 t_bool	is_builtin(char *value);
+int		builtin_outpipe(t_command *command, char ***env, t_list *lst_command);
 void	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command);
 int		builtin_echo(char **command, int fd, char ***env, t_list *lst_command);
 char	*get_env(char *var, char ***envp);
@@ -168,7 +171,8 @@ void	builtin_cd(char **cmd);
 char	*ft_strldup_secure(char *dst, const char *src, size_t dstsize);
 void	double_point(char **str, char **str2, int *path);
 char	*ft_root_one(char *back);
-void	builtin_pwd(char ***env, t_list *lst_command);
+void	builtin_pwd(char **cmd, char ***env, t_list *lst_command);
+int		is_pwd(char **cmd);
 int		is_exit(char **cmd);
 void	builtin_exit(char ***env, t_list *lst_command);
 void	builtin_env(char **cmd, int fd, char ***env, t_list *lst_command);
@@ -182,6 +186,9 @@ int		is_in_env(char *cmd, char **env);
 int		ft_is_there(char *str, char **cmd, int index);
 int		check_occur(char **cmd, char **str_env, int *occur);
 int		until_equal_sign(char *str, char *env);
+
+int		allready_in_env(char ***cmd, char ***env, int *j, int i);
+int		end_export(char ***new_env, char ***str_env, char ***env, char *cmd);
 
 
 

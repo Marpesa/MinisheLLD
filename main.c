@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/28 21:28:10 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/04 19:20:24 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,8 @@ int main(int argc, char **argv, char **env)
 			ft_putstr_fd(_ORANGE "GOODBYE !\n" _END, 2);
 			free_and_exit(lst_token, lst_command, &linebuffer, secret_env);
 		}
+		// if (is_g_stat(linebuffer))
+		// 	get_g_status();
 		g_status = check_error_input(linebuffer);
 		if (g_status == 0)
 		{
@@ -151,6 +153,8 @@ int main(int argc, char **argv, char **env)
 				free_and_exit(lst_token, lst_command, &linebuffer, secret_env);
 			if (ft_expand(lst_token, secret_env) == -1)
 				free_and_exit(lst_token, lst_command, &linebuffer, secret_env);
+			//print_lst_token(lst_token);
+
 			heredoc(lst_token);
 
 
@@ -162,11 +166,11 @@ int main(int argc, char **argv, char **env)
 				if (linebuffer != NULL)
 					free(linebuffer);
 				linebuffer = NULL;
-				exec(lst_command, &secret_env);
+				g_status = exec(lst_command, &secret_env);
 			}
 		}
 		free_all(&lst_token, &lst_command, &linebuffer);
 	}
 	rl_clear_history();
-	return (1);
+	return (g_status);
 }
