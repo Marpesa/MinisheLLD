@@ -6,11 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2023/03/04 23:13:43 by lmery            ###   ########.fr       */
-=======
-/*   Updated: 2023/03/04 22:23:59 by gle-mini         ###   ########.fr       */
->>>>>>> 183bdd9b0543e758790edc5f5242ba07885f1ade
+/*   Updated: 2023/03/05 21:58:39 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,7 +284,8 @@ int	exec(t_list	*lst_command, char ***env)
 			if(lst_command != NULL)
 				ft_lstclear(&lst_command, del_command);
 			ft_free_map(*env);
-			exit (0);
+			// printf ("error = %d\n", g_status);
+			exit (g_status);
 		}
 		lst_current = lst_current->next;
 	}	

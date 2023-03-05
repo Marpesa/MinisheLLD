@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 19:22:03 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/26 19:22:52 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/05 19:58:57 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,5 @@ int	builtin_echo(char **command, int fd, char ***env, t_list *lst_command)
 	ft_free_map(*env);
 	ft_lstclear(&lst_command, del_command);
 	exit (0);
-	return (0);
+	// return (0);
 }

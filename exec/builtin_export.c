@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 17:52:19 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/04 21:46:48 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/05 22:41:15 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,9 +94,10 @@ void	builtin_export(char **cmd, char ***env)
 
 	i = 0;
 	j = 1;
+	// printf("l = %ld\n", ft_maplen_secure(cmd));
 	while (cmd[j])
 	{
-		if (!valid_export(cmd[j]) || (cmd[j] && cmd[j][0] == '\0'))
+		if ((!valid_export(cmd[j])))
 		{
 			ft_print_error(_ORANGE2 \
 			"export : unvalid entry\n"_END, NULL, NULL);
@@ -109,4 +110,6 @@ void	builtin_export(char **cmd, char ***env)
 		i = end_export(&new_env, &str_env, env, cmd[j]);
 		j++;
 	}
+	if (ft_maplen_secure(cmd) < 2)
+		g_status = 1;
 }
