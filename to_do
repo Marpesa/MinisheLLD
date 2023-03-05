@@ -24,6 +24,7 @@ commande sans option
 $? (apres)
 cat Ctrl+C
 
+bien gerer le ctrl \ quand cat wait (il doit quitter)
 
 0 : succès
 1 : erreur générique
