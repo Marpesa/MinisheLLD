@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 04:20:53 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/06 18:46:12 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/06 19:34:26 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,10 +29,12 @@ void	builtin_exit(char ***env, t_list *lst_command, char **cmd)
 	int	res;
 	int	i;
 	int	j;
+	int	tmp;
 	
+	tmp = g_status;
+	// printf("%d\n", tmp);
 	i = 0;
 	j = 0;
-
 	if (cmd[1])
 	{
 		if ((!ft_isdigit(cmd[1][1]) || (!ft_isdigit(cmd[1][0]) && cmd[1][0] != '-' && cmd[1][0] != '+'))) 
@@ -53,7 +55,7 @@ void	builtin_exit(char ***env, t_list *lst_command, char **cmd)
 		g_status = res;
 	}
 	else
-		g_status = 0;
+		g_status = tmp;
 	if (ft_maplen_secure(cmd) > 2 || (cmd[1] && (cmd[1][0] == '1' && !cmd[1][1])))
 		g_status = 1;
 	ft_putstr_fd(_ORANGE2 "exit\n" _END, 2);

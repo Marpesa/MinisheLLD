@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/05 21:11:02 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/06 19:37:56 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ void	print_lst_command(t_list *lst_command, int fd);
 void	print_lst_token(t_list *head);
 
 /*------------------Exec-------------------------*/
-int		exec(t_list *lst_command, char ***env);
+int		exec(t_list *lst_command, char ***env, int tmp);
 int		is_g_stat(char *cmd);
 void	get_g_status(void);
 

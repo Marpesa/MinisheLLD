@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/05 21:58:39 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/06 19:38:12 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -230,13 +230,14 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command, t_list *
 	return (error);
 }
 
-int	exec(t_list	*lst_command, char ***env)
+int	exec(t_list	*lst_command, char ***env, int tmp)
 {
 	t_list		*lst_current;
 	t_command	*command;
 	int			prevpipe;
 	int			error_status;
 
+	// printf ("%d\n",tmp);
 	lst_current = NULL;
 	lst_current = lst_command;
 	error_status = 0;
@@ -254,9 +255,11 @@ int	exec(t_list	*lst_command, char ***env)
 			ft_putstr_fd(" : no such file or directory\n" _END, 2);
 			return (127);
 		}
-		g_status = builtin_outpipe(command, env, lst_command);
-		if (g_status >= 0)
+		g_status = tmp;
+		tmp = builtin_outpipe(command, env, lst_command);
+		if (tmp >= 0)
 		{
+			g_status = tmp;
 			if (lst_current->next)
 				lst_current = lst_current->next;
 			else
