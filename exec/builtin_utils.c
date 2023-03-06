@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:28 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/05 00:14:58 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/05 21:57:15 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ t_bool	is_builtin(char *value)
 
 	if (!value)
 		return (false);
-	len = ft_strlen_secure(value);
+	len = ft_strlen_secure(value) + 1;
 	if ((ft_strncmp(value, "echo", len) == 0))
 		return (true);
 	if (!(ft_strncmp(value, "pwd", len)))
@@ -44,7 +44,7 @@ void	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command)
 	if (!(ft_strncmp(cmd[0], "echo\0", ft_strlen("echo\0"))))
 		builtin_echo(cmd, fd, env, lst_command);
 	else if (!(ft_strncmp(cmd[0], "exit\0", ft_strlen("exit\0"))))
-		builtin_exit(env, lst_command);
+		builtin_exit(env, lst_command, cmd);
 	else if (!(ft_strncmp(cmd[0], "env\0", ft_strlen("env\0"))))
 		builtin_env(cmd, fd, env, lst_command);
 }

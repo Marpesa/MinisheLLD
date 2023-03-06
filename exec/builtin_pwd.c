@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 02:52:44 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/04 21:01:56 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/05 19:33:02 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 int	is_pwd(char **cmd)
 {
-	int	len;
+	// int	len;
 	if (!cmd)
 		return (false);
-	len = ft_strlen_secure(cmd[0]);
-	if ((ft_strncmp(cmd[0], "pwd", len) == 0))
+	// len = ft_strlen_secure(cmd[0]);
+	if ((ft_strncmp(cmd[0], "pwd", 3) == 0))
 		return (1);
 	return (0);
 }

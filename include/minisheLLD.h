@@ -6,11 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2023/03/05 00:06:32 by lmery            ###   ########.fr       */
-=======
-/*   Updated: 2023/03/04 22:11:24 by gle-mini         ###   ########.fr       */
->>>>>>> 183bdd9b0543e758790edc5f5242ba07885f1ade
+/*   Updated: 2023/03/05 21:11:02 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -179,7 +175,7 @@ char	*ft_root_one(char *back);
 void	builtin_pwd(char **cmd, char ***env, t_list *lst_command);
 int		is_pwd(char **cmd);
 int		is_exit(char **cmd);
-void	builtin_exit(char ***env, t_list *lst_command);
+void	builtin_exit(char ***env, t_list *lst_command, char **cmd);
 int		builtin_env(char **cmd, int fd, char ***env, t_list *lst_command);
 int		is_export(char **cmd);
 void	builtin_export(char **cmd, char ***env);
