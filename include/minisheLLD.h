@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/07 10:08:36 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/07 12:35:19 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -145,6 +145,8 @@ typedef struct s_command {
 int		parser(t_list *lst_token, t_list **lst_command);
 void	lst_print_command(t_list *cmd);
 void	free_map(char **map);
+int		lst_add_command(t_list **lst_command, t_command *command);
+int		add_str_to_map(char *str, char **map, char ***map_result);
 
 
 // Test

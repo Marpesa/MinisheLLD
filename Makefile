@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2023/03/07 10:02:07 by lmery            ###   ########.fr        #
+#    Updated: 2023/03/07 12:34:03 by lmery            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -54,7 +54,7 @@ C_HEREDOC = heredoc
 
 C_ERROR = syntaxe_error syntaxe_error_utils check_error_input free_and_exit
 
-C_PARSER = parser
+C_PARSER = parser parser_utils
 
 C_DEBUG = debug
 
