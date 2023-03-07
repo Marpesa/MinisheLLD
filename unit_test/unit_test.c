@@ -1,5 +1,7 @@
 #include "minisheLLD.h"
 
+int g_status = 0;
+
 t_token *ft_tokencpy(char *str, t_token_type token_type)
 {
 	t_token *token;

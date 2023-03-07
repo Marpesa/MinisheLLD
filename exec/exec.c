@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/05 21:58:39 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/07 17:05:27 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,13 @@ int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command, t_list 
 		dup2(command->fd_in, STDIN_FILENO);
 		close(*prevpipe);
 		if (is_builtin(*cmd) == true)
-			execute_builtin(cmd, env, command->fd_out, lst_command_head);
+		{
+			int	exit_status = execute_builtin(cmd, env, command->fd_out, lst_command_head);
+			ft_lstclear(&lst_command_head, del_command);
+			ft_free_map(*env);
+			exit(exit_status);
+
+		}
 		else
 		{
 			execve(cmd[0], cmd, *env);
@@ -208,7 +214,12 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command, t_list *
 		close (prevpipe);
 		//ft_putnbr_fd(command->fd_out, 2);
 		if (is_builtin(*cmd) == true)		
-			execute_builtin(cmd, env, command->fd_out, lst_command_head);
+		{
+			int	exit_status = execute_builtin(cmd, env, command->fd_out, lst_command_head);
+			ft_lstclear(&lst_command_head, del_command);
+			ft_free_map(*env);
+			exit(exit_status);
+		}
 		else
 			execve (cmd[0], cmd, *env);
 	}
@@ -254,7 +265,12 @@ int	exec(t_list	*lst_command, char ***env)
 			ft_putstr_fd(" : no such file or directory\n" _END, 2);
 			return (127);
 		}
-		g_status = builtin_outpipe(command, env, lst_command);
+		if (lst_current != NULL && ((ft_lstsize(lst_command) == 1 && is_builtin(command->word[0])) || is_cd(command->word)))
+		{
+			g_status = execute_builtin(command->word, env, command->fd_out, lst_current);
+			lst_current = lst_current->next;
+		}
+		/*
 		if (g_status >= 0)
 		{
 			if (lst_current->next)
@@ -262,7 +278,8 @@ int	exec(t_list	*lst_command, char ***env)
 			else
 				break;
 		}
-		if (lst_current->next == NULL)
+		*/
+		if (lst_current != NULL && lst_current->next == NULL)
 		{
 			if ((ft_last(command->word, env, prevpipe, lst_current, lst_command)) == 3)
 			{
@@ -271,7 +288,8 @@ int	exec(t_list	*lst_command, char ***env)
 				// exit (0);
 			}
 		}
-		else
+		else if (lst_current != NULL)
+		{
 			if ((ft_pipe(command->word, env, &prevpipe, lst_current, lst_command)) == 4)
 			{
 				// ft_lstclear(&lst_command, del_command);
@@ -279,6 +297,7 @@ int	exec(t_list	*lst_command, char ***env)
 				// if (is_exit(command->word))
 				// 	break;
 			}
+		}
 		if (is_exit(command->word) && !lst_current->next)
 		{
 			if(lst_command != NULL)
@@ -287,9 +306,10 @@ int	exec(t_list	*lst_command, char ***env)
 			// printf ("error = %d\n", g_status);
 			exit (g_status);
 		}
-		lst_current = lst_current->next;
+		if (lst_current != NULL)
+			lst_current = lst_current->next;
 	}	
-	if (g_status == -1)
-		g_status = 0;
+	//if (g_status == -1)
+		//g_status = 0;
 	return (g_status);
 }

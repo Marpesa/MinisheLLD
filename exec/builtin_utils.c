@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:28 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/05 21:57:15 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/07 16:37:52 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,22 +31,33 @@ t_bool	is_builtin(char *value)
 		return (true);
 	if (!(ft_strncmp(value, "cd", len)))
 		return (true);	
-	if (!(ft_strncmp(value, "&?", len)))
-		return (true);
 	if (!(ft_strncmp(value, "exit", len)))
 		return (true);
 	return (false);
 }
 
-void	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command)
+int	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command)
 {
-	(void) env;
+	int result;
+
+	result = 1;
 	if (!(ft_strncmp(cmd[0], "echo\0", ft_strlen("echo\0"))))
 		builtin_echo(cmd, fd, env, lst_command);
 	else if (!(ft_strncmp(cmd[0], "exit\0", ft_strlen("exit\0"))))
 		builtin_exit(env, lst_command, cmd);
 	else if (!(ft_strncmp(cmd[0], "env\0", ft_strlen("env\0"))))
 		builtin_env(cmd, fd, env, lst_command);
+	else if (!(ft_strncmp(cmd[0], "pwd\0", ft_strlen("pwd\0"))))
+		builtin_pwd(cmd, env, lst_command, fd);
+	else if (!(ft_strncmp(cmd[0], "unset\0", ft_strlen("unset\0"))))
+		builtin_unset(cmd, env);
+	else if (!(ft_strncmp(cmd[0], "export\0", ft_strlen("export\0"))))
+		builtin_export(cmd, env);
+	else if (!(ft_strncmp(cmd[0], "cd\0", ft_strlen("cd\0"))))
+		g_status = builtin_cd(cmd);
+	else
+		result = -1;	
+	return (result);
 }
 
 char	*get_env(char *var, char ***envp)

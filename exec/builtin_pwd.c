@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 02:52:44 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/05 19:33:02 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/07 17:34:47 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	is_pwd(char **cmd)
 	return (0);
 }
 
-void	builtin_pwd(char **cmd, char ***env, t_list *lst_command)
+void	builtin_pwd(char **cmd, char ***env, t_list *lst_command, int fd_out)
 {
 	char	cwd[PATH_MAX];
 	char	*str;
@@ -44,7 +44,9 @@ void	builtin_pwd(char **cmd, char ***env, t_list *lst_command)
 		return ;
 	}
 	str = ft_strdup(getenv("PWD"));
-	getcwd(cwd, sizeof(cwd));
-	printf("%s\n", cwd);
+	if (getcwd(cwd, sizeof(cwd)) == NULL)
+		cwd[0] = '\0';
+	ft_putstr_fd(cwd, fd_out);
+	ft_putstr_fd("\n", fd_out);
 	free(str);
 }

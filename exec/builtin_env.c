@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 17:35:44 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/04 23:02:10 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/07 13:32:01 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ int	builtin_env(char **cmd, int fd, char ***env, t_list *lst_command)
 	char	**str_env;
 	int		i;
 
-	(void)fd;
 	str_env = (*env);
 	i = 1;
 	if (!*env)
@@ -39,11 +38,13 @@ int	builtin_env(char **cmd, int fd, char ***env, t_list *lst_command)
 	{
 		while (str_env && str_env[i])
 		{
-			printf("%s\n", str_env[i]);
+			ft_putstr_fd(str_env[i], fd);
+			ft_putstr_fd("\n", fd);
 			i++;
 		}
 	}
-	ft_free_map(str_env);
-	ft_lstclear(&lst_command, del_command);
-	exit (0);
+	//ft_free_map(str_env);
+	//ft_lstclear(&lst_command, del_command);
+	return (0);
+	//exit (0);
 }

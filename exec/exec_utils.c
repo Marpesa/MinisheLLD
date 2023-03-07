@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 17:16:50 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/04 22:10:06 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/07 11:19:49 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,28 +55,3 @@ void	get_g_status()
 	free(c);
 }
 
-int	builtin_outpipe(t_command *command, char ***env, t_list	*lst_command)
-{
-
-	if (is_cd(command->word))
-	{
-		g_status = builtin_cd(command->word);
-		return(g_status);
-	}
-	if (is_export(command->word))
-	{
-		builtin_export(command->word, env);
-		return(g_status);
-	}
-	if (is_unset(command->word))
-	{
-		builtin_unset(command->word, env);
-		return(g_status);
-	}
-	if (is_pwd(command->word))
-	{
-		builtin_pwd(command->word, env, lst_command);
-		return(g_status);
-	}
-	return(-1);
-}

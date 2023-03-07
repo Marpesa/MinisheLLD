@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/05 21:11:02 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/07 11:31:19 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,7 +164,7 @@ void	get_g_status(void);
 /*------------------Builtin-------------------------*/
 t_bool	is_builtin(char *value);
 int		builtin_outpipe(t_command *command, char ***env, t_list *lst_command);
-void	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command);
+int		execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command);
 int		builtin_echo(char **command, int fd, char ***env, t_list *lst_command);
 char	*get_env(char *var, char ***envp);
 int		is_cd(char **cmd);
@@ -172,7 +172,7 @@ int		builtin_cd(char **cmd);
 char	*ft_strldup_secure(char *dst, const char *src, size_t dstsize);
 void	double_point(char **str, char **str2, int *path);
 char	*ft_root_one(char *back);
-void	builtin_pwd(char **cmd, char ***env, t_list *lst_command);
+void	builtin_pwd(char **cmd, char ***env, t_list *lst_command, int fd_out);
 int		is_pwd(char **cmd);
 int		is_exit(char **cmd);
 void	builtin_exit(char ***env, t_list *lst_command, char **cmd);
