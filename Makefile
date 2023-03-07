@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2023/03/04 17:28:17 by lmery            ###   ########.fr        #
+#    Updated: 2023/03/07 13:01:14 by lmery            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,7 @@ _BLKB 		=	\e[48:5:0m
 
 C_ROOT = main 
 
-C_LEXER = lexer lexer_utils
+C_LEXER = lexer lexer_utils lexer_tokens
 
 C_EXPAND = expand trim custom_tokenizer merge_strings
 
@@ -54,7 +54,7 @@ C_HEREDOC = heredoc
 
 C_ERROR = syntaxe_error syntaxe_error_utils check_error_input free_and_exit
 
-C_PARSER = parser
+C_PARSER = parser parser_utils
 
 C_DEBUG = debug
 
@@ -77,11 +77,13 @@ LIBFT		=	./libft/libft.a
 LIBFT_DIR	=	./libft
 LIB			=	make --silent -C libft 
 
+HEADER		=	./include/
+HEADER_FILE		=	./include/minisheLLD.h
 #----------------------- Constant strings --------------------
 
 COMPILER		=	gcc
 
-FLAGS			=	-Wall -Wextra -Werror -g3
+FLAGS			=	-Wall -Wextra -Werror -g3 -I $(HEADER)
 
 INCLUDE			=	-Iinclude -Ilibft
 
@@ -126,11 +128,11 @@ all: $(NAME)
 bonus: 
 	@$(NOBONUS)
 
-$(NAME): $(OBJS)
+$(NAME): $(OBJS) $(HEADER_FILE)
 	@$(LIBCOMP)
 	@$(LIB) 
 	@$(LIBREADY)
-		$(COMPILER) $(FLAGS) $(OBJS) -o $(NAME) $(LIBFT) -lreadline
+		$(COMPILER) $(FLAGS) $(OBJS) -o $(NAME) $(LIBFT) -lreadline	
 	@$(TITLE)
 	@$(READY)
 

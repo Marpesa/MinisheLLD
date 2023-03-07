@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/27 19:51:31 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/07 12:20:47 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,36 +46,44 @@ static int	replace_env_var_in_new_str(char *start, char *end, char **new_str)
 	return (1);
 }
 
+static int	loop_expand(char *start, char *end, char **new_str, char **env)
+{
+	t_bool	in_d_quote;
+	int		result;
+
+	in_d_quote = false;
+	while (1)
+	{
+		result = custom_tokenizer(end, &start, &end, &in_d_quote);
+		if ((*start == '$' && (end - start) > 1) || (*start == '$' && \
+		(end - start) == 1 && *(start + 1) == '\'' && in_d_quote == false))
+		{
+			*new_str = merge_strings(*new_str, \
+			env_var_find(start + 1, end, env));
+			if (*new_str == NULL)
+				return (-1);
+		}
+		else if (replace_env_var_in_new_str(start, end, new_str) == -1)
+			return (-1);
+		if (result == 0)
+			break ;
+	}
+	return (result);
+}
+
 static int	expand_token(t_token *token, char **env)
 {
 	int		result;
-	t_bool	in_d_quote;
 	char	*start;
 	char	*end;
 	char	*new_str;
 
-	in_d_quote = false;
 	new_str = NULL;
+	start = NULL;
 	end = token->text;
-	while (1)
-	{
-		result = custom_tokenizer(end, &start, &end, &in_d_quote);
-		if ((*start == '$' && (end - start) > 1) || \
-			(*start == '$' && (end - start) == 1 && \
-			*(start + 1) == '\'' && in_d_quote == false))
-		{
-			new_str = merge_strings(new_str, env_var_find(start + 1, end, env));
-			if (new_str == NULL)
-				return (-1);
-		}
-		else
-		{
-			if (replace_env_var_in_new_str(start, end, &new_str) == -1)
-				return (-1);
-		}
-		if (result == 0)
-			break ;
-	}
+	result = loop_expand(start, end, &new_str, env);
+	if (result == -1)
+		return (-1);
 	free(token->text);
 	token->text = new_str;
 	return (1);

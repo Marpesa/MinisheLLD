@@ -1,62 +1,25 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parser.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/07 12:25:03 by lmery             #+#    #+#             */
+/*   Updated: 2023/03/07 12:41:15 by lmery            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minisheLLD.h"
 
-void	free_map(char **map)
+void	init_cmd(t_command	**command, t_list **lst_cmd, t_token **token_prev)
 {
-	int	i;
-
-	i = 0;
-	if (map == NULL)
-		return ;
-	while(map[i] != NULL)
-	{
-		free(map[i]);
-		map[i] = NULL;
-		i++;
-	}
-	free(map);
-	map = NULL;
-}
-static int	add_str_to_map(char *str, char **map, char ***map_result)
-{
-	char	**new_map;
-	size_t		i;
-
-	i = 0;
-	if (str == NULL)
-	{
-		*map_result = map;
-		return (1);
-		
-	}
-	new_map = malloc(sizeof(char *) * (ft_maplen_secure(map) + 2));
-	if (new_map == NULL)
-		return (-1);
-	while (i < ft_maplen_secure(map))
-	{
-		new_map[i] = ft_strdup(map[i]);
-		i++;
-	}
-	new_map[i] = ft_strdup(str);
-	new_map[i + 1] = NULL;
-	if (map != NULL)
-	{
-		free_map(map);
-		map = NULL;
-	}
-	*map_result = new_map;
-	return (1);
-}
-
-static int	lst_add_command(t_list **lst_command, t_command *command)
-{
-	t_list	*new;
-
-	new = NULL;
-	new = ft_lstnew(command);
-	if (new == NULL)
-		return (-1);
-	ft_lstadd_back(lst_command, new);
-	return (1);
+	(*command)->word = NULL;
+	(*command)->redir = NULL;
+	(*command)->fd_in = STDIN_FILENO;
+	(*command)->fd_out = STDOUT_FILENO;
+	(*lst_cmd) = NULL;
+	(*token_prev) = NULL;
 }
 
 int	parser(t_list	*lst_token, t_list **lst_result)
@@ -71,12 +34,7 @@ int	parser(t_list	*lst_token, t_list **lst_result)
 	command = malloc(sizeof(t_command));
 	if (command == NULL)
 		return (-1);
-	command->word = NULL;
-	command->redir = NULL;
-	command->fd_in = STDIN_FILENO;
-	command->fd_out = STDOUT_FILENO;
-	lst_command = NULL;
-	token_previous = NULL;
+	init_cmd(&command, &lst_command, &token_previous);
 	if (lst_add_command(&lst_command, command) == -1)
 		return (-1);
 	while (lst_token != NULL)
@@ -93,38 +51,30 @@ int	parser(t_list	*lst_token, t_list **lst_result)
 			command->fd_out = STDOUT_FILENO;
 			lst_add_command(&lst_command, command);
 		}
-		else if (token->type == TOKEN_REDIRECT_IN || 
-				 token->type == TOKEN_REDIRECT_OUT || 
-				 token->type == TOKEN_REDIRECT_APPEND ||
-				 token->type == TOKEN_HEREDOC) 
+		else if (token->type == TOKEN_REDIRECT_IN || \
+		token->type == TOKEN_REDIRECT_OUT || \
+		token->type == TOKEN_REDIRECT_APPEND || \
+		token->type == TOKEN_HEREDOC)
 		{
-			//printf("%s\n", token->text);
-			if (add_str_to_map(token->text, command->redir, &command->redir) == -1)
+			if (add_str_to_map(token->text, command->redir, \
+			&command->redir) == -1)
 				return (-1);
-			//print_map(command->redir);
-			
 		}
-		else if (token_previous != NULL && 
-				(token_previous->type == TOKEN_REDIRECT_IN || 
-				 token_previous->type == TOKEN_REDIRECT_OUT || 
-				 token_previous->type == TOKEN_REDIRECT_APPEND))
+		else if (token_previous != NULL && \
+				(token_previous->type == TOKEN_REDIRECT_IN || \
+				token_previous->type == TOKEN_REDIRECT_OUT || \
+				token_previous->type == TOKEN_REDIRECT_APPEND))
 		{
-			if (add_str_to_map(token->text, command->redir, &command->redir) == -1)
+			if (add_str_to_map(token->text, command->redir, \
+			&command->redir) == -1)
 				return (-1);
-			//print_map(command->redir);
 		}
 		else if (token->type == TOKEN_WORD)
 		{
-			//printf("%s\n", token->text);
-			if (add_str_to_map(token->text, command->word, &command->word) == -1)
+			if (add_str_to_map(token->text, command->word, \
+			&command->word) == -1)
 				return (-1);
-			//print_map(command->word);
-			//print_command(command);
 		}
-		// else
-		// {
-		// 	printf(_ORANGE "\nERROR\n" _END);
-		// }
 		token_previous = lst_token->content;
 		lst_token = lst_token->next;
 	}

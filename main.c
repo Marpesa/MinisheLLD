@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/05 00:22:13 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/06 19:40:00 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,13 +153,14 @@ char	**save_env(char **env)
 
 int main(int argc, char **argv, char **env)
 {
-	g_status = 0;
+	// g_status = 0;
 	(void)argc;
 	(void)argv;
 	t_list	*lst_token;
 	t_list	*lst_command;
 	char	*linebuffer;
 	char 	**secret_env;
+	int		prev_gstat;
 
 	rl_outstream = stderr;
 	// ignore Ctrl-\ Ctrl-C Ctrl-Z signals
@@ -169,10 +170,11 @@ int main(int argc, char **argv, char **env)
 	// secret_env = NULL;
 	ignore_signal_for_shell();
 	secret_env = save_env(env);
-	// printf("gstat = %d\n", g_status);
+	// printf("gstat = %d\n", tmp);
 	rl_outstream = stderr;
 	while (true)
 	{
+		prev_gstat = g_status;
 		free(secret_env[0]);
 		secret_env[0] = gstat_in_env(secret_env[0]);
 		linebuffer = rl_gets();
@@ -203,7 +205,7 @@ int main(int argc, char **argv, char **env)
 				if (linebuffer != NULL)
 					free(linebuffer);
 				linebuffer = NULL;
-				g_status = exec(lst_command, &secret_env);
+				g_status = exec(lst_command, &secret_env, prev_gstat);
 				// printf("err = %d\n", g_status);
 			}
 		}

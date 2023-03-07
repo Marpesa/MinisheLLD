@@ -241,13 +241,14 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command, t_list *
 	return (error);
 }
 
-int	exec(t_list	*lst_command, char ***env)
+int	exec(t_list	*lst_command, char ***env, int tmp)
 {
 	t_list		*lst_current;
 	t_command	*command;
 	int			prevpipe;
 	int			error_status;
 
+	// printf ("%d\n",tmp);
 	lst_current = NULL;
 	lst_current = lst_command;
 	error_status = 0;
@@ -273,6 +274,7 @@ int	exec(t_list	*lst_command, char ***env)
 		/*
 		if (g_status >= 0)
 		{
+			g_status = tmp;
 			if (lst_current->next)
 				lst_current = lst_current->next;
 			else

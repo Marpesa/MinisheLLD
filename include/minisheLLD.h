@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/07 11:31:19 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/07 12:35:19 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,15 @@ char	*ft_get_token_type(enum e_token_type type);
 void	lexer_data_init(t_lexer *data);
 int		lst_add_token(t_list **lst_token, void *content);
 int		is_special(char c);
+int		ft_word_in_quote(char *input, int i, int len);
+
+int		token_word(char *input, int *i, t_lexer *data);
+int		super_token(char *input, int *i, t_lexer *data);
+
 
 /*-------------------- Expand ---------------------*/ 
 
-int	ft_expand(t_list *lst_token, char **env);
+int		ft_expand(t_list *lst_token, char **env);
 int		is_special(char c);
 void	trim(char **str);
 int		custom_tokenizer(char *str, char **start, char **end, t_bool *in_d_quote);
@@ -140,6 +145,8 @@ typedef struct s_command {
 int		parser(t_list *lst_token, t_list **lst_command);
 void	lst_print_command(t_list *cmd);
 void	free_map(char **map);
+int		lst_add_command(t_list **lst_command, t_command *command);
+int		add_str_to_map(char *str, char **map, char ***map_result);
 
 
 // Test
@@ -157,7 +164,7 @@ void	print_lst_command(t_list *lst_command, int fd);
 void	print_lst_token(t_list *head);
 
 /*------------------Exec-------------------------*/
-int		exec(t_list *lst_command, char ***env);
+int		exec(t_list *lst_command, char ***env, int tmp);
 int		is_g_stat(char *cmd);
 void	get_g_status(void);
 
