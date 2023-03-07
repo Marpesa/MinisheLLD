@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2023/03/04 17:28:17 by lmery            ###   ########.fr        #
+#    Updated: 2023/03/07 10:02:07 by lmery            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,7 @@ _BLKB 		=	\e[48:5:0m
 
 C_ROOT = main 
 
-C_LEXER = lexer lexer_utils
+C_LEXER = lexer lexer_utils lexer_tokens
 
 C_EXPAND = expand trim custom_tokenizer merge_strings
 

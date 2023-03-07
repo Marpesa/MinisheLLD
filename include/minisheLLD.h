@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/06 19:37:56 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/07 10:08:36 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,10 +99,15 @@ char	*ft_get_token_type(enum e_token_type type);
 void	lexer_data_init(t_lexer *data);
 int		lst_add_token(t_list **lst_token, void *content);
 int		is_special(char c);
+int		ft_word_in_quote(char *input, int i, int len);
+
+int		token_word(char *input, int *i, t_lexer *data);
+int		super_token(char *input, int *i, t_lexer *data);
+
 
 /*-------------------- Expand ---------------------*/ 
 
-int	ft_expand(t_list *lst_token, char **env);
+int		ft_expand(t_list *lst_token, char **env);
 int		is_special(char c);
 void	trim(char **str);
 int		custom_tokenizer(char *str, char **start, char **end, t_bool *in_d_quote);

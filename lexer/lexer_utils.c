@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 03:38:23 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/12 16:35:53 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/07 10:14:05 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ int	lst_add_token(t_list **lst_token, void *content)
 	if (new == NULL)
 		return (-1);
 	ft_lstadd_back(lst_token, new);
-	//print_lst_token(*lst_token);
 	return (1);
 }
 
