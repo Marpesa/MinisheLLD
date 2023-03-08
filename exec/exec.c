@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/07 17:05:27 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/08 19:35:58 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -268,8 +268,13 @@ int	exec(t_list	*lst_command, char ***env, int tmp)
 		}
 		if (lst_current != NULL && ((ft_lstsize(lst_command) == 1 && is_builtin(command->word[0])) || is_cd(command->word)))
 		{
-			g_status = execute_builtin(command->word, env, command->fd_out, lst_current);
+			g_status = tmp;
+			tmp = execute_builtin(command->word, env, command->fd_out, lst_current);
 			lst_current = lst_current->next;
+			if (tmp >= 0)
+				g_status = tmp;
+			if (prevpipe != STDIN_FILENO)
+				close(prevpipe);
 		}
 		/*
 		if (g_status >= 0)
