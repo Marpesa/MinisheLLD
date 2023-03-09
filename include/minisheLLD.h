@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/09 16:18:18 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/09 21:43:02 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ char 	*merge_strings(char *str1, char *str2);
 
 /*-------------------- Heredoc --------------------*/
 
-void	heredoc(t_list *lst_token);
+void	heredoc(t_list *lst_token, char *linebuffer, char **secret_env);
 
 /*-------------------- Error ----------------------*/
 

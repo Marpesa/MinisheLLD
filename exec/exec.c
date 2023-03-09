@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/09 16:45:22 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/09 18:09:17 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,18 +49,18 @@ static void	get_absolute_path(char **cmd, int *error_status, char **env)
 
 	path = NULL;
 	bin = NULL;
-	/*
 	if (cmd == NULL || cmd[0][0] == '\0')
 	{
 		*error_status = -1;
 		return ;
 	}
-	*/
+	/*
 	if (cmd[0][0] == '\0')
 	{
 		*error_status = -1;
 		return ;
 	}
+	*/
 	if (cmd[0][0] != '/' && ft_strncmp(cmd[0], "./", 2) != 0)
 	{
 		if (is_in_env("PATH", env))
