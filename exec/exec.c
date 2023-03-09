@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/09 15:10:01 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/09 16:45:22 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,13 @@ static void	get_absolute_path(char **cmd, int *error_status, char **env)
 
 	path = NULL;
 	bin = NULL;
+	/*
+	if (cmd == NULL || cmd[0][0] == '\0')
+	{
+		*error_status = -1;
+		return ;
+	}
+	*/
 	if (cmd[0][0] == '\0')
 	{
 		*error_status = -1;
@@ -166,7 +173,7 @@ int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command, t_list 
 			command->fd_in = *prevpipe;
 		dup2(command->fd_in, STDIN_FILENO);
 		close(*prevpipe);
-		if (is_builtin(*cmd) == true)
+		if (is_builtin(cmd) == true)
 		{
 			int	exit_status = execute_builtin(cmd, env, command->fd_out, lst_command_head);
 			ft_lstclear(&lst_command_head, del_command);
@@ -188,7 +195,7 @@ int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command, t_list 
 		*prevpipe = pipefd[0];
 	}
 	ignore_signal_for_shell();
-	if (is_builtin(*cmd) == true)
+	if (is_builtin(cmd) == true)
 		res = 4;
 	return (res);
 }
@@ -213,7 +220,13 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command, t_list *
 		dup2(command->fd_in, STDIN_FILENO);
 		close (prevpipe);
 		//ft_putnbr_fd(command->fd_out, 2);
-		if (is_builtin(*cmd) == true)		
+		if (cmd == NULL)
+		{
+			ft_lstclear(&lst_command_head, del_command);
+			ft_free_map(*env);
+			exit(0);
+		}
+		else if (is_builtin(cmd) == true)		
 		{
 			int	exit_status = execute_builtin(cmd, env, command->fd_out, lst_command_head);
 			ft_lstclear(&lst_command_head, del_command);
@@ -236,7 +249,7 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command, t_list *
 		}
 	}
 	ignore_signal_for_shell();
-	if (is_builtin(*cmd) == true)
+	if (is_builtin(cmd) == true)
 		error = 3;
 	return (error);
 }
@@ -257,7 +270,7 @@ int	exec(t_list	*lst_command, char ***env, int tmp)
 	while (lst_current != NULL)
 	{
 		command = lst_current->content;
-		if (!is_builtin(*command->word))
+		if (is_builtin(command->word) == 0)
 			get_absolute_path(command->word, &error_status, *env);
 		if (error_status == 2)
 		{
@@ -266,7 +279,7 @@ int	exec(t_list	*lst_command, char ***env, int tmp)
 			ft_putstr_fd(" : no such file or directory\n" _END, 2);
 			return (127);
 		}
-		if (lst_current != NULL && ((ft_lstsize(lst_command) == 1 && is_builtin(command->word[0])) || is_cd(command->word)))
+		if (lst_current != NULL && ((ft_lstsize(lst_command) == 1 && is_builtin(command->word)) || is_cd(command->word)))
 		{
 			g_status = tmp;
 			if (is_exit(command->word))
