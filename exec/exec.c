@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/10 17:12:33 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/10 19:30:17 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -142,10 +142,10 @@ void	redirection(t_command *command)
 		}
 		else if (ft_strncmp(redirection[i], "<<\0", 3) == 0)
 		{
-			ft_putstr_fd("<<\n", 2);
+			//ft_putstr_fd("<<\n", 2);
 			new_in = open(HEREDOC_FILE, O_RDONLY, 0644);
-			ft_putnbr_fd(new_in, 2);
-			ft_putstr_fd("\n", 2);
+			//ft_putnbr_fd(new_in, 2);
+			//ft_putstr_fd("\n", 2);
 			if (new_in == -1)
 				perror("open heredoc");
 			if (command->fd_in != STDIN_FILENO)

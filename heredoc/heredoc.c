@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 17:51:49 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/09 21:51:44 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/10 19:30:42 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,12 +79,12 @@ void	heredoc_open(char *lim, t_list *lst_token_head, char *linebuffer, char **se
 			input = readline("> ");
 			if (input == NULL)
 			{
-				printf("OUBLIE PAS DE GERER LERREUR GUGU\n");
+				//printf("OUBLIE PAS DE GERER LERREUR GUGU\n");
 				break ;
 			}
 			if ((ft_strncmp(input, lim, ft_strlen(lim)) == 0))
 			{
-				printf("exit normal\n");
+				//printf("exit normal\n");
 				free(input);
 				input = NULL;
 				break ;

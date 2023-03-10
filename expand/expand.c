@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/10 18:27:42 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/10 19:31:44 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ int	ft_expand(t_list *lst_token, char **env)
 
 	token = NULL;
 	token_next = NULL;
-	print_lst_token(lst_token);
+	//print_lst_token(lst_token);
 	while (lst_token != NULL)
 	{
 		token = lst_token->content;
