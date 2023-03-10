@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/10 16:07:48 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/10 16:09:07 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,7 +194,7 @@ int main(int argc, char **argv, char **env)
 				free_and_exit(lst_token, lst_command, &linebuffer, secret_env);
 			//print_lst_token(lst_token);
 
-			heredoc(lst_token);
+			heredoc(lst_token, linebuffer, secret_env);
 
 
 			if (syntaxe_error(lst_token) != 0)
