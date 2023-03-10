@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/09 15:10:01 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/10 17:12:33 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,18 @@ static void	get_absolute_path(char **cmd, int *error_status, char **env)
 
 	path = NULL;
 	bin = NULL;
+	if (cmd == NULL || cmd[0][0] == '\0')
+	{
+		*error_status = -1;
+		return ;
+	}
+	/*
 	if (cmd[0][0] == '\0')
 	{
 		*error_status = -1;
 		return ;
 	}
+	*/
 	if (cmd[0][0] != '/' && ft_strncmp(cmd[0], "./", 2) != 0)
 	{
 		if (is_in_env("PATH", env))
@@ -107,6 +114,8 @@ void	redirection(t_command *command)
 		{
 			//ft_putstr_fd("< OK\n", 2);
 			new_in = open(redirection[i + 1], O_RDONLY, 0644);
+			if (command->fd_in != STDIN_FILENO)
+				close(command->fd_in);
 			command->fd_in = new_in;
 			//dup2(new_in, fd_in);
 			i += 2;
@@ -115,6 +124,8 @@ void	redirection(t_command *command)
 		{
 			//ft_putstr_fd("> OK\n", 2);
 			new_out = open(redirection[i + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			if (command->fd_out != STDOUT_FILENO)
+				close(command->fd_out);
 			command->fd_out = new_out;
 			//dup2(new_out, fd_out);
 			i += 2;
@@ -123,6 +134,8 @@ void	redirection(t_command *command)
 		{
 			//ft_putstr_fd(">> OK\n", 2);
 			new_out = open(redirection[i + 1], O_CREAT | O_WRONLY | O_APPEND, 0644);
+			if (command->fd_out != STDOUT_FILENO)
+				close(command->fd_out);
 			command->fd_out = new_out;
 			//dup2(new_out, fd_out);
 			i += 2;
@@ -135,6 +148,8 @@ void	redirection(t_command *command)
 			ft_putstr_fd("\n", 2);
 			if (new_in == -1)
 				perror("open heredoc");
+			if (command->fd_in != STDIN_FILENO)
+				close(command->fd_in);
 			command->fd_in = new_in;
 			i += 1;
 		}
@@ -166,11 +181,15 @@ int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command, t_list 
 			command->fd_in = *prevpipe;
 		dup2(command->fd_in, STDIN_FILENO);
 		close(*prevpipe);
-		if (is_builtin(*cmd) == true)
+		if (is_builtin(cmd) == true)
 		{
 			int	exit_status = execute_builtin(cmd, env, command->fd_out, lst_command_head);
 			ft_lstclear(&lst_command_head, del_command);
 			ft_free_map(*env);
+			if (command->fd_out != STDOUT_FILENO)
+				close(command->fd_out);
+			if (command->fd_in != STDIN_FILENO)
+				close(command->fd_in);
 			exit(exit_status);
 
 		}
@@ -178,6 +197,10 @@ int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command, t_list 
 		{
 			execve(cmd[0], cmd, *env);
 		}
+		if (command->fd_out != STDOUT_FILENO)
+			close(command->fd_out);
+		if (command->fd_in != STDIN_FILENO)
+			close(command->fd_in);
 		exit(0);
 	}
 	else
@@ -188,7 +211,7 @@ int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command, t_list 
 		*prevpipe = pipefd[0];
 	}
 	ignore_signal_for_shell();
-	if (is_builtin(*cmd) == true)
+	if (is_builtin(cmd) == true)
 		res = 4;
 	return (res);
 }
@@ -213,15 +236,33 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command, t_list *
 		dup2(command->fd_in, STDIN_FILENO);
 		close (prevpipe);
 		//ft_putnbr_fd(command->fd_out, 2);
-		if (is_builtin(*cmd) == true)		
+		if (cmd == NULL)
+		{
+			if (command->fd_out != STDOUT_FILENO)
+				close(command->fd_out);
+			if (command->fd_in != STDIN_FILENO)
+				close(command->fd_in);
+			ft_lstclear(&lst_command_head, del_command);
+			ft_free_map(*env);
+			exit(0);
+		}
+		else if (is_builtin(cmd) == true)		
 		{
 			int	exit_status = execute_builtin(cmd, env, command->fd_out, lst_command_head);
 			ft_lstclear(&lst_command_head, del_command);
 			ft_free_map(*env);
+			if (command->fd_out != STDOUT_FILENO)
+				close(command->fd_out);
+			if (command->fd_in != STDIN_FILENO)
+				close(command->fd_in);
 			exit(exit_status);
 		}
 		else
 			execve (cmd[0], cmd, *env);
+		if (command->fd_out != STDOUT_FILENO)
+			close(command->fd_out);
+		if (command->fd_in != STDIN_FILENO)
+			close(command->fd_in);
 	}
 	else
 	{
@@ -236,7 +277,7 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command, t_list *
 		}
 	}
 	ignore_signal_for_shell();
-	if (is_builtin(*cmd) == true)
+	if (is_builtin(cmd) == true)
 		error = 3;
 	return (error);
 }
@@ -257,7 +298,7 @@ int	exec(t_list	*lst_command, char ***env, int tmp)
 	while (lst_current != NULL)
 	{
 		command = lst_current->content;
-		if (!is_builtin(*command->word))
+		if (is_builtin(command->word) == 0)
 			get_absolute_path(command->word, &error_status, *env);
 		if (error_status == 2)
 		{
@@ -266,7 +307,7 @@ int	exec(t_list	*lst_command, char ***env, int tmp)
 			ft_putstr_fd(" : no such file or directory\n" _END, 2);
 			return (127);
 		}
-		if (lst_current != NULL && ((ft_lstsize(lst_command) == 1 && is_builtin(command->word[0])) || is_cd(command->word)))
+		if (lst_current != NULL && ((ft_lstsize(lst_command) == 1 && is_builtin(command->word)) || is_cd(command->word)))
 		{
 			g_status = tmp;
 			if (is_exit(command->word))

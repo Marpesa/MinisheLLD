@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 17:51:49 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/01 18:55:48 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/09 21:51:44 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,14 @@ void set_heredoc_signal()
 	sigaction(SIGINT, &sa, NULL);
 }
 
-void	heredoc_prompt(char *lim)
+void	heredoc_open(char *lim, t_list *lst_token_head, char *linebuffer, char **secret_env)
 {
 	char	*input;
 	int		pid;
 	int		status;
 	int		fd;
 
-	(void) lim;
+	(void) linebuffer;
 	input = NULL;
 	g_status = 0;
 	pid = fork();
@@ -94,6 +94,10 @@ void	heredoc_prompt(char *lim)
 			free(input);
 		}
 		close(fd);
+		ft_lstclear(&lst_token_head, del_token);
+		ft_free_map(secret_env);
+		//if (linebuffer != NULL)
+			//free(linebuffer);
 		exit(0);
 	}
 	else
@@ -102,21 +106,20 @@ void	heredoc_prompt(char *lim)
 	}
 }
 
-void	heredoc_open(char *lim)
-{
-		heredoc_prompt(lim);
-}
 
-void	heredoc(t_list *lst_token)
+
+void	heredoc(t_list *lst_token_head, char *linebuffer, char **secret_env)
 {
 	t_token	*token;
+	t_list *lst_token;
 
+	lst_token = lst_token_head;
 	while (lst_token)
 	{
 		if (is_heredoc(lst_token))
 		{
 			token = lst_token->next->content;
-			heredoc_open(token->text);
+			heredoc_open(token->text, lst_token_head, linebuffer, secret_env);
 		}
 		lst_token = lst_token->next;
 	}

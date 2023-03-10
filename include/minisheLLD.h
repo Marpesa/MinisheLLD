@@ -6,7 +6,11 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2023/03/10 18:02:21 by lmery            ###   ########.fr       */
+=======
+/*   Updated: 2023/03/09 21:43:02 by gle-mini         ###   ########.fr       */
+>>>>>>> 7e7a1be5245148ad5b44810133ebdf1378d254f7
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +119,7 @@ char 	*merge_strings(char *str1, char *str2);
 
 /*-------------------- Heredoc --------------------*/
 
-void	heredoc(t_list *lst_token);
+void	heredoc(t_list *lst_token, char *linebuffer, char **secret_env);
 
 /*-------------------- Error ----------------------*/
 
@@ -169,7 +173,7 @@ int		is_g_stat(char *cmd);
 void	get_g_status(void);
 
 /*------------------Builtin-------------------------*/
-t_bool	is_builtin(char *value);
+t_bool	is_builtin(char **cmd);
 int		builtin_outpipe(t_command *command, char ***env, t_list *lst_command);
 int		execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command);
 int		builtin_echo(char **command, int fd, char ***env, t_list *lst_command);

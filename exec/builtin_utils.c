@@ -6,12 +6,40 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:28 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/07 16:37:52 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/09 16:17:52 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
 
+t_bool	is_builtin(char **cmd)
+{
+	int	len;
+
+	if (cmd == NULL)
+		return (false);
+
+	if (!*cmd)
+		return (false);
+	len = ft_strlen_secure(*cmd) + 1;
+	if ((ft_strncmp(*cmd, "echo", len) == 0))
+		return (true);
+	if (!(ft_strncmp(*cmd, "pwd", len)))
+		return (true);
+	if (!(ft_strncmp(*cmd, "env", len)))
+		return (true);
+	if (!(ft_strncmp(*cmd, "export", len)))
+		return (true);
+	if (!(ft_strncmp(*cmd, "unset", len)))
+		return (true);
+	if (!(ft_strncmp(*cmd, "cd", len)))
+		return (true);	
+	if (!(ft_strncmp(*cmd, "exit", len)))
+		return (true);
+	return (false);
+}
+
+/*
 t_bool	is_builtin(char *value)
 {
 	int	len;
@@ -35,6 +63,8 @@ t_bool	is_builtin(char *value)
 		return (true);
 	return (false);
 }
+*/
+
 
 int	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command)
 {
