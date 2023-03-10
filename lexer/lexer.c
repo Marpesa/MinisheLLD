@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 04:12:43 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/09 18:09:14 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/10 18:33:00 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,14 @@ static int	token_redirect_append(char *input, int *i, t_lexer *data)
 	return (1);
 }
 
-int	ft_word_in_quote(char *input, int i, int len)
+int	ft_word_in_quote(char *input, int i, int len, char quote)
 {
 	int	start;
 
 	start = i;
-	if (input[i] == '\"')
+	if (input[i] == quote)
 		i++;
-	while (input[i] && input[i] != '\"')
+	while (input[i] && input[i] != quote)
 		i++;
 	if (i - start >= len)
 		len = i - start + 1;

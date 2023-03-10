@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 09:59:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/07 10:13:32 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/10 18:36:11 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,8 +38,9 @@ int	token_word(char *input, int *i, t_lexer *data)
 	token = NULL;
 	j = len_token_word(input, i, data);
 	word_len = j - *i;
-	if (input[*i] == '\"' && input[*i + 1] != '\"')
-		word_len = ft_word_in_quote(input, *i, word_len);
+	if ((input[*i] == '\"' && input[*i + 1] != '\"')\
+	|| (input[*i] == '\'' && input[*i + 1] != '\''))
+		word_len = ft_word_in_quote(input, *i, word_len, input[*i]);
 	token = malloc(sizeof(t_token) * 1);
 	if (token == NULL)
 		return (-1);
