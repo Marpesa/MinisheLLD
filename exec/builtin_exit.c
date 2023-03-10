@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 04:20:53 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/06 19:34:26 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/10 16:48:18 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,7 +57,9 @@ void	builtin_exit(char ***env, t_list *lst_command, char **cmd)
 	else
 		g_status = tmp;
 	if (ft_maplen_secure(cmd) > 2 || (cmd[1] && (cmd[1][0] == '1' && !cmd[1][1])))
-		g_status = 1;
+		g_status = 1;	
+	if ((cmd[1] && (cmd[1][0] == '0' && !cmd[1][1])))
+		g_status = 0;
 	ft_putstr_fd(_ORANGE2 "exit\n" _END, 2);
 	ft_free_map(*env);
 	ft_lstclear(&lst_command, del_command);

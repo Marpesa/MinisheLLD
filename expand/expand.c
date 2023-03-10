@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/07 12:20:47 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/09 18:18:08 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,11 @@ static int	replace_env_var_in_new_str(char *start, char *end, char **new_str)
 	append_str = NULL;
 	append_str = malloc(ft_strlen_secure(*new_str) + (end - start) + 1);
 	if (append_str == NULL)
+	{
+		ft_print_error(_ORANGE2 \
+		"Malloc error in replace_env_var_in_new_str\n" _END, NULL, NULL);
 		return (-1);
+	}
 	ft_bzero(append_str, ft_strlen_secure(*new_str) + (end - start) + 1);
 	ft_strlcpy_secure(append_str, *new_str, ft_strlen_secure(*new_str) + 1);
 	ft_strlcat(append_str, start, \

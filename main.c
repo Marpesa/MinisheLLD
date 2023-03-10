@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/06 19:40:00 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/09 18:22:15 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,10 +121,12 @@ char	**save_env(char **env)
 		envc++;
 		i++;
 	}
-
 	envp = (char **)malloc((envc + 2) * sizeof(char *));
 	if (!envp)
-		return NULL;
+	{
+		ft_print_error(_ORANGE2 "Malloc error while creating secret env\n" _END, NULL, NULL);
+		exit (1);
+	}
 	envp[0] = gstat_in_env(envp[0]);
 	if (env[0] == NULL)
 	{
@@ -141,7 +143,8 @@ char	**save_env(char **env)
 			while (--i >= 0) 
 				free(envp[i]);
 			free(envp);
-			return (NULL);
+			ft_print_error(_ORANGE2 "Malloc error while creating secret env\n" _END, NULL, NULL);
+			exit (1);
 		}
 		ft_strncpy(envp[i], env[i], len);
 		envp[i][len-1] = '\0';
@@ -153,7 +156,6 @@ char	**save_env(char **env)
 
 int main(int argc, char **argv, char **env)
 {
-	// g_status = 0;
 	(void)argc;
 	(void)argv;
 	t_list	*lst_token;
@@ -163,14 +165,11 @@ int main(int argc, char **argv, char **env)
 	int		prev_gstat;
 
 	rl_outstream = stderr;
-	// ignore Ctrl-\ Ctrl-C Ctrl-Z signals
 	linebuffer = NULL;
 	lst_token = NULL;
 	lst_command = NULL;
-	// secret_env = NULL;
 	ignore_signal_for_shell();
 	secret_env = save_env(env);
-	// printf("gstat = %d\n", tmp);
 	rl_outstream = stderr;
 	while (true)
 	{
@@ -183,20 +182,15 @@ int main(int argc, char **argv, char **env)
 			ft_putstr_fd(_ORANGE "GOODBYE !\n" _END, 2);
 			free_and_exit(lst_token, lst_command, &linebuffer, secret_env);
 		}
-		// if (is_g_stat(linebuffer))
-		// 	get_g_status();
 		g_status = check_error_input(linebuffer);
 		if (g_status == 0)
 		{
+			g_status = 1;
 			if (lexer(linebuffer, &lst_token) == -1)
 				free_and_exit(lst_token, lst_command, &linebuffer, secret_env);
 			if (ft_expand(lst_token, secret_env) == -1)
 				free_and_exit(lst_token, lst_command, &linebuffer, secret_env);
-			//print_lst_token(lst_token);
-
 			heredoc(lst_token);
-
-
 			if (syntaxe_error(lst_token) != 0)
 			{
 				if (parser(lst_token, &lst_command) == -1)
@@ -205,8 +199,8 @@ int main(int argc, char **argv, char **env)
 				if (linebuffer != NULL)
 					free(linebuffer);
 				linebuffer = NULL;
+				g_status = 0;
 				g_status = exec(lst_command, &secret_env, prev_gstat);
-				// printf("err = %d\n", g_status);
 			}
 		}
 		free_all(&lst_token, &lst_command, &linebuffer);

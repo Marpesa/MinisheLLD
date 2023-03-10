@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 12:25:03 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/07 12:41:15 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/09 18:21:12 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,10 @@ int	parser(t_list	*lst_token, t_list **lst_result)
 		return (1);
 	command = malloc(sizeof(t_command));
 	if (command == NULL)
+	{
+		ft_print_error(_ORANGE2 "Malloc error in parer\n" _END, NULL, NULL);
 		return (-1);
+	}
 	init_cmd(&command, &lst_command, &token_previous);
 	if (lst_add_command(&lst_command, command) == -1)
 		return (-1);
@@ -44,7 +47,10 @@ int	parser(t_list	*lst_token, t_list **lst_result)
 		{
 			command = malloc(sizeof(t_command));
 			if (command == NULL)
+			{
+				ft_print_error(_ORANGE2 "Malloc error in parer\n" _END, NULL, NULL);
 				return (-1);
+			}
 			command->word = NULL;
 			command->redir = NULL;
 			command->fd_in = STDIN_FILENO;

@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 12:33:40 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/07 12:35:36 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/09 18:33:15 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,13 @@ int	add_str_to_map(char *str, char **map, char ***map_result)
 	while (i < ft_maplen_secure(map))
 	{
 		new_map[i] = ft_strdup(map[i]);
+		if (!new_map[i])
+			return(-1);
 		i++;
 	}
 	new_map[i] = ft_strdup(str);
+	if (!new_map[i])
+		return(-1);
 	new_map[i + 1] = NULL;
 	add_to_map_utils(&map);
 	*map_result = new_map;
