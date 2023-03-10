@@ -5,24 +5,14 @@
 -norm
 
 -gerer les valeurs de retours et les sorties de malloc partout
-
--Makefile ne remake pas avec changements dans le .h
-
--syntaxe error entre quotes
+(unset, export, cd_utils)
 
 -isatty pour subminishell (exit | ./minishell)
 
 
--ambigous redirect
-
 
 valgrind --suppressions=supp_file --leak-check=full --show-leak-kinds=all ./minishell
 
-
-KC:
-commande sans option
-$? (apres)
-cat Ctrl+C
 
 bien gerer le ctrl \ quand cat wait (il doit quitter)
 
