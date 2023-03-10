@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/09 18:18:08 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/10 18:27:42 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,15 +53,18 @@ static int	replace_env_var_in_new_str(char *start, char *end, char **new_str)
 static int	loop_expand(char *start, char *end, char **new_str, char **env)
 {
 	t_bool	in_d_quote;
+	t_bool	in_s_quote;
 	int		result;
 
 	in_d_quote = false;
+	in_s_quote = false;
 	while (1)
 	{
-		result = custom_tokenizer(end, &start, &end, &in_d_quote);
-		if ((*start == '$' && (end - start) > 1) || (*start == '$' && \
-		(end - start) == 1 && *(start + 1) == '\'' && in_d_quote == false))
+		//ft_putstr_fd("loulou\n", 2);
+		result = custom_tokenizer(end, &start, &end, &in_d_quote, &in_s_quote);
+		if (((*start == '$' && (end - start) > 1) || (*start == '$' && (end - start) == 1 && in_d_quote == false)) && in_s_quote == false)
 		{
+			//ft_putnbr_fd(in_s_quote, 2);
 			*new_str = merge_strings(*new_str, \
 			env_var_find(start + 1, end, env));
 			if (*new_str == NULL)
@@ -100,6 +103,7 @@ int	ft_expand(t_list *lst_token, char **env)
 
 	token = NULL;
 	token_next = NULL;
+	print_lst_token(lst_token);
 	while (lst_token != NULL)
 	{
 		token = lst_token->content;
@@ -114,6 +118,7 @@ int	ft_expand(t_list *lst_token, char **env)
 		{			
 			if (expand_token(token, env) == -1)
 				return (-1);
+			//print_lst_token(lst_token);
 			trim(&token->text);
 		}
 		lst_token = lst_token->next;

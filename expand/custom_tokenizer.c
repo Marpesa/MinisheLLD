@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 03:45:21 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/07 11:49:11 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/10 18:00:53 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,11 @@ static void	skip_s_quote(char *str, int *i, t_bool *in_d_quote)
 	}
 }
 
-static int	return_token(char *str, int *i, char **end, t_bool *in_d_quote)
+static int	return_token(char *str, int *i, char **end, t_bool *in_d_quote, t_bool *in_s_quote)
 {
+	if (str[*i] == '\'')
+		*in_d_quote = !*in_s_quote;
+
 	if ((str[*i] == '\'' && *in_d_quote == false) || \
 			(str[*i] == '\'' && *in_d_quote == true && *i != 0))
 	{
@@ -52,7 +55,7 @@ static int	return_token(char *str, int *i, char **end, t_bool *in_d_quote)
 	return (0);
 }
 
-int	custom_tokenizer(char *str, char **start, char **end, t_bool *in_d_quote)
+int	custom_tokenizer(char *str, char **start, char **end, t_bool *in_d_quote, t_bool *in_s_quote)
 {
 	int	i;
 
@@ -60,6 +63,8 @@ int	custom_tokenizer(char *str, char **start, char **end, t_bool *in_d_quote)
 	*start = str;
 	if (str[i] == '\"')
 		*in_d_quote = !*in_d_quote;
+	if (str[i] == '\'')
+		*in_s_quote = !*in_s_quote;
 	if (str[i] == '$' || str[i] == ' ' || str[i] == '\"' || str[i] == '+' \
 	|| str[i] == '%' || str[i] == '/' || str[i] == '-')
 		i++;
@@ -68,7 +73,9 @@ int	custom_tokenizer(char *str, char **start, char **end, t_bool *in_d_quote)
 	{
 		if (str[i] == '\"')
 			*in_d_quote = !*in_d_quote;
-		if (return_token(str, &i, end, in_d_quote))
+		if (str[i] == '\'')
+			*in_s_quote = !*in_s_quote;
+		if (return_token(str, &i, end, in_d_quote, in_s_quote))
 			return (1);
 		i++;
 	}
