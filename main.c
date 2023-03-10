@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:16:13 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/09 21:24:42 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/10 16:07:48 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -201,9 +201,7 @@ int main(int argc, char **argv, char **env)
 			{
 				if (parser(lst_token, &lst_command) == -1)
 					free_and_exit(lst_token, lst_command, &linebuffer, secret_env);
-				ft_putstr_fd("SHARLOTE\n", 2);
 				ft_lstclear(&lst_token, del_token);
-				ft_putstr_fd("--------------\n", 2);
 				if (linebuffer != NULL)
 					free(linebuffer);
 				linebuffer = NULL;
