@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:28 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/11 20:39:13 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/11 21:36:12 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,10 +77,7 @@ int	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command)
 	{
 		result = builtin_cd(cmd);
 		if (result == -1)
-		{
-			result = 1;
 			return (-1);
-		}
 		g_status = result;
 	}
 	return (result);
