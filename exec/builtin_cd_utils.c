@@ -6,20 +6,25 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 19:04:29 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/28 17:42:45 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/11 15:23:04 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
 
-void	double_point(char **str, char **str2, int *path)
+int	double_point(char **str, char **str2, int *path)
 {
 	*str = ft_strdup(getenv("PWD"));
+	if (*str == NULL)
+		return (-1);
 	*str2 = ft_root_one(*str);
+	if (*str2 == NULL)
+		return (-1);
 	free(*str);
 	*path = chdir(*str2);
 	free(*str2);
 	*str2 = NULL;
+	return (1);
 }
 
 char	*ft_root_one(char *back)
@@ -40,7 +45,11 @@ char	*ft_root_one(char *back)
 	else
 	{
 		res = malloc(sizeof(char) * (i + 1));
+		if (res == NULL)
+			return (NULL);
 		res = ft_strldup_secure(res, back, i + 1);
+		if (res == NULL)
+			return (NULL);
 	}
 	return (res);
 }

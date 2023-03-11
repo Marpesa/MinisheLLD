@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 21:42:16 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/26 20:48:22 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/11 15:34:23 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	ft_locate_occur(char ***cmd, int j, int *occur, int *found)
 	}
 }
 
-void	copy_env_unset(char ***str_env, int i, char ***cmd, char ***new_env)
+int	copy_env_unset(char ***str_env, int i, char ***cmd, char ***new_env)
 {
 	int	j;
 	int	occur;
@@ -65,12 +65,17 @@ void	copy_env_unset(char ***str_env, int i, char ***cmd, char ***new_env)
 			j++;
 		}
 		if (found == 0)
+		{
 			(*new_env)[i - occur] = ft_strdup((*str_env)[i]);
+			if ((*new_env)[i - occur] == NULL)
+				return (-1);
+		}
 		i++;
-	}
+	}	
+	return (1);
 }
 
-void	builtin_unset(char **cmd, char ***env)
+int	builtin_unset(char **cmd, char ***env)
 {
 	char	**new_env;
 	char	**str_env;
@@ -80,14 +85,16 @@ void	builtin_unset(char **cmd, char ***env)
 	i = 0;
 	str_env = *env;
 	if (!check_occur(cmd, str_env, &occur))
-		return ;
+		return (1);
 	new_env = malloc(sizeof(char *) * \
 	((ft_maplen_secure(str_env) - occur) + 1));
-	if (!new_env)
-		return ;
+	if (new_env == NULL)
+		return (-1);
 	ft_bzero(new_env, (sizeof(char *) * \
 	((ft_maplen_secure(str_env) - occur) + 1)));
-	copy_env_unset(&str_env, i, &cmd, &new_env);
+	if (copy_env_unset(&str_env, i, &cmd, &new_env) == -1)
+		return (-1);
 	ft_free_map(*env);
 	*env = new_env;
+	return (1);
 }

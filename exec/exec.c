@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/11 13:48:20 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/11 15:21:08 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,15 +52,8 @@ static int	get_absolute_path(char **cmd, int *error_status, char **env)
 	if (cmd == NULL || cmd[0][0] == '\0')
 	{
 		*error_status = -1;
-		return ;
+		return (1);
 	}
-	/*
-	if (cmd[0][0] == '\0')
-	{
-		*error_status = -1;
-		return ;
-	}
-	*/
 	if (cmd[0][0] != '/' && ft_strncmp(cmd[0], "./", 2) != 0)
 	{
 		if (is_in_env("PATH", env))
@@ -79,24 +72,19 @@ static int	get_absolute_path(char **cmd, int *error_status, char **env)
 		else 
 		{
 			*error_status = 2;
-			return ;
+			return (2);
 		}
 		if (get_valid_bin(path, cmd, &bin) == -1)
 		{
-			*error_status = -1;
-			return -1;
+			return (-1);
 		}
 		if (bin == NULL)
 		{
-			//printf("command not found\n");
-			//perror("command not found\n");
 			if (cmd[0] != NULL)
 			free(path);
 			path = NULL;
-			// free(cmd[0]);
-			// cmd[0] = NULL;
 			*error_status = 2;
-			return ;
+			return (2);
 		}
 		free(path);
 		path = NULL;
@@ -104,7 +92,10 @@ static int	get_absolute_path(char **cmd, int *error_status, char **env)
 		cmd[0] = NULL;
 		cmd[0] = bin;
 	}
+	return (1);
 }
+
+
 
 void	redirection(t_command *command)
 {
@@ -234,10 +225,10 @@ int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command, t_list 
 int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command, t_list *lst_command_head)
 {
 	pid_t	cpid;
-	int		error;
+	//int		error;
 	t_command	*command;
 	int		status;
-	error = 1;
+	//error = 1;
 	//print_command(lst_command->content, 2);
 	command = lst_command->content;
 	cpid = fork();
@@ -335,13 +326,15 @@ int	exec(t_list	*lst_command, char ***env, int tmp)
 			if (is_exit(command->word))
 				close(prevpipe);
 			tmp = execute_builtin(command->word, env, command->fd_out, lst_current);
+			if (tmp == -1)
+				return (-1);
 			lst_current = lst_current->next;
 			if (tmp >= 0)
 				g_status = tmp;
 			close(prevpipe);
 		}
 		if (lst_current != NULL && lst_current->next == NULL)
-			t_last(command->word, env, prevpipe, lst_current, lst_command);
+			ft_last(command->word, env, prevpipe, lst_current, lst_command);
 		
 		else if (lst_current != NULL)
 			ft_pipe(command->word, env, &prevpipe, lst_current, lst_command);
