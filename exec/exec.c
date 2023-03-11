@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/11 17:13:33 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/11 19:53:07 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,8 +116,10 @@ static int	get_absolute_path(char **cmd, int *error_status, char **env)
 	return (1);
 }
 
-void	redir_in(t_command *command, char **redirection, int new_in, int *i)
+void	redir_in(t_command *command, char **redirection, int *i)
 {
+	int	new_in;
+
 	new_in = open(redirection[*i + 1], O_RDONLY, 0644);
 	if (new_in == -1)
 		perror("open");
@@ -126,19 +128,55 @@ void	redir_in(t_command *command, char **redirection, int new_in, int *i)
 	command->fd_in = new_in;
 	*i += 2;
 }
-/*
-void	redir_out()
 
-void	redir_append_in()
+void	redir_out(t_command *command, char **redirection, int *i)
+{
+	int	new_out;
 
-void	redir_heredoc()
-*/
+	new_out = open(redirection[*i + 1], \
+			O_CREAT | O_WRONLY | O_TRUNC, 0644);
+	if (new_out == -1)
+		perror("open");
+	if (command->fd_out != STDOUT_FILENO)
+		close(command->fd_out);
+	command->fd_out = new_out;
+	*i += 2;
+}
+
+void	redir_append_out(t_command *command, char **redirection, int *i)
+{
+	int	new_out;
+
+	new_out = open(redirection[*i + 1], \
+			O_CREAT | O_WRONLY | O_APPEND, 0644);
+	if (new_out == -1)
+		perror("open");
+	if (command->fd_out != STDOUT_FILENO)
+		close(command->fd_out);
+	command->fd_out = new_out;
+	*i += 2;
+}
+
+
+
+void	redir_heredoc(t_command *command, int *i)
+{
+	int new_in;
+
+	new_in = open(HEREDOC_FILE, O_RDONLY, 0644);
+	if (new_in == -1)
+		perror("open");
+	if (command->fd_in != STDIN_FILENO)
+		close(command->fd_in);
+	command->fd_in = new_in;
+	*i += 1;
+
+
+}
 
 void	redirection(t_command *command)
 {
 	int		i;
-	int		new_out;
-	int		new_in;
 	char	**redirection;
 
 	redirection = command->redir;
@@ -146,50 +184,13 @@ void	redirection(t_command *command)
 	while (redirection != NULL && redirection[i] != NULL)
 	{
 		if (ft_strncmp(redirection[i], "<\0", 2) == 0)
-		{
-			redir_in(command, redirection, new_in, &i);
-			/*
-			new_in = open(redirection[i + 1], O_RDONLY, 0644);
-			if (new_in == -1)
-				perror("open");
-			if (command->fd_in != STDIN_FILENO)
-				close(command->fd_in);
-			command->fd_in = new_in;
-			i += 2;
-			*/
-		}
+			redir_in(command, redirection, &i);
 		else if (ft_strncmp(redirection[i], ">\0", 2) == 0)
-		{
-			new_out = open(redirection[i + 1], \
-					O_CREAT | O_WRONLY | O_TRUNC, 0644);
-			if (new_out == -1)
-				perror("open");
-			if (command->fd_out != STDOUT_FILENO)
-				close(command->fd_out);
-			command->fd_out = new_out;
-			i += 2;
-		}
+			redir_out(command, redirection, &i);
 		else if (ft_strncmp(redirection[i], ">>\0", 3) == 0)
-		{
-			new_out = open(redirection[i + 1], \
-					O_CREAT | O_WRONLY | O_APPEND, 0644);
-			if (new_out == -1)
-				perror("open");
-			if (command->fd_out != STDOUT_FILENO)
-				close(command->fd_out);
-			command->fd_out = new_out;
-			i += 2;
-		}
+			redir_append_out(command, redirection, &i);
 		else if (ft_strncmp(redirection[i], "<<\0", 3) == 0)
-		{
-			new_in = open(HEREDOC_FILE, O_RDONLY, 0644);
-			if (new_in == -1)
-				perror("open");
-			if (command->fd_in != STDIN_FILENO)
-				close(command->fd_in);
-			command->fd_in = new_in;
-			i += 1;
-		}
+			redir_heredoc(command, &i);	
 	}
 }
 
@@ -235,13 +236,12 @@ int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command, t_list 
 		}
 		else
 		{
+			if (command->fd_out != STDOUT_FILENO)
+				close(command->fd_out);
+			if (command->fd_in != STDIN_FILENO)
+				close(command->fd_in);
 			execve(cmd[0], cmd, *env);
 		}
-		if (command->fd_out != STDOUT_FILENO)
-			close(command->fd_out);
-		if (command->fd_in != STDIN_FILENO)
-			close(command->fd_in);
-		exit(0);
 	}
 	else
 	{
@@ -305,11 +305,13 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command, t_list *
 			exit(exit_status);
 		}
 		else
+		{
+			if (command->fd_out != STDOUT_FILENO)
+				close(command->fd_out);
+			if (command->fd_in != STDIN_FILENO)
+				close(command->fd_in);
 			execve (cmd[0], cmd, *env);
-		if (command->fd_out != STDOUT_FILENO)
-			close(command->fd_out);
-		if (command->fd_in != STDIN_FILENO)
-			close(command->fd_in);
+		}
 	}
 	else
 	{
@@ -319,9 +321,7 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command, t_list *
 		while (waitpid(-1, &status, 0) != -1)
 			;
 		if (WIFEXITED(status))
-		{
 			g_status = WEXITSTATUS(status);
-		}
 	}
 	ignore_signal_for_shell();
 	return (1);
@@ -334,7 +334,6 @@ int	exec(t_list	*lst_command, char ***env, int tmp)
 	int			prevpipe;
 	int			error_status;
 
-	// printf ("%d\n",tmp);
 	lst_current = NULL;
 	lst_current = lst_command;
 	error_status = 0;
@@ -345,8 +344,10 @@ int	exec(t_list	*lst_command, char ***env, int tmp)
 	{
 		command = lst_current->content;
 		if (is_builtin(command->word) == 0)
+		{
 			if (get_absolute_path(command->word, &error_status, *env) == -1)
 				return (-1);
+		}
 		if (error_status == 2)
 		{
 			ft_putstr_fd(_ORANGE2 "MinisheLLD : ", 2);
@@ -356,6 +357,7 @@ int	exec(t_list	*lst_command, char ***env, int tmp)
 		}
 		if (lst_current != NULL && ((ft_lstsize(lst_command) == 1 && is_builtin(command->word)) || is_cd(command->word)))
 		{
+			redirection(command);
 			g_status = tmp;
 			if (is_exit(command->word))
 				close(prevpipe);
@@ -368,8 +370,9 @@ int	exec(t_list	*lst_command, char ***env, int tmp)
 			close(prevpipe);
 		}
 		if (lst_current != NULL && lst_current->next == NULL)
+		{
 			ft_last(command->word, env, prevpipe, lst_current, lst_command);
-		
+		}
 		else if (lst_current != NULL)
 			ft_pipe(command->word, env, &prevpipe, lst_current, lst_command);
 		if (lst_current != NULL)
