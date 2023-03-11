@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/10 19:28:23 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/11 19:01:35 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,12 @@ typedef enum s_bool
 	false,
 	true
 } t_bool;
+
+typedef struct s_quotes {
+	t_bool	in_s;
+	t_bool	in_d;
+	t_bool	s_in_d;
+} t_quotes;
 
 typedef enum e_token_type {
 	TOKEN_LIM,				// heredoc limitor 
@@ -110,8 +116,10 @@ int		super_token(char *input, int *i, t_lexer *data);
 int		ft_expand(t_list *lst_token, char **env);
 int		is_special(char c);
 void	trim(char **str);
-int		custom_tokenizer(char *str, char **start, char **end, t_bool *in_d_quote, t_bool *in_s_quote);
+int		custom_tokenizer(char *str, char **start, char **end, t_quotes *quotes);
 char 	*merge_strings(char *str1, char *str2);
+int		loop_expand(char *start, char *end, char **new_str, char **env);
+
 
 /*-------------------- Heredoc --------------------*/
 

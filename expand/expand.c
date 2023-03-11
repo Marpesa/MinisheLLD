@@ -6,23 +6,29 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 11:14:45 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/10 19:31:44 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/11 18:58:05 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
 
-static char	*env_var_find(char *start, char *end, char **env)
+static char	*env_var_find(char *start, char *end, char **env, t_bool s_in_d)
 {
-	int	i;
+	int		i;
 
 	i = 0;
 	while (env[i])
 	{
-		if (ft_strncmp(start, env[i], end - start) == 0 && \
-				env[i][end - start] == '=')
+		// printf("res = %s\n", &env[i][((*end) + 1) - (*start) + 1]);
+		// // printf("start = %c\n", *(start + 2));
+		// // printf("en = %c\n", *(end - 3));
+		if ((ft_strncmp(start, env[i], end - start) == 0 && \
+		env[i][end - start] == '=') || (s_in_d == true && (ft_strncmp(start, env[i], end - start) == 0)))
 		{
-			return (&env[i][end - start + 1]);
+			// if (s_in_d == false)
+				return (&env[i][end - start + 1]);
+			// else
+			// 	return (&env[i][((*start) + 2)]);
 		}
 		i++;
 	}
@@ -50,31 +56,43 @@ static int	replace_env_var_in_new_str(char *start, char *end, char **new_str)
 	return (1);
 }
 
-static int	loop_expand(char *start, char *end, char **new_str, char **env)
+int	loop_expand(char *start, char *end, char **new_str, char **env)
 {
-	t_bool	in_d_quote;
-	t_bool	in_s_quote;
-	int		result;
+	int			result;
+	t_quotes	*quotes;
 
-	in_d_quote = false;
-	in_s_quote = false;
+	quotes = NULL;
+	quotes = malloc(sizeof(t_quotes));
+	if (quotes == NULL)
+		return (-1);
+	quotes->in_d = false;
+	quotes->in_s = false;
 	while (1)
 	{
-		//ft_putstr_fd("loulou\n", 2);
-		result = custom_tokenizer(end, &start, &end, &in_d_quote, &in_s_quote);
-		if (((*start == '$' && (end - start) > 1) || (*start == '$' && (end - start) == 1 && in_d_quote == false)) && in_s_quote == false)
+		result = custom_tokenizer(end, &start, &end, quotes);
+		if ((*start == '$' && (end - start) > 1) || \
+		((*start == '$' && (end - start) == 1) && (quotes->in_d == false && quotes->in_s == false)))
 		{
-			//ft_putnbr_fd(in_s_quote, 2);
 			*new_str = merge_strings(*new_str, \
-			env_var_find(start + 1, end, env));
+			env_var_find(start + 1, end, env, quotes->s_in_d));
 			if (*new_str == NULL)
+			{			
+				free(quotes);
+				quotes = NULL;
 				return (-1);
+			}
 		}
 		else if (replace_env_var_in_new_str(start, end, new_str) == -1)
+		{
+			free(quotes);
+			quotes = NULL;
 			return (-1);
+		}
 		if (result == 0)
 			break ;
 	}
+	free(quotes);
+	quotes = NULL;
 	return (result);
 }
 
