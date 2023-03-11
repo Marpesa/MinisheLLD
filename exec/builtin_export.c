@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 17:52:19 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/11 20:18:10 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/11 20:39:48 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,5 +126,5 @@ int	builtin_export(char **cmd, char ***env)
 	}
 	if (ft_maplen_secure(cmd) < 2)
 		g_status = 1;
-	return (1);
+	return (0);
 }

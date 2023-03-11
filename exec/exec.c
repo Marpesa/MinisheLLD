@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/11 19:53:07 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/11 20:38:12 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -225,12 +225,12 @@ int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command, t_list 
 			int	exit_status = execute_builtin(cmd, env, command->fd_out, lst_command_head);
 			if (exit_status == -1)
 				return (-1);
-			ft_lstclear(&lst_command_head, del_command);
-			ft_free_map(*env);
 			if (command->fd_out != STDOUT_FILENO)
 				close(command->fd_out);
 			if (command->fd_in != STDIN_FILENO)
 				close(command->fd_in);
+			ft_lstclear(&lst_command_head, del_command);
+			ft_free_map(*env);
 			exit(exit_status);
 
 		}
@@ -296,12 +296,13 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command, t_list *
 			int	exit_status = execute_builtin(cmd, env, command->fd_out, lst_command_head);
 			if (exit_status == -1)
 				return (-1);
-			ft_lstclear(&lst_command_head, del_command);
-			ft_free_map(*env);
 			if (command->fd_out != STDOUT_FILENO)
 				close(command->fd_out);
 			if (command->fd_in != STDIN_FILENO)
 				close(command->fd_in);
+			ft_lstclear(&lst_command_head, del_command);
+			ft_free_map(*env);
+			
 			exit(exit_status);
 		}
 		else

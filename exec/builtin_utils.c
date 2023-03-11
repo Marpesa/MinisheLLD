@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:28 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/11 15:18:02 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/11 20:39:13 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,8 @@ t_bool	is_builtin(char **cmd)
 int	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command)
 {
 	int result;
-	int	error_tmp;
 
-	result = 1;
+	result = 0;
 	if (!(ft_strncmp(cmd[0], "echo\0", ft_strlen("echo\0"))))
 	{
 		if (builtin_echo(cmd, fd, env, lst_command) == -1)
@@ -70,18 +69,20 @@ int	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command)
 	}
 	else if (!(ft_strncmp(cmd[0], "export\0", ft_strlen("export\0"))))
 	{
-		if (builtin_export(cmd, env) == -1)
+		result = builtin_export(cmd, env);
+		if (result == -1)
 			return (-1);
 	}
 	else if (!(ft_strncmp(cmd[0], "cd\0", ft_strlen("cd\0"))))
 	{
-		error_tmp = builtin_cd(cmd);
-		if (error_tmp == -1)
+		result = builtin_cd(cmd);
+		if (result == -1)
+		{
+			result = 1;
 			return (-1);
-		g_status = error_tmp;
+		}
+		g_status = result;
 	}
-	else
-		result = -2;	
 	return (result);
 }
 
