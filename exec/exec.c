@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/11 17:01:00 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/11 17:13:33 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,39 +70,6 @@ int	dup_path(char ***env, char **path, int *error_status)
 	return (1);
 }
 
-/*
-static int	get_absolute_path(char **cmd, int *error_status, char **env)
-{
-	char	*path;
-	char	*bin;
-
-	path = NULL;
-	bin = NULL;
-	if (cmd == NULL || cmd[0][0] == '\0')
-	{
-		*error_status = -1;
-		return (1);
-	}
-	if (dup_path(&env, &path, error_status) == -1)
-		return (-1);
-	if (cmd[0][0] != '/' && ft_strncmp(cmd[0], "./", 2) != 0)
-	{
-		
-		if (get_valid_bin(path, cmd, &bin) == -1)
-			return (-1);
-		if (bin == NULL)
-		{
-			free(path);
-			path = NULL;
-			*error_status = 2;
-			return (2);
-		}
-		free_path_and_cmd(path, cmd, bin);
-	}
-	return (1);
-}
-*/
-
 void	free_path_and_cmd(char *path, char *bin, char **cmd)
 {
 	free(path);
@@ -112,6 +79,18 @@ void	free_path_and_cmd(char *path, char *bin, char **cmd)
 	cmd[0] = bin;
 }
 
+int	free_path_and_return_error(char *bin, char *path, int *error_status)
+{
+	if (bin == NULL)
+	{
+		free(path);
+		path = NULL;
+		*error_status = 2;
+		return (2);
+	}
+	return (1);
+}
+
 static int	get_absolute_path(char **cmd, int *error_status, char **env)
 {
 	char	*path;
@@ -126,96 +105,83 @@ static int	get_absolute_path(char **cmd, int *error_status, char **env)
 	}
 	if (cmd[0][0] != '/' && ft_strncmp(cmd[0], "./", 2) != 0)
 	{
-		/*
-		if (is_in_env("PATH", env))
-		{
-			path = ft_strdup(getenv("PATH"));
-			if (path == NULL)
-				return (-1);
-		}
-		else if (path == NULL && env[0] == NULL)
-		{
-			path = ft_strdup("/bin:/usr/local/bin:/usr/bin:\
-					/bin:/usr/local/sbin");
-			if (path == NULL)
-				return (-1);
-		}
-		else
-		{
-			*error_status = 2;
-			return (2);
-		}
-		*/
 		if (dup_path(&env, &path, error_status) == -1)
 			return (-1);
-
 		if (get_valid_bin(path, cmd, &bin) == -1)
 			return (-1);
-		if (bin == NULL)
-		{
-			free(path);
-			path = NULL;
-			*error_status = 2;
+		if (free_path_and_return_error(bin, path, error_status) == 2)
 			return (2);
-		}
-	free_path_and_cmd(path, bin, cmd);	
+		free_path_and_cmd(path, bin, cmd);
 	}
 	return (1);
 }
 
+void	redir_in(t_command *command, char **redirection, int new_in, int *i)
+{
+	new_in = open(redirection[*i + 1], O_RDONLY, 0644);
+	if (new_in == -1)
+		perror("open");
+	if (command->fd_in != STDIN_FILENO)
+		close(command->fd_in);
+	command->fd_in = new_in;
+	*i += 2;
+}
+/*
+void	redir_out()
 
+void	redir_append_in()
+
+void	redir_heredoc()
+*/
 
 void	redirection(t_command *command)
 {
-	int	i;
-	int	new_out;
-	int	new_in;
+	int		i;
+	int		new_out;
+	int		new_in;
 	char	**redirection;
 
 	redirection = command->redir;
 	i = 0;
-	//print_map(redirection, 2);
 	while (redirection != NULL && redirection[i] != NULL)
 	{
 		if (ft_strncmp(redirection[i], "<\0", 2) == 0)
 		{
-			//ft_putstr_fd("< OK\n", 2);
+			redir_in(command, redirection, new_in, &i);
+			/*
 			new_in = open(redirection[i + 1], O_RDONLY, 0644);
 			if (new_in == -1)
 				perror("open");
 			if (command->fd_in != STDIN_FILENO)
 				close(command->fd_in);
 			command->fd_in = new_in;
-			//dup2(new_in, fd_in);
 			i += 2;
+			*/
 		}
 		else if (ft_strncmp(redirection[i], ">\0", 2) == 0)
 		{
-			//ft_putstr_fd("> OK\n", 2);
-			new_out = open(redirection[i + 1], O_CREAT | O_WRONLY | O_TRUNC, 0644);
+			new_out = open(redirection[i + 1], \
+					O_CREAT | O_WRONLY | O_TRUNC, 0644);
 			if (new_out == -1)
 				perror("open");
 			if (command->fd_out != STDOUT_FILENO)
 				close(command->fd_out);
 			command->fd_out = new_out;
-			//dup2(new_out, fd_out);
 			i += 2;
-        }
+		}
 		else if (ft_strncmp(redirection[i], ">>\0", 3) == 0)
 		{
-			//ft_putstr_fd(">> OK\n", 2);
-			new_out = open(redirection[i + 1], O_CREAT | O_WRONLY | O_APPEND, 0644);
+			new_out = open(redirection[i + 1], \
+					O_CREAT | O_WRONLY | O_APPEND, 0644);
 			if (new_out == -1)
 				perror("open");
 			if (command->fd_out != STDOUT_FILENO)
 				close(command->fd_out);
 			command->fd_out = new_out;
-			//dup2(new_out, fd_out);
 			i += 2;
 		}
 		else if (ft_strncmp(redirection[i], "<<\0", 3) == 0)
 		{
-			//ft_putstr_fd("<<\n", 2);
 			new_in = open(HEREDOC_FILE, O_RDONLY, 0644);
 			if (new_in == -1)
 				perror("open");
