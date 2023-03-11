@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/11 20:54:04 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/12 00:09:12 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,11 +157,9 @@ void	redir_append_out(t_command *command, char **redirection, int *i)
 	*i += 2;
 }
 
-
-
 void	redir_heredoc(t_command *command, int *i)
 {
-	int new_in;
+	int	new_in;
 
 	new_in = open(HEREDOC_FILE, O_RDONLY, 0644);
 	if (new_in == -1)
@@ -170,8 +168,6 @@ void	redir_heredoc(t_command *command, int *i)
 		close(command->fd_in);
 	command->fd_in = new_in;
 	*i += 1;
-
-
 }
 
 void	redirection(t_command *command)
@@ -190,7 +186,7 @@ void	redirection(t_command *command)
 		else if (ft_strncmp(redirection[i], ">>\0", 3) == 0)
 			redir_append_out(command, redirection, &i);
 		else if (ft_strncmp(redirection[i], "<<\0", 3) == 0)
-			redir_heredoc(command, &i);	
+			redir_heredoc(command, &i);
 	}
 }
 
@@ -202,46 +198,70 @@ void	close_open_fd(t_command *command)
 		close(command->fd_in);
 }
 
-int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command, t_list *lst_command_head)
+void	close_fd_and_free(t_command *command, char ***env, \
+		t_list *lst_command_head)
 {
-	int		pipefd[2];
-	int	cpid;
-	int	res;
-	t_command *command;
+	close_open_fd(command);
+	ft_free_map(*env);
+	ft_lstclear(&lst_command_head, del_command);
+}
 
-	command = lst_command->content;
-	res = 1;
+int	execute_command(t_command *command, char ***env, t_list *lst_command_head)
+{
+	int	exit_status;
+
+	exit_status = 0;
+	if (command->word == NULL)
+	{
+		close_fd_and_free(command, env, lst_command_head);
+		exit(0);
+	}
+	else if (is_builtin(command->word) == true)
+	{
+		exit_status = execute_builtin(command->word, env, command->fd_out, \
+					lst_command_head);
+		if (exit_status == -1)
+			return (-1);
+		close_fd_and_free(command, env, lst_command_head);
+		exit(exit_status);
+	}
+	else
+	{
+		execve (command->word[0], command->word, *env);
+		close_open_fd(command);
+	}
+	return (exit_status);
+}
+
+void	redir_child_pipe(t_command *command, int *prevpipe, int *pipefd)
+{
+	redirection(command);
+	close(pipefd[0]);
+	if (command->fd_out == STDOUT_FILENO)
+		command->fd_out = pipefd[1];
+	if (dup2(command->fd_out, STDOUT_FILENO) == -1)
+		perror("dup2");
+	close(pipefd[1]);
+	if (command->fd_in == STDIN_FILENO)
+		command->fd_in = *prevpipe;
+	if (dup2(command->fd_in, STDIN_FILENO) == -1)
+		perror("dup2");
+	close(*prevpipe);
+}
+
+int	ft_pipe(t_command *command, char ***env, int *prevpipe, \
+		t_list *lst_command_head)
+{
+	int	pipefd[2];
+	int	cpid;
+
 	pipe(pipefd);
 	cpid = fork();
 	if (cpid == 0)
 	{
-		redirection(command);
-		close(pipefd[0]);
-		if (command->fd_out == STDOUT_FILENO)
-			command->fd_out = pipefd[1];
-		if (dup2(command->fd_out, STDOUT_FILENO) == -1)
-			perror("dup2");
-		close(pipefd[1]);
-		if (command->fd_in == STDIN_FILENO)
-			command->fd_in = *prevpipe;
-		if (dup2(command->fd_in, STDIN_FILENO) == -1)
-			perror("dup2");
-		close(*prevpipe);
-		if (is_builtin(cmd) == true)
-		{
-			int	exit_status = execute_builtin(cmd, env, command->fd_out, lst_command_head);
-			if (exit_status == -1)
-				return (-1);
-			close_open_fd(command);
-			ft_lstclear(&lst_command_head, del_command);
-			ft_free_map(*env);
-			exit(exit_status);
-		}
-		else
-		{
-			close_open_fd(command);
-			execve(cmd[0], cmd, *env);
-		}
+		redir_child_pipe(command, prevpipe, pipefd);
+		if (execute_command(command, env, lst_command_head) == -1)
+			return (-1);
 	}
 	else
 	{
@@ -251,12 +271,11 @@ int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command, t_list 
 		*prevpipe = pipefd[0];
 	}
 	ignore_signal_for_shell();
-	if (is_builtin(cmd) == true)
-		res = 4;
-	return (res);
+	return (1);
 }
 
-int	execute_child_last(t_command *command, int prevpipe, char ***env, t_list *lst_command_head)
+int	execute_child_last(t_command *command, int prevpipe, char ***env, \
+		t_list *lst_command_head)
 {
 	redirection(command);
 	if (command->fd_out != STDOUT_FILENO)
@@ -267,44 +286,20 @@ int	execute_child_last(t_command *command, int prevpipe, char ***env, t_list *ls
 	if (dup2(command->fd_in, STDIN_FILENO))
 		perror("dup2");
 	close (prevpipe);
-	if (command->word == NULL)
-	{
-		close_open_fd(command);
-		ft_lstclear(&lst_command_head, del_command);
-		ft_free_map(*env);
-		exit(0);
-	}
-	else if (is_builtin(command->word) == true)		
-	{
-		int	exit_status = execute_builtin(command->word, env, command->fd_out, lst_command_head);
-		if (exit_status == -1)
-			return (-1);
-		close_open_fd(command);
-		ft_lstclear(&lst_command_head, del_command);
-		ft_free_map(*env);
-		ft_lstclear(&lst_command_head, del_command);
-		exit(exit_status);
-	}
-	else
-	{
-		close_open_fd(command);
-		execve (command->word[0], command->word, *env);
-	}
+	if (execute_command(command, env, lst_command_head) == -1)
+		return (-1);
 	return (1);
 }
 
-int	ft_last(t_command *command, char ***env, int prevpipe, t_list *lst_command_head)
+int	ft_last(t_command *command, char ***env, int prevpipe, \
+		t_list *lst_command_head)
 {
 	pid_t	cpid;
-	//int		error;
 	int		status;
-	//error = 1;
-	//print_command(lst_command->content, 2);
+
 	cpid = fork();
 	if (cpid == -1)
-	{
 		perror("fork");
-	}
 	else if (cpid == 0)
 	{
 		if (execute_child_last(command, prevpipe, env, lst_command_head) == -1)
@@ -324,6 +319,77 @@ int	ft_last(t_command *command, char ***env, int prevpipe, t_list *lst_command_h
 	return (1);
 }
 
+int	get_command_path(t_command *command, int *error_status, char **env)
+{
+	if (is_builtin(command->word) == 0)
+	{
+		if (get_absolute_path(command->word, error_status, env) == -1)
+			return (-1);
+	}
+	return (1);
+}
+
+int	check_valid_path(t_command *command, int error_status, int prevpipe)
+{
+	if (error_status == 2)
+	{
+		ft_putstr_fd(_ORANGE2 "MinisheLLD : ", 2);
+		ft_putstr_fd((command->word)[0], 2);
+		ft_putstr_fd(" : no such file or directory\n" _END, 2);
+		close(prevpipe);
+		return (127);
+	}
+	return (1);
+}
+
+int	exec_builtin_no_fork(t_list **lst_current, \
+		char ***env, int tmp, int prevpipe)
+{
+	t_command	*command;
+
+	command = (*lst_current)->content;
+	redirection(command);
+	g_status = tmp;
+	if (is_exit(command->word))
+		close(prevpipe);
+	tmp = execute_builtin(command->word, env, command->fd_out, \
+			*lst_current);
+	if (tmp == -1)
+		return (-1);
+	*lst_current = (*lst_current)->next;
+	if (tmp >= 0)
+		g_status = tmp;
+	close(prevpipe);
+	return (1);
+}
+
+void	dup_prevpipe(int *prevpipe)
+{
+	*prevpipe = dup(STDIN_FILENO);
+	if (*prevpipe == -1)
+		perror("dup");
+}
+
+int	execute_in_pipe(t_list **lst_curr, int *prevpipe, t_list *lst_command, \
+		char ***env)
+{
+	t_command	*command;
+
+	if ((*lst_curr) != NULL)
+		command = (*lst_curr)->content;
+	if ((*lst_curr) != NULL && (*lst_curr)->next == NULL)
+	{
+		if (ft_last(command, env, *prevpipe, lst_command) == -1)
+			return (-1);
+	}
+	else if ((*lst_curr) != NULL)
+		if (ft_pipe(command, env, prevpipe, lst_command) == -1)
+			return (-1);
+	if ((*lst_curr) != NULL)
+		(*lst_curr) = (*lst_curr)->next;
+	return (1);
+}
+
 int	exec(t_list	*lst_command, char ***env, int tmp)
 {
 	t_list		*lst_current;
@@ -331,50 +397,23 @@ int	exec(t_list	*lst_command, char ***env, int tmp)
 	int			prevpipe;
 	int			error_status;
 
-	lst_current = NULL;
 	lst_current = lst_command;
 	error_status = 0;
-	prevpipe = dup(STDIN_FILENO);
-	if (prevpipe == -1)
-		perror("dup");
+	dup_prevpipe(&prevpipe);
 	while (lst_current != NULL)
 	{
 		command = lst_current->content;
-		if (is_builtin(command->word) == 0)
-		{
-			if (get_absolute_path(command->word, &error_status, *env) == -1)
-				return (-1);
-		}
-		if (error_status == 2)
-		{
-			ft_putstr_fd(_ORANGE2 "MinisheLLD : ", 2);
-			ft_putstr_fd((command->word)[0], 2);
-			ft_putstr_fd(" : no such file or directory\n" _END, 2);
+		if (get_command_path(command, &error_status, *env) == -1)
+			return (-1);
+		if (check_valid_path(command, error_status, prevpipe) == 127)
 			return (127);
-		}
-		if (lst_current != NULL && ((ft_lstsize(lst_command) == 1 && is_builtin(command->word)) || is_cd(command->word)))
-		{
-			redirection(command);
-			g_status = tmp;
-			if (is_exit(command->word))
-				close(prevpipe);
-			tmp = execute_builtin(command->word, env, command->fd_out, lst_current);
-			if (tmp == -1)
+		if (lst_current != NULL && ((ft_lstsize(lst_command) == 1 && \
+					is_builtin(command->word)) || is_cd(command->word)))
+			if (exec_builtin_no_fork(&lst_current, env, tmp, prevpipe) == -1)
 				return (-1);
-			lst_current = lst_current->next;
-			if (tmp >= 0)
-				g_status = tmp;
-			close(prevpipe);
-		}
-		if (lst_current != NULL && lst_current->next == NULL)
-		{
-		//	ft_last(command->word, env, prevpipe, lst_current, lst_command);
-			ft_last(command, env, prevpipe, lst_command);
-		}
-		else if (lst_current != NULL)
-			ft_pipe(command->word, env, &prevpipe, lst_current, lst_command);
-		if (lst_current != NULL)
-			lst_current = lst_current->next;
+		if (execute_in_pipe(&lst_current, &prevpipe, lst_command, env) == -1)
+			return (-1);
 	}
+	close(prevpipe);
 	return (g_status);
 }
