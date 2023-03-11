@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 17:52:19 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/11 20:12:24 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/11 20:18:10 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,7 @@ int	builtin_export(char **cmd, char ***env)
 
 	i = 0;
 	j = 1;
+		
 	while (cmd[j])
 	{
 		if ((!valid_export(cmd[j])))
@@ -106,8 +107,13 @@ int	builtin_export(char **cmd, char ***env)
 			ft_print_error(_ORANGE2 \
 			"export : unvalid entry\n"_END, NULL, NULL);
 			g_status = 2;
-			return ;
+			return(2);
 		}
+		j++;
+	}
+	j = 1;
+	while (cmd[j])
+	{
 		tmp_error = allready_in_env(&cmd, env, &j, i);
 		if (tmp_error == 1)
 			continue ;
