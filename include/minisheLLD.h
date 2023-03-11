@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/11 20:12:40 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/11 21:30:29 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,7 @@ void	heredoc(t_list *lst_token, char *linebuffer, char **secret_env);
 /*-------------------- Error ----------------------*/
 
 int				syntaxe_error(t_list *lst_token);
+int				closed_quotes(char *input, int *i);
 t_token_type	return_token_type(t_list *lst_token);
 char			*return_token_text(t_list *lst_token);
 t_bool			start_or_finish_pipe(t_list *lst_token);
