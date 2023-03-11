@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/11 19:53:07 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/11 20:54:04 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -194,6 +194,13 @@ void	redirection(t_command *command)
 	}
 }
 
+void	close_open_fd(t_command *command)
+{
+	if (command->fd_out != STDOUT_FILENO)
+		close(command->fd_out);
+	if (command->fd_in != STDIN_FILENO)
+		close(command->fd_in);
+}
 
 int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command, t_list *lst_command_head)
 {
@@ -208,7 +215,7 @@ int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command, t_list 
 	cpid = fork();
 	if (cpid == 0)
 	{
-		redirection(lst_command->content);
+		redirection(command);
 		close(pipefd[0]);
 		if (command->fd_out == STDOUT_FILENO)
 			command->fd_out = pipefd[1];
@@ -225,21 +232,14 @@ int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command, t_list 
 			int	exit_status = execute_builtin(cmd, env, command->fd_out, lst_command_head);
 			if (exit_status == -1)
 				return (-1);
+			close_open_fd(command);
 			ft_lstclear(&lst_command_head, del_command);
 			ft_free_map(*env);
-			if (command->fd_out != STDOUT_FILENO)
-				close(command->fd_out);
-			if (command->fd_in != STDIN_FILENO)
-				close(command->fd_in);
 			exit(exit_status);
-
 		}
 		else
 		{
-			if (command->fd_out != STDOUT_FILENO)
-				close(command->fd_out);
-			if (command->fd_in != STDIN_FILENO)
-				close(command->fd_in);
+			close_open_fd(command);
 			execve(cmd[0], cmd, *env);
 		}
 	}
@@ -256,15 +256,50 @@ int	ft_pipe(char **cmd, char ***env, int *prevpipe,	t_list *lst_command, t_list 
 	return (res);
 }
 
-int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command, t_list *lst_command_head)
+int	execute_child_last(t_command *command, int prevpipe, char ***env, t_list *lst_command_head)
+{
+	redirection(command);
+	if (command->fd_out != STDOUT_FILENO)
+		if (dup2(command->fd_out, STDOUT_FILENO) == -1)
+			perror("dup2");
+	if (command->fd_in == STDIN_FILENO)
+		command->fd_in = prevpipe;
+	if (dup2(command->fd_in, STDIN_FILENO))
+		perror("dup2");
+	close (prevpipe);
+	if (command->word == NULL)
+	{
+		close_open_fd(command);
+		ft_lstclear(&lst_command_head, del_command);
+		ft_free_map(*env);
+		exit(0);
+	}
+	else if (is_builtin(command->word) == true)		
+	{
+		int	exit_status = execute_builtin(command->word, env, command->fd_out, lst_command_head);
+		if (exit_status == -1)
+			return (-1);
+		close_open_fd(command);
+		ft_lstclear(&lst_command_head, del_command);
+		ft_free_map(*env);
+		ft_lstclear(&lst_command_head, del_command);
+		exit(exit_status);
+	}
+	else
+	{
+		close_open_fd(command);
+		execve (command->word[0], command->word, *env);
+	}
+	return (1);
+}
+
+int	ft_last(t_command *command, char ***env, int prevpipe, t_list *lst_command_head)
 {
 	pid_t	cpid;
 	//int		error;
-	t_command	*command;
 	int		status;
 	//error = 1;
 	//print_command(lst_command->content, 2);
-	command = lst_command->content;
 	cpid = fork();
 	if (cpid == -1)
 	{
@@ -272,46 +307,8 @@ int	ft_last(char **cmd, char ***env, int prevpipe, t_list *lst_command, t_list *
 	}
 	else if (cpid == 0)
 	{
-		redirection(lst_command->content);
-		if (command->fd_out != STDOUT_FILENO)
-			if (dup2(command->fd_out, STDOUT_FILENO) == -1)
-				perror("dup2");
-		if (command->fd_in == STDIN_FILENO)
-			command->fd_in = prevpipe;
-		if (dup2(command->fd_in, STDIN_FILENO))
-			perror("dup2");
-		close (prevpipe);
-		if (cmd == NULL)
-		{
-			if (command->fd_out != STDOUT_FILENO)
-				close(command->fd_out);
-			if (command->fd_in != STDIN_FILENO)
-				close(command->fd_in);
-			ft_lstclear(&lst_command_head, del_command);
-			ft_free_map(*env);
-			exit(0);
-		}
-		else if (is_builtin(cmd) == true)		
-		{
-			int	exit_status = execute_builtin(cmd, env, command->fd_out, lst_command_head);
-			if (exit_status == -1)
-				return (-1);
-			ft_lstclear(&lst_command_head, del_command);
-			ft_free_map(*env);
-			if (command->fd_out != STDOUT_FILENO)
-				close(command->fd_out);
-			if (command->fd_in != STDIN_FILENO)
-				close(command->fd_in);
-			exit(exit_status);
-		}
-		else
-		{
-			if (command->fd_out != STDOUT_FILENO)
-				close(command->fd_out);
-			if (command->fd_in != STDIN_FILENO)
-				close(command->fd_in);
-			execve (cmd[0], cmd, *env);
-		}
+		if (execute_child_last(command, prevpipe, env, lst_command_head) == -1)
+			return (-1);
 	}
 	else
 	{
@@ -371,7 +368,8 @@ int	exec(t_list	*lst_command, char ***env, int tmp)
 		}
 		if (lst_current != NULL && lst_current->next == NULL)
 		{
-			ft_last(command->word, env, prevpipe, lst_current, lst_command);
+		//	ft_last(command->word, env, prevpipe, lst_current, lst_command);
+			ft_last(command, env, prevpipe, lst_command);
 		}
 		else if (lst_current != NULL)
 			ft_pipe(command->word, env, &prevpipe, lst_current, lst_command);
