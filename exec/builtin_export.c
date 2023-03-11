@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 17:52:19 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/11 20:04:40 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/11 20:12:24 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,8 @@ int	allready_in_env(char ***cmd, char ***env, int *j, int i)
 		i = index_in_env(key, *env);
 		free((*env)[i]);
 		(*env)[i] = ft_strdup((*cmd)[*j]);
+		if ((*env)[i] == NULL)
+			return (-1);
 		i = 0;
 		(*j)++;
 		free(key);
@@ -70,27 +72,30 @@ int	end_export(char ***new_env, char ***str_env, char ***env, char *cmd)
 	i = 0;
 	*str_env = *env;
 	*new_env = malloc(sizeof(char *) * (ft_maplen_secure(*str_env) + 2));
+	if (*new_env == NULL)
+		return (-1);
 	ft_bzero(*new_env, (sizeof(char *) * (ft_maplen_secure(*str_env) + 2)));
-	if (!*new_env)
-		return (i);
 	while (i < (int)(ft_maplen_secure(*str_env)))
 	{
 		(*new_env)[i] = ft_strdup((*str_env)[i]);
 		i++;
 	}
 	(*new_env)[i] = ft_strdup(cmd);
+	if ((*new_env)[i] == NULL)
+		return (-1);
 	(*new_env)[i + 1] = NULL;
 	free_map(*env);
 	*env = *new_env;
 	return (i);
 }
 
-void	builtin_export(char **cmd, char ***env)
+int	builtin_export(char **cmd, char ***env)
 {
 	char	**new_env;
 	char	**str_env;
 	int		i;
 	int		j;
+	int		tmp_error;
 
 	i = 0;
 	j = 1;
@@ -103,16 +108,17 @@ void	builtin_export(char **cmd, char ***env)
 			g_status = 2;
 			return ;
 		}
-		j++;
-	}
-	j = 1;
-	while (cmd[j])
-	{
-		if (allready_in_env(&cmd, env, &j, i) == 1)
+		tmp_error = allready_in_env(&cmd, env, &j, i);
+		if (tmp_error == 1)
 			continue ;
+		else if (tmp_error == -1)
+			return (-1);	
 		i = end_export(&new_env, &str_env, env, cmd[j]);
+		if (i == -1)
+			return (-1);
 		j++;
 	}
 	if (ft_maplen_secure(cmd) < 2)
 		g_status = 1;
+	return (1);
 }
