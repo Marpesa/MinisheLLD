@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   merge_strings.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: gle-mini <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 04:56:17 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/13 22:01:35 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/11 23:14:21 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
 
-char	*merge_strings(char *str1, char *str2)
+char	*m_s(char *str1, char *str2)
 {
 	char	*result;
 

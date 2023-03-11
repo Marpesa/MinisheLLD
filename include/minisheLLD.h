@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/11 21:30:29 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/11 23:13:45 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,10 +114,11 @@ int		super_token(char *input, int *i, t_lexer *data);
 /*-------------------- Expand ---------------------*/ 
 
 int		ft_expand(t_list *lst_token, char **env);
+char	*var_find(char *start, char *end, char **env, t_bool s_in_d);
 int		is_special(char c);
 void	trim(char **str);
 int		custom_tokenizer(char *str, char **start, char **end, t_quotes *quotes);
-char 	*merge_strings(char *str1, char *str2);
+char 	*m_s(char *str1, char *str2);
 int		loop_expand(char *start, char *end, char **new_str, char **env);
 
 
