@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/11 15:24:05 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/11 23:13:45 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,12 @@ typedef enum s_bool
 	false,
 	true
 } t_bool;
+
+typedef struct s_quotes {
+	t_bool	in_s;
+	t_bool	in_d;
+	t_bool	s_in_d;
+} t_quotes;
 
 typedef enum e_token_type {
 	TOKEN_LIM,				// heredoc limitor 
@@ -108,10 +114,13 @@ int		super_token(char *input, int *i, t_lexer *data);
 /*-------------------- Expand ---------------------*/ 
 
 int		ft_expand(t_list *lst_token, char **env);
+char	*var_find(char *start, char *end, char **env, t_bool s_in_d);
 int		is_special(char c);
 void	trim(char **str);
-int		custom_tokenizer(char *str, char **start, char **end, t_bool *in_d_quote, t_bool *in_s_quote);
-char 	*merge_strings(char *str1, char *str2);
+int		custom_tokenizer(char *str, char **start, char **end, t_quotes *quotes);
+char 	*m_s(char *str1, char *str2);
+int		loop_expand(char *start, char *end, char **new_str, char **env);
+
 
 /*-------------------- Heredoc --------------------*/
 
@@ -120,6 +129,7 @@ void	heredoc(t_list *lst_token, char *linebuffer, char **secret_env);
 /*-------------------- Error ----------------------*/
 
 int				syntaxe_error(t_list *lst_token);
+int				closed_quotes(char *input, int *i);
 t_token_type	return_token_type(t_list *lst_token);
 char			*return_token_text(t_list *lst_token);
 t_bool			start_or_finish_pipe(t_list *lst_token);

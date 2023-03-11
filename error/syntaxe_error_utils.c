@@ -6,11 +6,31 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:21:26 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/28 20:00:33 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/11 21:33:33 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
+
+int	closed_quotes(char *input, int *i)
+{
+	char	quote;
+	int		res;
+
+	res = 2;
+	quote = input[*i];
+	*i += 1;
+	while (input [*i])
+	{
+		if (input[*i] == quote)
+		{
+			res = 0;
+			break ;
+		}
+		*i += 1;
+	}
+	return (res);
+}
 
 t_token_type	return_token_type(t_list *lst_token)
 {
@@ -36,7 +56,7 @@ t_bool	start_or_finish_pipe(t_list *lst_token)
 	if (return_token_type(lst_token) == TOKEN_PIPE \
 	|| return_token_type(ft_lstlast(lst_token)) == TOKEN_PIPE)
 	{
-		ft_print_error(_ORANGE2 "syntax error near unexpected token `|'",\
+		ft_print_error(_ORANGE2 "syntax error near unexpected token `|'", \
 		NULL, "\n");
 		return (true);
 	}
@@ -46,7 +66,7 @@ t_bool	start_or_finish_pipe(t_list *lst_token)
 		&& lst_current->next && \
 		return_token_type(lst_current->next) == TOKEN_PIPE)
 		{
-			ft_print_error(_ORANGE2 "syntax error near unexpected token `|'",\
+			ft_print_error(_ORANGE2 "syntax error near unexpected token `|'", \
 			NULL, "\n");
 			return (true);
 		}
@@ -54,9 +74,10 @@ t_bool	start_or_finish_pipe(t_list *lst_token)
 	}
 	return (false);
 }
+
 int	ft_print_error(char *msg, char *data, char *end)
 {
-	if (msg )
+	if (msg)
 	{
 		ft_putstr_fd(_ORANGE2 "   MinisheLLD : " _END, 2);
 		ft_putstr_fd(msg, 2);

@@ -6,31 +6,11 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 17:24:59 by lmery             #+#    #+#             */
-/*   Updated: 2023/02/28 19:59:31 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/11 21:29:48 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
-
-static int	closed_quotes(char *input, int *i)
-{
-	char	quote;
-	int		res;
-
-	res = 2;
-	quote = input[*i];
-	*i += 1;
-	while (input [*i])
-	{
-		if (input[*i] == quote)
-		{
-			res = 0;
-			break ;
-		}
-		*i += 1;
-	}
-	return (res);
-}
 
 static int	check_closed_quotes(char *input)
 {
@@ -45,9 +25,9 @@ static int	check_closed_quotes(char *input)
 			res = closed_quotes(input, &i);
 		if (res == 2)
 		{
-			ft_print_error(_ORANGE2 "Error input : Quote not closed\n" _END,\
-			 NULL, NULL);
-			 g_status = 2;
+			ft_print_error(_ORANGE2 "Error input : Quote not closed\n" _END, \
+			NULL, NULL);
+			g_status = 2;
 			break ;
 		}
 		i++;
@@ -64,7 +44,7 @@ static int	point_and_slash(char *input)
 		return (0);
 	while (input[i] && (input[i] == '.' || input[i] == '/'))
 		i++;
-	if  (input[i] == '\0')
+	if (input[i] == '\0')
 		return (2);
 	return (0);
 }
@@ -78,36 +58,28 @@ int	not_in_quote(char *input, int i)
 	j = 0;
 	while (input[j] && input[j] != '\"')
 		j++;
-	if(input[j] == '\"')
+	if (input[j] == '\"')
 	{
 		res = 0;
 		j++;
 	}
-	if (res == 0 && j < i)
+	if (res == 0 && j <= i)
+	{
 		while (input[j])
 		{
 			if (input[j] == '\"' && j > i)
 				return (res);
-			j++;			
+			j++;
 		}
+	}
 	return (1);
 }
 
-int	check_error_input(char *input)
+static int	error_input_loop(char *input)
 {
 	int	i;
-	int	res;
-	int	check;
 
-	res = 0;
-	check = 0;
 	i = 0;
-	if (input[0] == '.' || input[0] == '/')
-		res = point_and_slash(input);
-	// printf ("res = %d\n", res);
-	if (res != 0)
-		return (res);
-	
 	while (input[i])
 	{
 		if ((input[i] == '(' || input[i] == ')' || input[i] == ';' \
@@ -123,6 +95,22 @@ int	check_error_input(char *input)
 		}
 		i++;
 	}
+	return (0);
+}
+
+int	check_error_input(char *input)
+{
+	int	res;
+	int	check;
+
+	res = 0;
+	check = 0;
+	if (input[0] == '.' || input[0] == '/')
+		res = point_and_slash(input);
+	if (res != 0)
+		return (res);
+	if (error_input_loop(input) == 2)
+		return (2);
 	check = check_closed_quotes(input);
 		res = check;
 	return (res);

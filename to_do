@@ -6,6 +6,12 @@
 
 -gerer les valeurs de retours et les sorties de malloc partout
 (unset, export, cd_utils)
+ft_strdup
+(export, pwd, unset,cd_utils, builtin_utils, exec)
+ft_strjoin
+(cd)
+
+echo ' $USER'
 
 -isatty pour subminishell (exit | ./minishell)
 
@@ -25,3 +31,8 @@ bien gerer le ctrl \ quand cat wait (il doit quitter)
 130 : le script a été interrompu par l'utilisateur (par exemple, via Ctrl+C)
 255 : statut de sortie maximal (la valeur maximale autorisée est 255)
             
+static void	nested_quotes(t_quotes *quotes, int i, char *str)
+{
+	if (str[i] == '\'' && quotes->in_s == true && quotes->in_d == true)
+		quotes->s_in_d = true;
+}

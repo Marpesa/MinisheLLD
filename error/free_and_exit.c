@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/13 03:29:09 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/05 21:57:59 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/11 21:32:41 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	ft_free_map(char **map)
 
 void	del_token(void *content)
 {
-	t_token *token;
+	t_token	*token;
 
 	token = content;
 	if (token->text)
@@ -54,16 +54,17 @@ void	del_command(void *content)
 
 void	free_all(t_list **lst_token, t_list **lst_command, char **linebuffer)
 {
-	if(lst_token)
+	if (lst_token)
 		ft_lstclear(lst_token, del_token);
-	if(lst_command != NULL)
+	if (lst_command != NULL)
 		ft_lstclear(lst_command, del_command);
 	if (*linebuffer != NULL)
 		free(*linebuffer);
 	*linebuffer = NULL;
 }
 
-void	free_and_exit(t_list *lst_token, t_list *lst_command, char **linebuffer, char **env)
+void	free_and_exit(t_list *lst_token, t_list *lst_command, \
+char **linebuffer, char **env)
 {
 	ft_lstclear(&lst_token, del_token);
 	ft_lstclear(&lst_command, del_command);
@@ -72,6 +73,5 @@ void	free_and_exit(t_list *lst_token, t_list *lst_command, char **linebuffer, ch
 		free(*linebuffer);
 	*linebuffer = NULL;
 	rl_clear_history();
-	// printf ("error = %d\n", g_status);
 	exit(g_status);
 }
