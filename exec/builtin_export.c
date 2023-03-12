@@ -6,23 +6,11 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 17:52:19 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/11 20:39:48 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/12 01:09:56 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include"minisheLLD.h"
-
-int	is_export(char **cmd)
-{
-	int	len;
-
-	if (!cmd)
-		return (false);
-	len = ft_strlen_secure(cmd[0]);
-	if ((ft_strncmp(cmd[0], "export", len) == 0))
-		return (1);
-	return (0);
-}
 
 int	valid_export(char *cmd)
 {
@@ -89,6 +77,25 @@ int	end_export(char ***new_env, char ***str_env, char ***env, char *cmd)
 	return (i);
 }
 
+int	check_valid_export(char **cmd)
+{
+	int	j;
+
+	j = 1;
+	while (cmd[j])
+	{
+		if ((!valid_export(cmd[j])))
+		{
+			ft_print_error(_ORANGE2 \
+			"export : unvalid entry\n"_END, NULL, NULL);
+			g_status = 2;
+			return (2);
+		}
+		j++;
+	}
+	return (0);
+}
+
 int	builtin_export(char **cmd, char ***env)
 {
 	char	**new_env;
@@ -99,26 +106,15 @@ int	builtin_export(char **cmd, char ***env)
 
 	i = 0;
 	j = 1;
-		
-	while (cmd[j])
-	{
-		if ((!valid_export(cmd[j])))
-		{
-			ft_print_error(_ORANGE2 \
-			"export : unvalid entry\n"_END, NULL, NULL);
-			g_status = 2;
-			return(2);
-		}
-		j++;
-	}
-	j = 1;
+	if (check_valid_export(cmd) == 2)
+		return (2);
 	while (cmd[j])
 	{
 		tmp_error = allready_in_env(&cmd, env, &j, i);
 		if (tmp_error == 1)
 			continue ;
 		else if (tmp_error == -1)
-			return (-1);	
+			return (-1);
 		i = end_export(&new_env, &str_env, env, cmd[j]);
 		if (i == -1)
 			return (-1);

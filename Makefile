@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2023/03/07 13:01:14 by lmery            ###   ########.fr        #
+#    Updated: 2023/03/12 00:38:49 by lmery            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,7 +60,9 @@ C_DEBUG = debug
 
 C_UNIT_TEST = unit_test unit_test_parser unit_test_syntaxe_error
 
-C_EXEC = exec  exec_utils builtin_utils builtin_echo builtin_cd builtin_pwd builtin_exit builtin_env builtin_export builtin_unset builtin_unset_utils builtin_cd_utils
+C_EXEC = exec  exec_utils exec_utils_2 exec_utils_3 exec_utils_4\
+builtin_utils builtin_echo builtin_cd builtin_pwd builtin_exit builtin_env \
+builtin_export builtin_unset builtin_unset_utils builtin_cd_utils
 
 				
 #----------------------Sources and objects-------------------

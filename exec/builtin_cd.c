@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:18 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/11 15:23:30 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/12 00:53:27 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,8 +88,6 @@ int	builtin_cd(char **cmd)
 
 	init_values_cd(cmd[1], &len, &str, &str2);
 	path = 2;
-	
-
 	if (ft_maplen_secure(cmd) > 2 && !ft_print_error(_ORANGE2 \
 	"cd : Too many arguments\n" _END, NULL, NULL))
 		return (1);
@@ -119,5 +117,5 @@ int	builtin_cd(char **cmd)
 	else
 		end_builtin();
 	g_status = 0;
-	return(g_status);
+	return (g_status);
 }

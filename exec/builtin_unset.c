@@ -6,13 +6,13 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 21:42:16 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/11 15:34:23 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/12 01:16:33 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
 
-int	until_equal_sign(char *str, char *env)
+int	equal_sign(char *str, char *env)
 {
 	int	i;
 
@@ -58,9 +58,8 @@ int	copy_env_unset(char ***str_env, int i, char ***cmd, char ***new_env)
 		found = 0;
 		while ((*cmd)[j])
 		{
-			if ((ft_strncmp((*cmd)[j], (*str_env)[i], \
-			ft_strlen_secure((*str_env)[i])) == 0 \
-			|| until_equal_sign((*cmd)[j], (*str_env)[i]) == 1))
+			if ((ft_strncmp((*cmd)[j], (*str_env)[i], ft_strlen_secure(\
+			(*str_env)[i])) == 0 || equal_sign((*cmd)[j], (*str_env)[i]) == 1))
 				ft_locate_occur(cmd, j, &occur, &found);
 			j++;
 		}

@@ -6,11 +6,23 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:28 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/11 21:36:12 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/12 01:17:42 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
+
+int	is_export(char **cmd)
+{
+	int	len;
+
+	if (!cmd)
+		return (false);
+	len = ft_strlen_secure(cmd[0]);
+	if ((ft_strncmp(cmd[0], "export", len) == 0))
+		return (1);
+	return (0);
+}
 
 t_bool	is_builtin(char **cmd)
 {
@@ -18,7 +30,6 @@ t_bool	is_builtin(char **cmd)
 
 	if (cmd == NULL)
 		return (false);
-
 	if (!*cmd)
 		return (false);
 	len = ft_strlen_secure(*cmd) + 1;
@@ -33,7 +44,7 @@ t_bool	is_builtin(char **cmd)
 	if (!(ft_strncmp(*cmd, "unset", len)))
 		return (true);
 	if (!(ft_strncmp(*cmd, "cd", len)))
-		return (true);	
+		return (true);
 	if (!(ft_strncmp(*cmd, "exit", len)))
 		return (true);
 	return (false);
@@ -41,7 +52,7 @@ t_bool	is_builtin(char **cmd)
 
 int	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command)
 {
-	int result;
+	int	result;
 
 	result = 0;
 	if (!(ft_strncmp(cmd[0], "echo\0", ft_strlen("echo\0"))))
@@ -82,4 +93,3 @@ int	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command)
 	}
 	return (result);
 }
-

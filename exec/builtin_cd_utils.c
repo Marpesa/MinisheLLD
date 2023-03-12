@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 19:04:29 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/11 15:23:04 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/12 01:15:38 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ char	*ft_root_one(char *back)
 int	is_cd(char **cmd)
 {
 	int	len;
+
 	if (!cmd)
 		return (false);
 	len = ft_strlen_secure(cmd[0]);
@@ -94,7 +95,7 @@ int	index_in_env(char *cmd, char **env)
 	while (env[i])
 	{
 		if (ft_strncmp(cmd, env[i], ft_strlen_secure(env[i])) == 0 || \
-		until_equal_sign(cmd, env[i]) == 1)
+		equal_sign(cmd, env[i]) == 1)
 			return (i);
 		i++;
 	}
