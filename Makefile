@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2023/03/12 03:01:35 by lmery            ###   ########.fr        #
+#    Updated: 2023/03/12 03:09:08 by lmery            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,7 +52,7 @@ C_LEXER = lexer lexer_utils lexer_tokens
 
 C_EXPAND = expand trim custom_tokenizer merge_strings
 
-C_HEREDOC = heredoc
+C_HEREDOC = heredoc heredoc_utils
 
 C_ERROR = syntaxe_error syntaxe_error_utils check_error_input free_and_exit
 
