@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 02:40:39 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/12 02:59:13 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ typedef struct s_exec {
 void			ft_new_line(int signum, siginfo_t *info, void *context);
 void			ignore_signal_for_shell(void);
 char			*gstat_in_env(char *env);
-void			ignore_sigint(int signum);
+void			ignore_sigint(void);
 char			*rl_gets(void);
 char			*gstat_in_env(char *env);
 
@@ -236,6 +236,7 @@ char			*get_env(char *var, char ***envp);
 int				is_cd(char **cmd);
 int				builtin_cd(char **cmd);
 char			*ft_strldup_secure(char *dst, const char *src, size_t dstsize);
+int				print_error_path(char **cmd, int path);
 int				double_point(char **str, char **str2, int *path);
 char			*ft_root_one(char *back);
 void			builtin_pwd(char **cmd, char ***env, t_list *lst_command, \

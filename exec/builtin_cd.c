@@ -6,32 +6,11 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:18 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 02:43:09 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/12 02:52:41 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
-
-char	*ft_strldup_secure(char *dst, const char *src, size_t dstsize)
-{
-	size_t	srcsize;
-	size_t	i;
-
-	srcsize = ft_strlen_secure(src);
-	i = 0;
-	if (srcsize == 0)
-		return (0);
-	if (dstsize != 0)
-	{
-		while (src[i] != '\0' && i < (dstsize - 1))
-		{
-			dst[i] = src[i];
-			i++;
-		}
-		dst[i] = '\0';
-	}
-	return (dst);
-}
 
 static int	adding_slash(char **str, char **str2, char ***cmd, int len)
 {
@@ -61,15 +40,6 @@ static int	adding_slash(char **str, char **str2, char ***cmd, int len)
 	return (path);
 }
 
-static void	end_builtin(void)
-{
-	char	cwd[PATH_MAX];
-
-	getcwd(cwd, sizeof(cwd));
-	setenv("OLDPWD", getenv("PWD"), 1);
-	setenv("PWD", cwd, 1);
-}	
-
 static void	init_values_cd(char **str, char **str2)
 {
 	*str = NULL;
@@ -87,20 +57,6 @@ int	builtin_cd2(char **cmd, char **str, char **str2, int *path)
 	else
 		*path = chdir(cmd[1]);
 	return (1);
-}
-
-int	print_error_path(char **cmd, int path)
-{
-	if (path == -1)
-	{
-		ft_print_error(_ORANGE2 "cd : \'", cmd[1], \
-		"\' No such file or directory\n"_END);
-		return (1);
-	}
-	else
-		end_builtin();
-	g_status = 0;
-	return (0);
 }
 
 int	builtin_cd(char **cmd)

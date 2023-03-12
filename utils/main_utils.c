@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 02:38:34 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 02:41:24 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/12 03:00:11 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,10 @@ void	ignore_signal_for_shell(void)
 	sigaction(SIGINT, &new_sigint, NULL);
 }
 
-void	ignore_sigint(int signum)
+void	ignore_sigint(void)
 {
 	struct sigaction	lazy_action;
 
-	(void)signum;
 	ft_memset(&lazy_action, 0, sizeof(lazy_action));
 	lazy_action.sa_handler = SIG_IGN;
 	sigaction(SIGINT, &lazy_action, NULL);
