@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 17:51:49 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/12 01:51:33 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/12 03:28:25 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ int	manage_heredoc(char *input, char *lim, int fd)
 	return (0);
 }
 
-void	heredoc_open(char *lim, t_list *lst_token_head, char *linebuffer, \
+void	heredoc_open(char *lim, t_list *lst_token_head, \
 		char **secret_env)
 {
 	char	*input;
@@ -84,7 +84,6 @@ void	heredoc_open(char *lim, t_list *lst_token_head, char *linebuffer, \
 	int		status;
 	int		fd;
 
-	(void) linebuffer;
 	input = NULL;
 	g_status = 0;
 	pid = fork();
@@ -106,7 +105,7 @@ void	heredoc_open(char *lim, t_list *lst_token_head, char *linebuffer, \
 		waitpid(pid, &status, 0);
 }
 
-void	heredoc(t_list *lst_token_head, char *linebuffer, char **secret_env)
+void	heredoc(t_list *lst_token_head, char **secret_env)
 {
 	t_token	*token;
 	t_list	*lst_token;
@@ -117,7 +116,7 @@ void	heredoc(t_list *lst_token_head, char *linebuffer, char **secret_env)
 		if (is_heredoc(lst_token))
 		{
 			token = lst_token->next->content;
-			heredoc_open(token->text, lst_token_head, linebuffer, secret_env);
+			heredoc_open(token->text, lst_token_head, secret_env);
 		}
 		lst_token = lst_token->next;
 	}

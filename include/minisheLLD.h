@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 02:59:13 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/12 03:25:16 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,12 @@ typedef struct s_exec {
 	char	**env;
 }	t_exec;
 
+typedef struct s_input {
+	char 	*linebuffer;
+	t_list	*lst_command;
+	t_list	*lst_token;
+}	t_input;
+
 /*----------------- Colors LLD ---------------- */
 
 # define _ORANGE		"\e[38:5:208m"
@@ -130,7 +136,7 @@ int				loop_expand(char *start, char *end, char **new_str, char **env);
 
 /*-------------------- Heredoc --------------------*/
 
-void			heredoc(t_list *lst_token, char *linebuffer, char **secret_env);
+void			heredoc(t_list *lst_token, char **secret_env);
 
 /*-------------------- Error ----------------------*/
 
