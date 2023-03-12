@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 12:33:40 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 01:20:49 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/12 01:23:14 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	add_str_to_map(char *str, char **map, char ***map_result)
 	size_t		i;
 
 	i = 0;
-	if (map_null(str, map_result, &map))
+	if (str_null(str, map_result, &map))
 		return (1);
 	new_map = malloc(sizeof(char *) * (ft_maplen_secure(map) + 2));
 	if (new_map == NULL)
