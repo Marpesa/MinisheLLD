@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 17:16:50 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 00:28:35 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/12 05:07:25 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,8 @@ int	get_valid_bin(char *path, char **cmd, char **bin_result)
 	char	*path_split;
 	char	*bin;
 
+	if (path == NULL)
+		return (127);
 	path_split = strtok(path, ":");
 	while (path_split != NULL)
 	{	
