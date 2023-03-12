@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:18 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 00:53:27 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/12 02:43:09 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,37 @@ static void	end_builtin(void)
 	setenv("PWD", cwd, 1);
 }	
 
-static void	init_values_cd(char *cmd, int *len, char **str, char **str2)
+static void	init_values_cd(char **str, char **str2)
 {
-	*len = 0;
-	if (cmd)
-		*len = ft_strlen_secure(cmd);
 	*str = NULL;
 	*str2 = NULL;
+}
+
+int	builtin_cd2(char **cmd, char **str, char **str2, int *path)
+{
+	if (cmd[1][0] != '/')
+	{
+		*path = adding_slash(str, str2, &cmd, ft_strlen_secure(cmd[1]));
+		if (*path == -2)
+			return (-1);
+	}
+	else
+		*path = chdir(cmd[1]);
+	return (1);
+}
+
+int	print_error_path(char **cmd, int path)
+{
+	if (path == -1)
+	{
+		ft_print_error(_ORANGE2 "cd : \'", cmd[1], \
+		"\' No such file or directory\n"_END);
+		return (1);
+	}
+	else
+		end_builtin();
+	g_status = 0;
+	return (0);
 }
 
 int	builtin_cd(char **cmd)
@@ -84,9 +108,8 @@ int	builtin_cd(char **cmd)
 	int		path;
 	char	*str;
 	char	*str2;
-	int		len;
 
-	init_values_cd(cmd[1], &len, &str, &str2);
+	init_values_cd(&str, &str2);
 	path = 2;
 	if (ft_maplen_secure(cmd) > 2 && !ft_print_error(_ORANGE2 \
 	"cd : Too many arguments\n" _END, NULL, NULL))
@@ -100,22 +123,10 @@ int	builtin_cd(char **cmd)
 	}
 	else if (ft_strncmp(cmd[1], ".", 2) == 0)
 		return (0);
-	else if (cmd[1][0] != '/')
-	{
-		path = adding_slash(&str, &str2, &cmd, len);
-		if (path == -2)
+	else
+		if (!builtin_cd2(cmd, &str, &str2, &path))
 			return (-1);
-	}
-	else
-		path = chdir(cmd[1]);
-	if (path == -1)
-	{
-		ft_print_error(_ORANGE2 "cd : \'", cmd[1], \
-		"\' No such file or directory\n"_END);
+	if (print_error_path(cmd, path))
 		return (1);
-	}
-	else
-		end_builtin();
-	g_status = 0;
 	return (g_status);
 }

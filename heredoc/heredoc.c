@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 17:51:49 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/10 19:30:42 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/12 01:51:33 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,6 @@ t_bool	is_heredoc(t_list *lst_token)
 	return (false);
 }
 
-//t_bool is_already_heredoc_file -> append_heredoc : create_heredoc
-
-//CHANGE LE NOM DE LA FONCTION
 static int	create_temporary_file(void)
 {
 	int	fd;
@@ -39,27 +36,48 @@ static int	create_temporary_file(void)
 	return (fd);
 }
 
-int	check_sigint_heredoc()
+void	sigint_handler(int signum)
 {
-	if (g_status == 128 + SIGINT)
-		exit(0);
-	return (1);
-}
-void sigint_handler() {
-    // Perform any necessary cleanup and exit the process
-    exit(0);
+	(void) signum;
+	exit(0);
 }
 
-void set_heredoc_signal()
+void	set_heredoc_signal(void)
 {
-	struct sigaction sa;
+	struct sigaction	sa;
+
 	sa.sa_handler = sigint_handler;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_flags = 0;
 	sigaction(SIGINT, &sa, NULL);
 }
 
-void	heredoc_open(char *lim, t_list *lst_token_head, char *linebuffer, char **secret_env)
+int	check_input(char *input)
+{
+	if (input == NULL)
+		return (1);
+	return (0);
+}
+
+int	manage_heredoc(char *input, char *lim, int fd)
+{
+	input = readline("> ");
+	if (check_input(input))
+		return (1);
+	if ((ft_strncmp(input, lim, ft_strlen(lim)) == 0))
+	{
+		free(input);
+		input = NULL;
+		return (1);
+	}
+	write(fd, input, ft_strlen(input));
+	write(fd, "\n", 1);
+	free(input);
+	return (0);
+}
+
+void	heredoc_open(char *lim, t_list *lst_token_head, char *linebuffer, \
+		char **secret_env)
 {
 	char	*input;
 	int		pid;
@@ -76,42 +94,22 @@ void	heredoc_open(char *lim, t_list *lst_token_head, char *linebuffer, char **se
 		fd = create_temporary_file();
 		while (true)
 		{
-			input = readline("> ");
-			if (input == NULL)
-			{
-				//printf("OUBLIE PAS DE GERER LERREUR GUGU\n");
+			if (manage_heredoc(input, lim, fd))
 				break ;
-			}
-			if ((ft_strncmp(input, lim, ft_strlen(lim)) == 0))
-			{
-				//printf("exit normal\n");
-				free(input);
-				input = NULL;
-				break ;
-			}
-			write(fd, input, ft_strlen(input));
-			write(fd, "\n", 1);
-			free(input);
 		}
 		close(fd);
 		ft_lstclear(&lst_token_head, del_token);
 		ft_free_map(secret_env);
-		//if (linebuffer != NULL)
-			//free(linebuffer);
 		exit(0);
 	}
 	else
-	{
 		waitpid(pid, &status, 0);
-	}
 }
-
-
 
 void	heredoc(t_list *lst_token_head, char *linebuffer, char **secret_env)
 {
 	t_token	*token;
-	t_list *lst_token;
+	t_list	*lst_token;
 
 	lst_token = lst_token_head;
 	while (lst_token)
