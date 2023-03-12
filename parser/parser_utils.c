@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/07 12:33:40 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/09 18:33:15 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/12 01:20:49 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,17 +50,24 @@ static void	add_to_map_utils(char ***map)
 	}
 }
 
+int	str_null(char *str, char ***map_result, char ***map)
+{
+	if (str == NULL)
+	{
+		*map_result = *map;
+		return (1);
+	}
+	return (0);
+}
+
 int	add_str_to_map(char *str, char **map, char ***map_result)
 {
 	char		**new_map;
 	size_t		i;
 
 	i = 0;
-	if (str == NULL)
-	{
-		*map_result = map;
+	if (map_null(str, map_result, &map))
 		return (1);
-	}
 	new_map = malloc(sizeof(char *) * (ft_maplen_secure(map) + 2));
 	if (new_map == NULL)
 		return (-1);
@@ -68,12 +75,12 @@ int	add_str_to_map(char *str, char **map, char ***map_result)
 	{
 		new_map[i] = ft_strdup(map[i]);
 		if (!new_map[i])
-			return(-1);
+			return (-1);
 		i++;
 	}
 	new_map[i] = ft_strdup(str);
 	if (!new_map[i])
-		return(-1);
+		return (-1);
 	new_map[i + 1] = NULL;
 	add_to_map_utils(&map);
 	*map_result = new_map;
