@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 17:16:50 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 05:07:25 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/12 05:49:08 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	get_valid_bin(char *path, char **cmd, char **bin_result)
 
 	if (path == NULL)
 		return (127);
-	path_split = strtok(path, ":");
+	path_split = ft_strtok(path, ":");
 	while (path_split != NULL)
 	{	
 		bin = ft_calloc(sizeof(char), (ft_strlen(path_split) + 1 \
@@ -41,7 +41,7 @@ int	get_valid_bin(char *path, char **cmd, char **bin_result)
 			*bin_result = bin;
 			return (1);
 		}
-		path_split = strtok(NULL, ":");
+		path_split = ft_strtok(NULL, ":");
 		free(bin);
 		bin = NULL;
 	}

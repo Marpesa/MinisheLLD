@@ -1,25 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd_address.c                             :+:      :+:    :+:   */
+/*   ft_strtok_r.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gle-mini <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/13 03:06:16 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/12 05:42:08 by gle-mini         ###   ########.fr       */
+/*   Created: 2023/03/12 05:19:11 by gle-mini          #+#    #+#             */
+/*   Updated: 2023/03/12 05:43:43 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "libft.h"
 
-void	ft_putstr_fd_address(char *start, char *end, int fd)
+char	*ft_strtok_r(char *s, const char *delim, char **save_ptr)
 {
-	if (!start)
-		return ;
-	if (!end)
-		return ;
-	if (start > end)
-		return ;
-	write(fd, start, end - start);
-	write(fd, "\n", 1);
+	char	*end;
+
+	if (s == NULL)
+		s = *save_ptr;
+	if (*s == '\0')
+	{
+		*save_ptr = s;
+		return (NULL);
+	}
+	s += ft_strspn (s, delim);
+	if (*s == '\0')
+	{
+		*save_ptr = s;
+		return (NULL);
+	}
+	end = s + ft_strcspn (s, delim);
+	if (*end == '\0')
+	{
+		*save_ptr = end;
+		return (s);
+	}
+	*end = '\0';
+	*save_ptr = end + 1;
+	return (s);
 }

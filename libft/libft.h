@@ -6,7 +6,7 @@
 /*   By: gle-mini <gle-mini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 04:19:58 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/01/13 21:33:37 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/12 05:47:25 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,5 +138,13 @@ void			ft_lstclear(t_list **lst, void (*del)(void*));
 void			ft_lstiter(t_list *lst, void (*f)(void*));
 
 t_list			*ft_lstmap(t_list *lst, void *(*f)(void*), void (*del)(void *));
+
+char			*ft_strtok_r(char *s, const char *delim, char **save_ptr);
+
+char			*ft_strtok(char *s, const char *delim);
+
+size_t			ft_strspn(const char *s1, const char *s2);
+
+size_t			ft_strcspn(const char *s1, const char *s2);
 
 #endif

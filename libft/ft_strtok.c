@@ -1,25 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putstr_fd_address.c                             :+:      :+:    :+:   */
+/*   ft_strtok.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gle-mini <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/13 03:06:16 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/12 05:42:08 by gle-mini         ###   ########.fr       */
+/*   Created: 2023/03/12 05:24:22 by gle-mini          #+#    #+#             */
+/*   Updated: 2023/03/12 05:37:08 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
 #include "libft.h"
 
-void	ft_putstr_fd_address(char *start, char *end, int fd)
+char	*ft_strtok(char *s, const char *delim)
 {
-	if (!start)
-		return ;
-	if (!end)
-		return ;
-	if (start > end)
-		return ;
-	write(fd, start, end - start);
-	write(fd, "\n", 1);
+	static char	*olds;
+
+	return (ft_strtok_r (s, delim, &olds));
 }
