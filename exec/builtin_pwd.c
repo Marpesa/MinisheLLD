@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 02:52:44 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 01:10:37 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/12 04:49:29 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	is_pwd(char **cmd)
 	return (0);
 }
 
-void	builtin_pwd(char **cmd, char ***env, t_list *lst_command, int fd_out)
+int	builtin_pwd(char **cmd, char ***env, t_list *lst_command, int fd_out)
 {
 	char	cwd[PATH_MAX];
 	char	*str;
@@ -36,11 +36,10 @@ void	builtin_pwd(char **cmd, char ***env, t_list *lst_command, int fd_out)
 	}
 	if (ft_maplen_secure(cmd) != 1)
 	{
-		ft_print_error(_ORANGE2 "Pwd : Options not available\n" \
-		_END, NULL, NULL);
+		ft_print_error(_ORANGE2 "Pwd : Options not available\n"_END, "", "");
 		free(str);
 		g_status = 126;
-		return ;
+		return (g_status);
 	}
 	str = ft_strdup(getenv("PWD"));
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
@@ -48,4 +47,5 @@ void	builtin_pwd(char **cmd, char ***env, t_list *lst_command, int fd_out)
 	ft_putstr_fd(cwd, fd_out);
 	ft_putstr_fd("\n", fd_out);
 	free(str);
+	return (g_status);
 }

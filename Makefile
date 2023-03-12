@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2023/03/12 03:09:08 by lmery            ###   ########.fr        #
+#    Updated: 2023/03/12 04:32:47 by lmery            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,7 +46,7 @@ _BLKB 		=	\e[48:5:0m
 
 C_ROOT = main 
 
-C_UTILS = main_utils 
+C_UTILS = main_utils main_utils_2
 
 C_LEXER = lexer lexer_utils lexer_tokens
 

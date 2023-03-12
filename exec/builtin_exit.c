@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 04:20:53 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 03:24:32 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/12 04:40:35 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	builtin_exit(char ***env, t_list *lst_command, char **cmd)
 	int	j;
 
 	j = 0;
+	res = 0;
 	tmp = g_status;
 	modulo_status(&tmp, cmd, &res, &j);
 	if (ft_maplen_secure(cmd) > 2 || \

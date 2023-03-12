@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 03:25:16 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/12 04:50:22 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,12 +84,6 @@ typedef struct s_exec {
 	char	**env;
 }	t_exec;
 
-typedef struct s_input {
-	char 	*linebuffer;
-	t_list	*lst_command;
-	t_list	*lst_token;
-}	t_input;
-
 /*----------------- Colors LLD ---------------- */
 
 # define _ORANGE		"\e[38:5:208m"
@@ -108,6 +102,12 @@ char			*gstat_in_env(char *env);
 void			ignore_sigint(void);
 char			*rl_gets(void);
 char			*gstat_in_env(char *env);
+void			init_value(char **linebuffer, t_list **lst_token, \
+				t_list **lst_command);
+void			init_status_and_get_linebuffer(int *prev_gstat, \
+				char ***sec_env, char **linebuffer);
+void			exit_minishell(char **linebuffer, t_list **lst_token, \
+				t_list **lst_command, char ***sec_env);
 
 /*--------------------- Lexer ---------------------*/
 
@@ -249,7 +249,7 @@ char			*ft_strldup_secure(char *dst, const char *src, size_t dstsize);
 int				print_error_path(char **cmd, int path);
 int				double_point(char **str, char **str2, int *path);
 char			*ft_root_one(char *back);
-void			builtin_pwd(char **cmd, char ***env, t_list *lst_command, \
+int				builtin_pwd(char **cmd, char ***env, t_list *lst_command, \
 				int fd_out);
 int				is_pwd(char **cmd);
 int				is_exit(char **cmd);

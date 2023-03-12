@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:28 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 02:12:46 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/12 04:50:02 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,9 +71,7 @@ int	execute_builtin2(char **cmd, char ***env, int fd, t_list *lst_command)
 
 	result = 0;
 	if (!(ft_strncmp(cmd[0], "pwd\0", ft_strlen("pwd\0"))))
-	{
-		builtin_pwd(cmd, env, lst_command, fd);
-	}
+		result = builtin_pwd(cmd, env, lst_command, fd);
 	else if (!(ft_strncmp(cmd[0], "unset\0", ft_strlen("unset\0"))))
 	{
 		if (builtin_unset(cmd, env) == -1)
