@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   debug.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/03/12 03:11:42 by lmery             #+#    #+#             */
+/*   Updated: 2023/03/12 03:11:55 by lmery            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minisheLLD.h"
 
 void	print_map(char **map, int fd)
@@ -32,7 +44,7 @@ void	print_lst_command(t_list *lst_command, int fd)
 	{
 		command = lst_command->content;
 		print_command(command, fd);
-		lst_command = lst_command->next;	
+		lst_command = lst_command->next;
 		ft_putstr_fd("__________________\n", fd);
 	}
 }

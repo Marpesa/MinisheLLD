@@ -137,6 +137,10 @@ int				loop_expand(char *start, char *end, char **new_str, char **env);
 /*-------------------- Heredoc --------------------*/
 
 void			heredoc(t_list *lst_token, char **secret_env);
+t_bool			is_heredoc(t_list *lst_token);
+int				create_temporary_file(void);
+void			sigint_handler(int signum);
+void			set_heredoc_signal(void);
 
 /*-------------------- Error ----------------------*/
 
