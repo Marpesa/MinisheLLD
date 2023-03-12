@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:28 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 01:17:42 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/12 02:12:46 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,26 +50,27 @@ t_bool	is_builtin(char **cmd)
 	return (false);
 }
 
-int	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command)
+int	execute_builtin3(char **cmd)
 {
 	int	result;
 
 	result = 0;
-	if (!(ft_strncmp(cmd[0], "echo\0", ft_strlen("echo\0"))))
+	if (!(ft_strncmp(cmd[0], "cd\0", ft_strlen("cd\0"))))
 	{
-		if (builtin_echo(cmd, fd, env, lst_command) == -1)
+		result = builtin_cd(cmd);
+		if (result == -1)
 			return (-1);
+		g_status = result;
 	}
-	else if (!(ft_strncmp(cmd[0], "exit\0", ft_strlen("exit\0"))))
-	{
-		builtin_exit(env, lst_command, cmd);
-	}
-	else if (!(ft_strncmp(cmd[0], "env\0", ft_strlen("env\0"))))
-	{
-		if (builtin_env(cmd, fd, env, lst_command) == -1)
-			return (-1);
-	}
-	else if (!(ft_strncmp(cmd[0], "pwd\0", ft_strlen("pwd\0"))))
+	return (result);
+}
+
+int	execute_builtin2(char **cmd, char ***env, int fd, t_list *lst_command)
+{
+	int	result;
+
+	result = 0;
+	if (!(ft_strncmp(cmd[0], "pwd\0", ft_strlen("pwd\0"))))
 	{
 		builtin_pwd(cmd, env, lst_command, fd);
 	}
@@ -84,12 +85,37 @@ int	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command)
 		if (result == -1)
 			return (-1);
 	}
-	else if (!(ft_strncmp(cmd[0], "cd\0", ft_strlen("cd\0"))))
+	else
 	{
-		result = builtin_cd(cmd);
+		result = execute_builtin3(cmd);
 		if (result == -1)
 			return (-1);
-		g_status = result;
+	}
+	return (result);
+}
+
+int	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command)
+{
+	int	result;
+
+	result = 0;
+	if (!(ft_strncmp(cmd[0], "echo\0", ft_strlen("echo\0"))))
+	{
+		if (builtin_echo(cmd, fd, env, lst_command) == -1)
+			return (-1);
+	}
+	else if (!(ft_strncmp(cmd[0], "exit\0", ft_strlen("exit\0"))))
+		builtin_exit(env, lst_command, cmd);
+	else if (!(ft_strncmp(cmd[0], "env\0", ft_strlen("env\0"))))
+	{
+		if (builtin_env(cmd, fd, env, lst_command) == -1)
+			return (-1);
+	}
+	else
+	{
+		result = execute_builtin2(cmd, env, fd, lst_command);
+		if (result == -1)
+			return (-1);
 	}
 	return (result);
 }
