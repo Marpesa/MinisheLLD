@@ -6,7 +6,7 @@
 #    By: lmery <lmery@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/09/14 08:26:27 by lmery             #+#    #+#              #
-#    Updated: 2023/03/12 01:29:40 by lmery            ###   ########.fr        #
+#    Updated: 2023/03/12 02:39:24 by lmery            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -46,6 +46,8 @@ _BLKB 		=	\e[48:5:0m
 
 C_ROOT = main 
 
+C_UTILS = main_utils 
+
 C_LEXER = lexer lexer_utils lexer_tokens
 
 C_EXPAND = expand trim custom_tokenizer merge_strings
@@ -60,14 +62,14 @@ C_DEBUG = debug
 
 C_UNIT_TEST = unit_test unit_test_parser unit_test_syntaxe_error
 
-C_EXEC = exec  exec_utils exec_utils_2 exec_utils_3 exec_utils_4\
+C_EXEC = exec  exec_utils exec_utils_2 exec_utils_3 exec_utils_4 \
 builtin_utils builtin_echo builtin_cd builtin_pwd builtin_exit builtin_env \
 builtin_export builtin_unset builtin_unset_utils builtin_cd_utils
 
 				
 #----------------------Sources and objects-------------------
 
-SRCS = $(addsuffix .c, $(C_ROOT) $(addprefix lexer/, $(C_LEXER)) $(addprefix expand/, $(C_EXPAND)) \
+SRCS = $(addsuffix .c, $(C_ROOT) $(addprefix utils/, $(C_UTILS)) $(addprefix lexer/, $(C_LEXER)) $(addprefix expand/, $(C_EXPAND)) \
 		$(addprefix error/, $(C_ERROR)) $(addprefix heredoc/, $(C_HEREDOC)) $(addprefix parser/, $(C_PARSER)) $(addprefix debug/, $(C_DEBUG)) $(addprefix exec/, $(C_EXEC)))
 
 SRCS_TEST = $(addsuffix .c, $(addprefix unit_test/, $(C_UNIT_TEST)) $(addprefix lexer/, $(C_LEXER)) $(addprefix expand/, $(C_EXPAND)) $(addprefix error/, $(C_ERROR)) $(addprefix parser/, $(C_PARSER)) $(addprefix debug/, $(C_DEBUG)))

@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 01:45:15 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/12 02:40:39 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,10 +96,12 @@ typedef struct s_exec {
 
 /*---------------- Main fonctions -----------------*/
 
-void			ft_new_line(void);
+void			ft_new_line(int signum, siginfo_t *info, void *context);
 void			ignore_signal_for_shell(void);
-char			*gstat_in_env(void);
-void			ignore_sigint(void);
+char			*gstat_in_env(char *env);
+void			ignore_sigint(int signum);
+char			*rl_gets(void);
+char			*gstat_in_env(char *env);
 
 /*--------------------- Lexer ---------------------*/
 
