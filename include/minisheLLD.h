@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/11 23:13:45 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/12 01:16:32 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -175,8 +175,34 @@ void	print_lst_token(t_list *head);
 
 /*------------------Exec-------------------------*/
 int		exec(t_list *lst_command, char ***env, int tmp);
-int		is_g_stat(char *cmd);
-void	get_g_status(void);
+
+void	cat_to_bin(char *bin, char *path_split, char *cmd);
+int		get_valid_bin(char *path, char **cmd, char **bin_result);
+int		dup_path(char ***env, char **path, int *error_status);
+void	free_path_and_cmd(char *path, char *bin, char **cmd);
+int		free_path_and_return_error(char *bin, char *path, int *error_status);
+
+void	redir_in(t_command *command, char **redirection, int *i);
+void	redir_out(t_command *command, char **redirection, int *i);
+void	redir_append_out(t_command *command, char **redirection, int *i);
+void	redir_heredoc(t_command *command, int *i);
+void	redirection(t_command *command);
+
+void	close_open_fd(t_command *command);
+void	close_fd_and_free(t_command *command, char ***env, \
+		t_list *lst_command_head);
+int		execute_command(t_command *command, char ***env, t_list *lst_command_head);
+void	redir_child_pipe(t_command *command, int *prevpipe, int *pipefd);
+int		ft_pipe(t_command *command, char ***env, int *prevpipe, \
+		t_list *lst_command_head);
+
+int		execute_child_last(t_command *command, int prevpipe, char ***env, \
+		t_list *lst_command_head);
+int		ft_last(t_command *command, char ***env, int prevpipe, \
+		t_list *lst_command_head);
+int		get_command_path(t_command *command, int *error_status, char **env);
+int		check_valid_path(t_command *command, int error_status, int prevpipe);
+
 
 /*------------------Builtin-------------------------*/
 t_bool	is_builtin(char **cmd);
@@ -195,6 +221,7 @@ int		is_exit(char **cmd);
 void	builtin_exit(char ***env, t_list *lst_command, char **cmd);
 int		builtin_env(char **cmd, int fd, char ***env, t_list *lst_command);
 int		is_export(char **cmd);
+int		is_export(char **cmd);
 int		builtin_export(char **cmd, char ***env);
 char	*until_equal(char *cmd);
 int		index_in_env(char *cmd, char **env);
@@ -203,7 +230,7 @@ int		builtin_unset(char **cmd, char ***env);
 int		is_in_env(char *cmd, char **env);
 int		ft_is_there(char *str, char **cmd, int index);
 int		check_occur(char **cmd, char **str_env, int *occur);
-int		until_equal_sign(char *str, char *env);
+int		equal_sign(char *str, char *env);
 
 int		allready_in_env(char ***cmd, char ***env, int *j, int i);
 int		end_export(char ***new_env, char ***str_env, char ***env, char *cmd);

@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 20:47:07 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/05 22:47:15 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/12 01:16:35 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	is_in_env(char *cmd, char **env)
 	while (env[i])
 	{
 		if (ft_strncmp(cmd, env[i], ft_strlen_secure(env[i])) == 0 || \
-		until_equal_sign(cmd, env[i]) == 1)
+		equal_sign(cmd, env[i]) == 1)
 			return (1);
 		i++;
 	}

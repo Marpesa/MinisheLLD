@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 17:35:44 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/07 13:32:01 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/12 01:04:02 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,8 +43,5 @@ int	builtin_env(char **cmd, int fd, char ***env, t_list *lst_command)
 			i++;
 		}
 	}
-	//ft_free_map(str_env);
-	//ft_lstclear(&lst_command, del_command);
 	return (0);
-	//exit (0);
 }
