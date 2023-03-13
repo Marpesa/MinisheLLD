@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:18 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 02:52:41 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/14 00:40:20 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ static int	adding_slash(char **str, char **str2, char ***cmd, int len)
 {
 	int	path;
 
+	if (getenv("PWD") == NULL)
+		return (1);
 	*str = ft_strdup(getenv("PWD"));
 	*str2 = ft_strjoin(*str, "/");
 	free(*str);
@@ -71,7 +73,11 @@ int	builtin_cd(char **cmd)
 	"cd : Too many arguments\n" _END, NULL, NULL))
 		return (1);
 	else if (ft_maplen_secure(cmd) == 1 || cmd[1][0] == '~')
+	{
+		if (getenv("HOME") == NULL)
+			return (1);
 		path = chdir(getenv("HOME"));
+	}
 	else if (ft_strncmp(cmd[1], "..", 3) == 0)
 	{
 		if (double_point(&str, &str2, &path) == -1)

@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 19:04:29 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 01:15:38 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/14 00:27:51 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	double_point(char **str, char **str2, int *path)
 {
+	if (getenv("PWD") == NULL)
+		return (1);
 	*str = ft_strdup(getenv("PWD"));
 	if (*str == NULL)
 		return (-1);

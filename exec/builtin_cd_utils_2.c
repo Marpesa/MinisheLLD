@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 02:50:36 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 02:52:49 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/14 00:40:00 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ static void	end_builtin(void)
 {
 	char	cwd[PATH_MAX];
 
+	if (getenv("PWD") == NULL)
+		return ;
 	getcwd(cwd, sizeof(cwd));
 	setenv("OLDPWD", getenv("PWD"), 1);
 	setenv("PWD", cwd, 1);

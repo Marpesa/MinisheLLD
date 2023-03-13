@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 02:52:44 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 04:49:29 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/14 00:20:28 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ int	builtin_pwd(char **cmd, char ***env, t_list *lst_command, int fd_out)
 		g_status = 126;
 		return (g_status);
 	}
+	if (getenv("PWD") == NULL)
+		return (1);
 	str = ft_strdup(getenv("PWD"));
 	if (getcwd(cwd, sizeof(cwd)) == NULL)
 		cwd[0] = '\0';
