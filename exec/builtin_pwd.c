@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 02:52:44 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/14 00:20:28 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/14 06:47:00 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ int	builtin_pwd(char **cmd, char ***env, t_list *lst_command, int fd_out)
 	char	cwd[PATH_MAX];
 	char	*str;
 
-	(void)lst_command;
 	str = NULL;
 	if ((*env)[0] == NULL)
 	{
 		ft_print_error(_ORANGE2 "Pwd : Error\n" _END, NULL, NULL);
 		free(str);
 		g_status = 128;
+		return (g_status);
 	}
 	if (ft_maplen_secure(cmd) != 1)
 	{
