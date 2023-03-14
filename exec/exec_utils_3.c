@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 00:33:21 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/14 07:06:23 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/14 18:47:29 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,15 +49,14 @@ int	execute_command(t_command *command, char ***env, t_list *lst_command_head)
 	}
 	else
 	{
-		execve (command->word[0], command->word, *env);
 		close_open_fd(command);
+		execve (command->word[0], command->word, *env);
 	}
 	return (exit_status);
 }
 
 void	redir_child_pipe(t_command *command, int *prevpipe, int *pipefd)
 {
-	ft_putstr_fd(command->word[0], 2);
 	redirection(command);
 	close(pipefd[0]);
 	if (command->fd_out == STDOUT_FILENO)
