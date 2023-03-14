@@ -1,12 +1,13 @@
 /* ************************************************************************** */
 /*                                                                            */
+
 /*                                                        :::      ::::::::   */
 /*   exec.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:11:42 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/12 00:39:28 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/14 01:57:18 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +25,13 @@ int	exec_builtin_no_fork(t_list **lst_current, \
 		close(prevpipe);
 	tmp = execute_builtin(command->word, env, command->fd_out, \
 			*lst_current);
+	close_open_fd(command);
+	close(prevpipe);
 	if (tmp == -1)
 		return (-1);
 	*lst_current = (*lst_current)->next;
 	if (tmp >= 0)
 		g_status = tmp;
-	close(prevpipe);
 	return (1);
 }
 
