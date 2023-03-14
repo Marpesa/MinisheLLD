@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/04 17:16:50 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 05:49:08 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/14 01:06:40 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,8 @@ int	dup_path(char ***env, char **path, int *error_status)
 {
 	if (is_in_env("PATH", *env))
 	{
+		if (getenv("PATH") == NULL)
+			return (1);
 		*path = ft_strdup(getenv("PATH"));
 		if (*path == NULL)
 			return (-1);
