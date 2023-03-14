@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 00:33:21 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/14 06:40:21 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/14 07:06:23 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,6 +82,7 @@ int	ft_pipe(t_command *command, char ***env, int *prevpipe, \
 	cpid = fork();
 	if (cpid == 0)
 	{
+		restore_default_signal_behavior();
 		redir_child_pipe(command, prevpipe, pipefd);
 		if (execute_command(command, env, lst_command_head) == -1)
 			return (-1);

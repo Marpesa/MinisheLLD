@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 02:38:34 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/14 01:19:52 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/14 07:03:02 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,21 +14,10 @@
 
 void	ft_new_line(int signum, siginfo_t *info, void *context)
 {
-	(void)signum;
 	(void)(info);
 	(void)(context);
-	if (signum == SIGINT)
-	{
-		g_status = 128 + SIGINT;
-	}
-	else if(signum == SIGKILL)
-	{
-		g_status = 128 + SIGKILL;
-	}
-	else if (signum == SIGTERM)
-	{
-		g_status = 128 + SIGTERM;
-	}
+
+	g_status = 128 + signum;
 	write(STDERR_FILENO, "\n", 1);
 	rl_replace_line("", 0);
 	rl_on_new_line();
