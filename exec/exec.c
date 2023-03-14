@@ -6,11 +6,24 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 15:24:41 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/14 15:24:45 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/14 19:12:42 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
+
+int	check_valid_path(t_command *command, int error_status, int prevpipe)
+{
+	if (error_status == 2)
+	{
+		ft_putstr_fd(_ORANGE2 "MinisheLLD : ", 2);
+		ft_putstr_fd((command->word)[0], 2);
+		ft_putstr_fd(" : no such file or directory\n" _END, 2);
+		close(prevpipe);
+		return (127);
+	}
+	return (1);
+}
 
 int	exec_builtin_no_fork(t_list **lst_current, \
 		char ***env, int tmp, int prevpipe)

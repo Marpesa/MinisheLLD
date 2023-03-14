@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/14 16:28:41 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/14 19:12:22 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -247,11 +247,10 @@ int				is_cd(char **cmd);
 int				builtin_cd(char **cmd, char ***env);
 char			*ft_strldup_secure(char *dst, const char *src, size_t dstsize);
 int				print_error_path(char **cmd, int path, char ***env);
-int				double_point(char **str, char **str2, int *path, char ***env);
+int				double_point(char **str, char **str2, int *path);
 char			*ft_root_one(char *back);
-void			change_old_pwd(char ***env);
-int				builtin_pwd(char **cmd, char ***env, t_list *lst_command, \
-				int fd_out);
+int				change_old_pwd(char ***env);
+int				builtin_pwd(char **cmd, char ***env, int fd_out);
 int				is_pwd(char **cmd);
 int				is_exit(char **cmd);
 void			builtin_exit(char ***env, t_list *lst_command, char **cmd);

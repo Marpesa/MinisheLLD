@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 19:04:29 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/14 16:55:49 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/14 19:05:53 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ char	*ft_strdup_oldpwd(const char *s1)
 	size_t	j;
 
 	j = 0;
-	printf("len = %ld\n", ft_strlen_secure(s1));
 	str = (char *)malloc(sizeof(*s1) * (ft_strlen(s1) - 3));
 	if (!str)
 		return (NULL);
@@ -31,23 +30,20 @@ char	*ft_strdup_oldpwd(const char *s1)
 		j++;
 	}
 	str[j] = 0;
-	printf("str = %s\n", str);
 	return (str);
 }
 
-
-int	double_point(char **str, char **str2, int *path, char ***env)
+int	double_point(char **str, char **str2, int *path)
 {	
-	int	i;
+	char	cwd[PATH_MAX];
 
-	i = index_in_env("PWD=5", *env);
-	printf("i = %d\n", i);
-
-	if (i == -1)
+	if (getcwd(cwd, sizeof(cwd)) == NULL)
+	{
+		ft_print_error("Current Working Directory lost, " \
+		, "", "use cd without argument to go back to HOME directory\n" _END);
 		return (-1);
-	printf("i = %d\n", i);
-	printf("str = %s\n", (*env)[i]);
-	*str = ft_strdup_oldpwd((*env)[i]);
+	}
+	*str = ft_strdup(cwd);
 	if (*str == NULL)
 		return (-1);
 	*str2 = ft_root_one(*str);
@@ -85,18 +81,6 @@ char	*ft_root_one(char *back)
 			return (NULL);
 	}
 	return (res);
-}
-
-int	is_cd(char **cmd)
-{
-	int	len;
-
-	if (!cmd)
-		return (false);
-	len = ft_strlen_secure(cmd[0]);
-	if ((ft_strncmp(cmd[0], "cd", len) == 0))
-		return (1);
-	return (0);
 }
 
 char	*until_equal(char *cmd)

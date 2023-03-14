@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/11 19:21:26 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/11 21:33:33 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/14 18:08:13 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ int	ft_print_error(char *msg, char *data, char *end)
 {
 	if (msg)
 	{
-		ft_putstr_fd(_ORANGE2 "   MinisheLLD : " _END, 2);
+		ft_putstr_fd(_ORANGE2 "   MinisheLLD : ", 2);
 		ft_putstr_fd(msg, 2);
 	}
 	if (data)

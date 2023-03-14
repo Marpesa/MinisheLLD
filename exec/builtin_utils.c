@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:28 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/14 15:31:50 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/14 18:35:17 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,13 @@ int	execute_builtin3(char **cmd, char ***env)
 	return (result);
 }
 
-int	execute_builtin2(char **cmd, char ***env, int fd, t_list *lst_command)
+int	execute_builtin2(char **cmd, char ***env, int fd)
 {
 	int	result;
 
 	result = 0;
 	if (!(ft_strncmp(cmd[0], "pwd\0", ft_strlen("pwd\0"))))
-		result = builtin_pwd(cmd, env, lst_command, fd);
+		result = builtin_pwd(cmd, env, fd);
 	else if (!(ft_strncmp(cmd[0], "unset\0", ft_strlen("unset\0"))))
 	{
 		if (builtin_unset(cmd, env) == -1)
@@ -111,7 +111,7 @@ int	execute_builtin(char **cmd, char ***env, int fd, t_list *lst_command)
 	}
 	else
 	{
-		result = execute_builtin2(cmd, env, fd, lst_command);
+		result = execute_builtin2(cmd, env, fd);
 		if (result == -1)
 			return (-1);
 	}
