@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 20:03:26 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/14 20:31:15 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/14 20:54:37 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,8 @@ int	builtin_lld(char **cmd)
 	else
 	{
 		ft_putstr_fd(_ORANGE2 \
-		"\n-----------------------------------------------------------\n", STDOUT_FILENO);
+		"\n----------------------------------------------------\
+		-------\n", STDOUT_FILENO);
 		ft_putstr_fd(_BLUE_LLD _BOLD \
 		"\n\t***   You have found an easter egg !   ***\n\n", STDOUT_FILENO);
 		ft_putstr_fd(_END _ORANGE \
