@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/14 19:12:22 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/14 20:06:12 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -261,6 +261,7 @@ int				is_export(char **cmd);
 int				builtin_export(char **cmd, char ***env);
 char			*until_equal(char *cmd);
 int				index_in_env(char *cmd, char **env);
+int				builtin_lld(char **cmd);
 int				is_unset(char **cmd);
 int				builtin_unset(char **cmd, char ***env);
 int				is_in_env(char *cmd, char **env);
