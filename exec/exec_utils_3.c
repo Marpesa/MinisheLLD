@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 00:33:21 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 02:56:00 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/14 06:40:21 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int	execute_command(t_command *command, char ***env, t_list *lst_command_head)
 	}
 	else if (is_builtin(command->word) == true)
 	{
-		exit_status = execute_builtin(command->word, env, command->fd_out, \
+		exit_status = execute_builtin(command->word, env, STDOUT_FILENO, \
 					lst_command_head);
 		if (exit_status == -1)
 			return (-1);
@@ -57,6 +57,7 @@ int	execute_command(t_command *command, char ***env, t_list *lst_command_head)
 
 void	redir_child_pipe(t_command *command, int *prevpipe, int *pipefd)
 {
+	ft_putstr_fd(command->word[0], 2);
 	redirection(command);
 	close(pipefd[0]);
 	if (command->fd_out == STDOUT_FILENO)
