@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:28 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 04:50:02 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/14 15:31:50 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,14 +50,14 @@ t_bool	is_builtin(char **cmd)
 	return (false);
 }
 
-int	execute_builtin3(char **cmd)
+int	execute_builtin3(char **cmd, char ***env)
 {
 	int	result;
 
 	result = 0;
 	if (!(ft_strncmp(cmd[0], "cd\0", ft_strlen("cd\0"))))
 	{
-		result = builtin_cd(cmd);
+		result = builtin_cd(cmd, env);
 		if (result == -1)
 			return (-1);
 		g_status = result;
@@ -85,7 +85,7 @@ int	execute_builtin2(char **cmd, char ***env, int fd, t_list *lst_command)
 	}
 	else
 	{
-		result = execute_builtin3(cmd);
+		result = execute_builtin3(cmd, env);
 		if (result == -1)
 			return (-1);
 	}

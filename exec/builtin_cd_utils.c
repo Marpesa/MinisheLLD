@@ -6,17 +6,48 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 19:04:29 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/14 00:27:51 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/14 16:55:49 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minisheLLD.h"
 
-int	double_point(char **str, char **str2, int *path)
+char	*ft_strdup_oldpwd(const char *s1)
 {
-	if (getenv("PWD") == NULL)
-		return (1);
-	*str = ft_strdup(getenv("PWD"));
+	char	*str;
+	size_t	i;
+	size_t	j;
+
+	j = 0;
+	printf("len = %ld\n", ft_strlen_secure(s1));
+	str = (char *)malloc(sizeof(*s1) * (ft_strlen(s1) - 3));
+	if (!str)
+		return (NULL);
+	i = 4;
+	while (s1[i])
+	{
+		str[j] = s1[i];
+		i++;
+		j++;
+	}
+	str[j] = 0;
+	printf("str = %s\n", str);
+	return (str);
+}
+
+
+int	double_point(char **str, char **str2, int *path, char ***env)
+{	
+	int	i;
+
+	i = index_in_env("PWD=5", *env);
+	printf("i = %d\n", i);
+
+	if (i == -1)
+		return (-1);
+	printf("i = %d\n", i);
+	printf("str = %s\n", (*env)[i]);
+	*str = ft_strdup_oldpwd((*env)[i]);
 	if (*str == NULL)
 		return (-1);
 	*str2 = ft_root_one(*str);

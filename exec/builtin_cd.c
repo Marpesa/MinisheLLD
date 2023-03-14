@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/17 00:18:18 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/14 00:40:20 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/14 16:23:56 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	builtin_cd2(char **cmd, char **str, char **str2, int *path)
 	return (1);
 }
 
-int	builtin_cd(char **cmd)
+int	builtin_cd(char **cmd, char ***env)
 {
 	int		path;
 	char	*str;
@@ -72,7 +72,8 @@ int	builtin_cd(char **cmd)
 	if (ft_maplen_secure(cmd) > 2 && !ft_print_error(_ORANGE2 \
 	"cd : Too many arguments\n" _END, NULL, NULL))
 		return (1);
-	else if (ft_maplen_secure(cmd) == 1 || cmd[1][0] == '~')
+	// change_old_pwd(env);
+	if (ft_maplen_secure(cmd) == 1 || cmd[1][0] == '~')
 	{
 		if (getenv("HOME") == NULL)
 			return (1);
@@ -80,7 +81,7 @@ int	builtin_cd(char **cmd)
 	}
 	else if (ft_strncmp(cmd[1], "..", 3) == 0)
 	{
-		if (double_point(&str, &str2, &path) == -1)
+		if (double_point(&str, &str2, &path, env) == -1)
 			return (-1);
 	}
 	else if (ft_strncmp(cmd[1], ".", 2) == 0)
@@ -88,7 +89,7 @@ int	builtin_cd(char **cmd)
 	else
 		if (!builtin_cd2(cmd, &str, &str2, &path))
 			return (-1);
-	if (print_error_path(cmd, path))
+	if (print_error_path(cmd, path, env))
 		return (1);
 	return (g_status);
 }

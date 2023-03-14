@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 00:36:58 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/14 07:05:13 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/14 15:26:17 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,19 +54,19 @@ int	execute_child_last(t_command *command, int prevpipe, char ***env, \
 	return (1);
 }
 
-void	restore_default_signal_behavior()
+void	restore_default_signal_behavior(void)
 {
-    struct sigaction sa;
+	struct sigaction	sa;
 
-    sa.sa_handler = SIG_DFL;
-    sigemptyset(&sa.sa_mask);
-    sa.sa_flags = 0;
-    if (sigaction(SIGINT, &sa, NULL) == -1)
-        perror("Error restoring default behavior of SIGINT");
-    if (sigaction(SIGQUIT, &sa, NULL) == -1)
-        perror("Error restoring default behavior of SIGKILL");
-    if (sigaction(SIGSTOP, &sa, NULL) == -1)
-        perror("Error restoring default behavior of SIGSTOP");
+	sa.sa_handler = SIG_DFL;
+	sigemptyset(&sa.sa_mask);
+	sa.sa_flags = 0;
+	if (sigaction(SIGINT, &sa, NULL) == -1)
+		perror("Error restoring default behavior of SIGINT");
+	if (sigaction(SIGQUIT, &sa, NULL) == -1)
+		perror("Error restoring default behavior of SIGKILL");
+	if (sigaction(SIGSTOP, &sa, NULL) == -1)
+		perror("Error restoring default behavior of SIGSTOP");
 }
 
 int	ft_last(t_command *command, char ***env, int prevpipe, \
