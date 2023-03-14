@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 00:36:58 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/14 15:26:17 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/14 19:12:34 by lmery            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,19 +104,6 @@ int	get_command_path(t_command *command, int *error_status, char **env)
 	{
 		if (get_absolute_path(command->word, error_status, env) == -1)
 			return (-1);
-	}
-	return (1);
-}
-
-int	check_valid_path(t_command *command, int error_status, int prevpipe)
-{
-	if (error_status == 2)
-	{
-		ft_putstr_fd(_ORANGE2 "MinisheLLD : ", 2);
-		ft_putstr_fd((command->word)[0], 2);
-		ft_putstr_fd(" : no such file or directory\n" _END, 2);
-		close(prevpipe);
-		return (127);
 	}
 	return (1);
 }
