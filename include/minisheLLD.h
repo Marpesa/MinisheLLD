@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/14 19:12:22 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/14 20:12:45 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,12 +38,6 @@
 extern int	g_status;
 
 /*----------------- Structures ---------------- */
-
-typedef enum s_bool
-{
-	false,
-	true
-}	t_bool;
 
 typedef struct s_quotes {
 	t_bool	in_s;

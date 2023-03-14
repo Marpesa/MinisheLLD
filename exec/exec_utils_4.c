@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 00:36:58 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/14 19:12:34 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/14 20:50:20 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ static int	get_absolute_path(char **cmd, int *error_status, char **env)
 			return (2);
 		free_path_and_cmd(path, bin, cmd);
 	}
+	print_map(cmd, 2);
 	return (1);
 }
 

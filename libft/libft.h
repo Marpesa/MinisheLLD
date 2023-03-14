@@ -6,7 +6,7 @@
 /*   By: gle-mini <gle-mini@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/12/06 04:19:58 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/12 05:47:25 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/14 20:46:45 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,13 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <unistd.h>
+# include <sys/stat.h>
+
+typedef enum s_bool
+{
+	false,
+	true
+}	t_bool;
 
 typedef struct s_list
 {
@@ -141,10 +148,12 @@ t_list			*ft_lstmap(t_list *lst, void *(*f)(void*), void (*del)(void *));
 
 char			*ft_strtok_r(char *s, const char *delim, char **save_ptr);
 
-char			*ft_strtok(char *s, const char *delim);
-
 size_t			ft_strspn(const char *s1, const char *s2);
 
 size_t			ft_strcspn(const char *s1, const char *s2);
+
+t_bool			ft_is_directory(const char *str);
+
+t_bool			ft_is_file_exist(const char *str);
 
 #endif

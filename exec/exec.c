@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 15:24:41 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/14 19:12:42 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/14 20:50:49 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	check_valid_path(t_command *command, int error_status, int prevpipe)
 {
-	if (error_status == 2)
+	if (error_status == 2 || ft_is_directory(command->word[0]) || !ft_is_file_exist(command->word[0]))
 	{
 		ft_putstr_fd(_ORANGE2 "MinisheLLD : ", 2);
 		ft_putstr_fd((command->word)[0], 2);

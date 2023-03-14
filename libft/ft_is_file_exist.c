@@ -1,19 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strtok.c                                        :+:      :+:    :+:   */
+/*   ft_is_file_exist.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gle-mini <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/12 05:24:22 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/12 05:37:08 by gle-mini         ###   ########.fr       */
+/*   Created: 2023/03/14 20:20:48 by gle-mini          #+#    #+#             */
+/*   Updated: 2023/03/14 20:49:02 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 #include "libft.h"
 
-char	*ft_strtok(char *s, const char *delim)
+t_bool	ft_is_file_exist(const char *str)
 {
-	static char	*olds;
-
-	return (ft_strtok_r (s, delim, &olds));
+	if (access(str, F_OK) == 0)
+		return (true);
+	return (false);
 }
