@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 00:36:58 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/14 15:26:17 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/14 17:04:29 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,6 @@ void	restore_default_signal_behavior(void)
 		perror("Error restoring default behavior of SIGINT");
 	if (sigaction(SIGQUIT, &sa, NULL) == -1)
 		perror("Error restoring default behavior of SIGKILL");
-	if (sigaction(SIGSTOP, &sa, NULL) == -1)
-		perror("Error restoring default behavior of SIGSTOP");
 }
 
 int	ft_last(t_command *command, char ***env, int prevpipe, \
