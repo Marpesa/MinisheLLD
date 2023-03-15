@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 15:24:41 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/14 20:57:38 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/15 11:50:54 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 int	check_valid_path(t_command *command, int error_status, int prevpipe)
 {
+	if (command->word == NULL)
+		return (1);
 	if ((error_status == 2 || ft_is_directory(command->word[0]) \
 			|| !ft_is_file_exist(command->word[0])) \
 			&& !is_builtin(command->word))
