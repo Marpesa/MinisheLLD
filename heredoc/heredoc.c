@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/08 17:51:49 by gle-mini          #+#    #+#             */
-/*   Updated: 2023/03/12 03:28:25 by gle-mini         ###   ########.fr       */
+/*   Updated: 2023/03/15 11:38:35 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,23 +46,21 @@ void	heredoc_open(char *lim, t_list *lst_token_head, \
 
 	input = NULL;
 	g_status = 0;
+	fd = 1;
 	pid = fork();
 	if (pid == 0)
 	{
-		set_heredoc_signal();
-		fd = create_temporary_file();
-		while (true)
-		{
-			if (manage_heredoc(input, lim, fd))
-				break ;
-		}
+		heredoc_routine(input, lim, &fd);
 		close(fd);
 		ft_lstclear(&lst_token_head, del_token);
 		ft_free_map(secret_env);
 		exit(0);
 	}
 	else
+	{
+		set_heredoc_signal();
 		waitpid(pid, &status, 0);
+	}
 }
 
 void	heredoc(t_list *lst_token_head, char **secret_env)
@@ -77,6 +75,7 @@ void	heredoc(t_list *lst_token_head, char **secret_env)
 		{
 			token = lst_token->next->content;
 			heredoc_open(token->text, lst_token_head, secret_env);
+			ignore_signal_for_shell();
 		}
 		lst_token = lst_token->next;
 	}

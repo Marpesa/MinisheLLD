@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/17 22:34:27 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/14 20:06:12 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/15 11:40:33 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -135,6 +135,8 @@ t_bool			is_heredoc(t_list *lst_token);
 int				create_temporary_file(void);
 void			sigint_handler(int signum);
 void			set_heredoc_signal(void);
+void			heredoc_routine(char *input, char *lim, int *fd);
+int				manage_heredoc(char *input, char *lim, int fd);
 
 /*-------------------- Error ----------------------*/
 

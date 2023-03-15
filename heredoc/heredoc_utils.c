@@ -6,7 +6,7 @@
 /*   By: lmery <lmery@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/12 03:06:28 by lmery             #+#    #+#             */
-/*   Updated: 2023/03/12 03:10:43 by lmery            ###   ########.fr       */
+/*   Updated: 2023/03/15 11:43:05 by gle-mini         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,18 +36,24 @@ int	create_temporary_file(void)
 	return (fd);
 }
 
-void	sigint_handler(int signum)
-{
-	(void) signum;
-	exit(0);
-}
-
 void	set_heredoc_signal(void)
 {
-	struct sigaction	sa;
+	struct sigaction	lazy_action;
 
-	sa.sa_handler = sigint_handler;
-	sigemptyset(&sa.sa_mask);
-	sa.sa_flags = 0;
-	sigaction(SIGINT, &sa, NULL);
+	ft_memset(&lazy_action, 0, sizeof(lazy_action));
+	lazy_action.sa_handler = SIG_IGN;
+	sigaction(SIGTSTP, &lazy_action, NULL);
+	sigaction(SIGQUIT, &lazy_action, NULL);
+	sigaction(SIGINT, &lazy_action, NULL);
+}
+
+void	heredoc_routine(char *input, char *lim, int *fd)
+{
+	set_heredoc_signal();
+	*fd = create_temporary_file();
+	while (true)
+	{
+		if (manage_heredoc(input, lim, *fd))
+			break ;
+	}
 }
